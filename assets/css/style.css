@@ -1,1 +1,173 @@
-body { font-family: Arial; margin: 20px; }
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Değişkenler */
+:root {
+    --primary-color: #0d9488;
+    --secondary-color: #475569;
+    --background-color: #f1f5f9;
+    --surface-color: #ffffff;
+    --text-color: #1e293b;
+    --border-color: #e2e8f0;
+    --container-width: 1200px;
+    --border-radius: 8px;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Genel Sıfırlama ve Body */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Navigasyon Menüsü */
+.navbar {
+    background-color: var(--surface-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-weight: 500;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+.nav-link.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* Ana İçerik Alanı */
+.page-content {
+    padding: 2rem 0;
+}
+
+/* Ana Sayfa Karşılama Alanı */
+.hero {
+    text-align: center;
+    background-color: var(--surface-color);
+    padding: 3rem 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* Kategori Kartları */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.category-card {
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+.category-card h2 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.category-card p {
+    flex-grow: 1; /* Butonların altta hizalanmasını sağlar */
+    margin-bottom: 1.5rem;
+}
+
+/* Butonlar */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-align: center;
+    transition: background-color 0.2s, transform 0.2s;
+    background-color: var(--primary-color);
+    color: white;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem; /* Mobil için alt alta geldiğinde boşluk */
+}
+
+.btn:hover {
+    background-color: #0f766e; /* primary-color'ın koyusu */
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #334155; /* secondary-color'ın koyusu */
+}
+
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+    color: var(--secondary-color);
+    border-top: 1px solid var(--border-color);
+}
