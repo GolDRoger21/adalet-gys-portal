@@ -1,15 +1,15 @@
 // ===================================================================================
-// UYGULAMA MANTIĞI (Dinamik URL Okuyacak Şekilde Güncellendi)
+// UYGULAMA MANTIĞI (deneme-1.html ile Uyumlu)
 // ===================================================================================
 
 class JusticeExamApp {
     constructor() {
         this.domElements = this.initializeDOMElements();
         if (!this.domElements.appContainer) {
-            console.log("Sınav konteyneri bulunamadı, test motoru başlatılmadı.");
+            console.error("Sınav konteyneri bulunamadı, test motoru başlatılmadı.");
             return;
         }
-        // GOOGLE_SHEET_URL'i artık doğrudan HTML'den alıyoruz.
+        // GOOGLE_SHEET_URL'i HTML dosyasındaki data attribute'tan al
         this.GOOGLE_SHEET_URL = this.domElements.appContainer.dataset.sheetUrl;
         this.examManager = null;
         this.uiManager = null;
@@ -20,13 +20,13 @@ class JusticeExamApp {
 
     initializeDOMElements() {
         return {
-            appContainer: document.getElementById('app-container'), // URL'i okumak için ana konteyner
+            appContainer: document.getElementById('app-container'), // URL'i okumak için
             welcomeScreen: document.getElementById('welcome-screen'),
             quizScreen: document.getElementById('quiz-screen'),
             startExamBtn: document.getElementById('start-exam-btn'),
             elapsedTime: document.getElementById('elapsed-time'),
             remainingTime: document.getElementById('remaining-time'),
-            timerAnnouncer: document.getElementById('timer-announcer'),
+            timerAnnouncer: document.getElementById('timer-announcer'), // Olmayabilir, ama tanımlayalım
             counter: document.getElementById('question-counter'),
             questionText: document.getElementById('question-text'),
             optionsContainer: document.getElementById('options-container'),
@@ -91,25 +91,40 @@ class JusticeExamApp {
 
     // Hata mesajı gösterme fonksiyonu
     showError(message) {
-         const startExamBtn = this.domElements.startExamBtn;
-         const startBtnFullText = this.domElements.startBtnFullText;
-         const totalQuestionCount = this.domElements.totalQuestionCount;
-         const warningBox = this.domElements.warningBox;
-         const warningMessage = this.domElements.warningMessage;
+        const startExamBtn = this.domElements.startExamBtn;
+        const startBtnFullText = this.domElements.startBtnFullText;
+        const totalQuestionCount = this.domElements.totalQuestionCount;
+        const warningBox = this.domElements.warningBox;
+        const warningMessage = this.domElements.warningMessage;
 
-         if (startExamBtn) startExamBtn.disabled = true;
-         if (startBtnFullText) startBtnFullText.textContent = "HATA OLUŞTU";
-         if (totalQuestionCount) totalQuestionCount.textContent = "0";
-         if (warningMessage) warningMessage.textContent = message;
-         if (warningBox) warningBox.classList.remove('hidden');
-         console.error("Uygulama başlatma hatası:", message); // Konsola da yaz
+        if (startExamBtn) startExamBtn.disabled = true;
+        if (startBtnFullText) startBtnFullText.textContent = "HATA OLUŞTU";
+        if (totalQuestionCount) totalQuestionCount.textContent = "0";
+        if (warningMessage) warningMessage.textContent = message;
+        if (warningBox) warningBox.classList.remove('hidden');
+        console.error("Uygulama başlatma hatası:", message); // Konsola da yaz
     }
 
     // Event listener'ları bağlama
     bindEventListeners() {
-        this.domElements.startExamBtn.addEventListener('click', () => this.startExam());
-        this.domElements.restartBtn.addEventListener('click', () => window.location.reload());
-        this.domElements.closeResultModalBtn.addEventListener('click', () => window.location.reload());
+        if (this.domElements.startExamBtn) {
+            this.domElements.startExamBtn.addEventListener('click', () => this.startExam());
+        }
+        if (this.domElements.restartBtn) {
+            this.domElements.restartBtn.addEventListener('click', () => window.location.reload());
+        }
+        if (this.domElements.closeResultModalBtn) {
+            this.domElements.closeResultModalBtn.addEventListener('click', () => {
+                 if (this.domElements.resultModal) {
+                    this.domElements.resultModal.classList.add('hidden');
+                 }
+                 if (this.domElements.welcomeScreen) {
+                    this.domElements.welcomeScreen.classList.remove('hidden');
+                 }
+                 // Sınavı sıfırla
+                 window.location.reload();
+            });
+        }
         // Eğer bu elementler tanımlıysa, event listener ekle
         if (this.domElements.wrongAnswersTab && this.domElements.markedQuestionsTab && this.uiManager) {
             this.domElements.wrongAnswersTab.addEventListener('click', () => this.uiManager.switchResultTab('wrong'));
@@ -119,13 +134,15 @@ class JusticeExamApp {
 
     // Sınavı başlatma
     startExam() {
-        this.domElements.welcomeScreen.classList.add('hidden');
+        if (this.domElements.welcomeScreen) {
+            this.domElements.welcomeScreen.classList.add('hidden');
+        }
         if (this.examManager) {
             this.examManager.startExam();
         }
     }
 
-     // GOOGLE_SHEET_URL'i güvenli bir şekilde satırlara ayıran fonksiyon
+    // GOOGLE_SHEET_URL'i güvenli bir şekilde satırlara ayıran fonksiyon
     robustCsvParse(csvText) {
         const rows = [];
         let currentRow = '';
@@ -275,7 +292,7 @@ class JusticeExamApp {
     }
 }
 
-// ExamManager sınıfı (Kodun geri kalanı)
+// ExamManager sınıfı
 class ExamManager {
     constructor(questions, durationMinutes, app) {
         this.questions = questions;
@@ -285,6 +302,17 @@ class ExamManager {
         this.userAnswers = [];
         this.timerInterval = null;
         this.timeRemaining = 0;
+        // VisibilityChange handler için bağlama (arrow function)
+        this.handleVisibilityChange = () => {
+            if (document.hidden) {
+                if (this.app.modalManager) {
+                    this.app.modalManager.show({
+                        title: 'UYARI',
+                        message: 'Sınav sırasında başka bir sekmeye geçtiniz. Lütfen sınava odaklanın.'
+                    });
+                }
+            }
+        };
     }
 
     startExam() {
@@ -296,10 +324,11 @@ class ExamManager {
 
         // Zamanlayıcıyı başlat
         this.timeRemaining = this.durationMinutes * 60; // Dakikayı saniyeye çevir
-        this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
         
         // Sınav ekranını göster
-        this.app.domElements.quizScreen.classList.remove('hidden');
+        if (this.app.domElements.quizScreen) {
+            this.app.domElements.quizScreen.classList.remove('hidden');
+        }
 
         // Zamanlayıcıyı başlat
         this.startTimer();
@@ -347,12 +376,15 @@ class ExamManager {
         }
 
         // Otomatik ilerleme (isteğe bağlı): Son soru değilse, bir sonraki soruya geç
+        // Not: Bu davranış isteğe bağlıdır. Şu an yorum yapılmış durumda.
+        /*
         if (this.currentQuestionIndex < this.questions.length - 1) {
              // Küçük bir gecikme ekleyerek kullanıcıya seçiminin yansıdığını göster
             setTimeout(() => {
                 this.goToNextQuestion();
             }, 200); // 200ms gecikme
         }
+        */
     }
 
     toggleMarkForReview() {
@@ -440,10 +472,10 @@ class ExamManager {
         const successPercentage = totalQuestions > 0 ? (correct / totalQuestions * 100) : 0;
 
         // DOM elementlerini güncelle
-        this.app.domElements.correctCount.textContent = correct;
-        this.app.domElements.incorrectCount.textContent = incorrect;
-        this.app.domElements.emptyCount.textContent = empty;
-        this.app.domElements.successRate.textContent = `${successPercentage.toFixed(1)}%`;
+        if (this.app.domElements.correctCount) this.app.domElements.correctCount.textContent = correct;
+        if (this.app.domElements.incorrectCount) this.app.domElements.incorrectCount.textContent = incorrect;
+        if (this.app.domElements.emptyCount) this.app.domElements.emptyCount.textContent = empty;
+        if (this.app.domElements.successRate) this.app.domElements.successRate.textContent = `${successPercentage.toFixed(1)}%`;
 
         // Başarı oranına göre stil ve mesaj güncelle
         if (this.app.uiManager) {
@@ -451,26 +483,17 @@ class ExamManager {
         }
 
         // Quiz ekranını gizle, sonuç modalini göster
-        this.app.domElements.quizScreen.classList.add('hidden');
-        this.app.domElements.resultModal.classList.remove('hidden');
-        this.app.domElements.resultModal.focus(); // Erişilebilirlik için
+        if (this.app.domElements.quizScreen) {
+            this.app.domElements.quizScreen.classList.add('hidden');
+        }
+        if (this.app.domElements.resultModal) {
+            this.app.domElements.resultModal.classList.remove('hidden');
+            this.app.domElements.resultModal.focus(); // Erişilebilirlik için
+        }
 
         // Sonuçları modal içinde render et
         if (this.app.uiManager) {
              this.app.uiManager.renderResultsPage(incorrectQuestions, markedQuestions);
-        }
-    }
-
-    // VisibilityChange handler (arrow function olarak tanımlandı)
-    handleVisibilityChange = () => {
-        if (document.hidden) {
-            // Kullanıcı başka bir sekmeye geçtiğinde uyarı ver
-             if (this.app.modalManager) {
-                this.app.modalManager.show({
-                    title: 'UYARI',
-                    message: 'Sınav sırasında başka bir sekmeye geçtiniz. Lütfen sınava odaklanın.'
-                });
-            }
         }
     }
 
@@ -481,9 +504,13 @@ class ExamManager {
         const totalDuration = this.durationMinutes * 60; // Toplam süreyi saniye cinsinden al
 
         // Başlangıçta kalan süreyi göster
-        this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
+        if (this.app.domElements.remainingTime) {
+            this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
+        }
         // Başlangıçta geçen süreyi sıfırla
-        this.app.domElements.elapsedTime.textContent = this.formatTime(0);
+        if (this.app.domElements.elapsedTime) {
+            this.app.domElements.elapsedTime.textContent = this.formatTime(0);
+        }
 
         // Timer'ı sıfırla (varsa)
         if (this.timerInterval) {
@@ -491,7 +518,9 @@ class ExamManager {
         }
 
         // Uyarı sınıfını kaldır
-        this.app.domElements.remainingTime.classList.remove('timer-warning');
+        if (this.app.domElements.remainingTime) {
+            this.app.domElements.remainingTime.classList.remove('timer-warning');
+        }
 
         // Her saniyede bir çalışan timer
         this.timerInterval = setInterval(() => {
@@ -506,17 +535,23 @@ class ExamManager {
             this.timeRemaining--;
 
             // Kalan süreyi güncelle
-            this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
+            if (this.app.domElements.remainingTime) {
+                this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
+            }
 
             // Geçen süreyi hesapla ve güncelle
             const elapsedSecondsTotal = totalDuration - this.timeRemaining;
-            this.app.domElements.elapsedTime.textContent = this.formatTime(elapsedSecondsTotal);
+            if (this.app.domElements.elapsedTime) {
+                this.app.domElements.elapsedTime.textContent = this.formatTime(elapsedSecondsTotal);
+            }
 
             // Son 5 dakika uyarısı (300 saniye = 5 dakika)
-            if (this.timeRemaining <= 300 && !this.app.domElements.remainingTime.classList.contains('timer-warning')) {
+            if (this.timeRemaining <= 300 && this.app.domElements.remainingTime && !this.app.domElements.remainingTime.classList.contains('timer-warning')) {
                 this.app.domElements.remainingTime.classList.add('timer-warning');
-                // Ekran okuyucular için duyuru
-                this.app.domElements.timerAnnouncer.textContent = 'Sınavın bitmesine son 5 dakika kaldı.';
+                // Ekran okuyucular için duyuru (varsa)
+                if (this.app.domElements.timerAnnouncer) {
+                    this.app.domElements.timerAnnouncer.textContent = 'Sınavın bitmesine son 5 dakika kaldı.';
+                }
             }
         }, 1000); // 1 saniye
     }
@@ -532,23 +567,31 @@ class UIManager {
         const question = this.examManager.questions[this.examManager.currentQuestionIndex];
 
         // Soru numarasını güncelle
-        this.dom.counter.textContent = `Soru ${this.examManager.currentQuestionIndex + 1} / ${this.examManager.questions.length}`;
+        if (this.dom.counter) {
+            this.dom.counter.textContent = `Soru ${this.examManager.currentQuestionIndex + 1} / ${this.examManager.questions.length}`;
+        }
 
         // Soru metnini güncelle (Numarayı temizle)
-        const cleanQuestionText = question.questionText.replace(/^\d+[\.\)-]\s*/, ''); // Başındaki "1)", "1.", "1-" gibi ifadeleri kaldır
-        this.dom.questionText.textContent = cleanQuestionText;
+        if (this.dom.questionText) {
+            const cleanQuestionText = question.questionText.replace(/^\d+[\.\)-]\s*/, ''); // Başındaki "1)", "1.", "1-" gibi ifadeleri kaldır
+            this.dom.questionText.textContent = cleanQuestionText;
+        }
 
         // Seçenekleri temizle
-        this.dom.optionsContainer.innerHTML = '';
+        if (this.dom.optionsContainer) {
+            this.dom.optionsContainer.innerHTML = '';
+        }
 
         // Seçenekleri oluştur ve ekle
-        Object.entries(question.options).forEach(([key, optionText]) => {
-            // Sadece dolu seçenekleri ekle
-            if (optionText) {
-                const button = this.createOptionButton(key, optionText);
-                this.dom.optionsContainer.appendChild(button);
-            }
-        });
+        if (this.dom.optionsContainer) {
+            Object.entries(question.options).forEach(([key, optionText]) => {
+                // Sadece dolu seçenekleri ekle
+                if (optionText) {
+                    const button = this.createOptionButton(key, optionText);
+                    this.dom.optionsContainer.appendChild(button);
+                }
+            });
+        }
 
         // Soru gezgini ve buton durumlarını güncelle
         this.updateNavPalette();
@@ -595,50 +638,64 @@ class UIManager {
 
     updateNavPalette() {
         // Soru gezgini kutularını temizle
-        this.dom.navPalette.innerHTML = '';
+        if (this.dom.navPalette) {
+            this.dom.navPalette.innerHTML = '';
+        }
 
         // Her soru için bir kutu oluştur
-        this.examManager.questions.forEach((_, index) => {
-            const box = document.createElement('button');
-            box.textContent = index + 1; // Kutu içeriği (soru numarası)
-            box.setAttribute('aria-label', `Soru ${index + 1}'ye git`); // Erişilebilirlik
+        if (this.dom.navPalette) {
+            this.examManager.questions.forEach((_, index) => {
+                const box = document.createElement('button');
+                box.textContent = index + 1; // Kutu içeriği (soru numarası)
+                box.setAttribute('aria-label', `Soru ${index + 1}'ye git`); // Erişilebilirlik
 
-            // Duruma göre sınıf belirle
-            let statusClass = ' bg-slate-300 hover:bg-slate-400'; // Varsayılan (boş)
-            if (this.examManager.userAnswers[index].isMarkedForReview) {
-                // İşaretli
-                statusClass = ' bg-yellow-400 text-white hover:bg-yellow-500';
-            } else if (this.examManager.userAnswers[index].userAnswer) {
-                // Cevaplanmış
-                statusClass = ' bg-green-500 text-white hover:bg-green-600';
-            }
-            // Aktif soru için özel stil
-            let ringClass = index === this.examManager.currentQuestionIndex ? ' ring-4 ring-offset-2 ring-teal-500 scale-110 z-10' : '';
+                // Duruma göre sınıf belirle
+                let statusClass = ' bg-slate-300 hover:bg-slate-400'; // Varsayılan (boş)
+                if (this.examManager.userAnswers[index].isMarkedForReview) {
+                    // İşaretli
+                    statusClass = ' bg-yellow-400 text-white hover:bg-yellow-500';
+                } else if (this.examManager.userAnswers[index].userAnswer) {
+                    // Cevaplanmış
+                    statusClass = ' bg-green-500 text-white hover:bg-green-600';
+                }
+                // Aktif soru için özel stil
+                let ringClass = index === this.examManager.currentQuestionIndex ? ' ring-4 ring-offset-2 ring-teal-500 scale-110 z-10' : '';
 
-            // Kutuya sınıf ekle
-            box.className = `nav-box w-full h-10 flex items-center justify-center rounded-md border border-transparent${statusClass}${ringClass}`;
+                // Kutuya sınıf ekle
+                box.className = `nav-box w-full h-10 flex items-center justify-center rounded-md border border-transparent${statusClass}${ringClass}`;
 
-            // Tıklama event'i
-            box.onclick = () => {
-                this.examManager.navigateToQuestion(index);
-            };
+                // Tıklama event'i
+                box.onclick = () => {
+                    this.examManager.navigateToQuestion(index);
+                };
 
-            // Kutuyu konteynere ekle
-            this.dom.navPalette.appendChild(box);
-        });
+                // Kutuyu konteynere ekle
+                this.dom.navPalette.appendChild(box);
+            });
+        }
     }
 
     updateButtonStates() {
         // Önceki ve Sonraki butonlarının durumunu güncelle
-        this.dom.prevBtn.disabled = this.examManager.currentQuestionIndex === 0;
-        this.dom.nextBtn.disabled = this.examManager.currentQuestionIndex === this.examManager.questions.length - 1;
+        if (this.dom.prevBtn) {
+            this.dom.prevBtn.disabled = this.examManager.currentQuestionIndex === 0;
+        }
+        if (this.dom.nextBtn) {
+            this.dom.nextBtn.disabled = this.examManager.currentQuestionIndex === this.examManager.questions.length - 1;
+        }
 
         // İşaretleme butonunun durumunu güncelle
         const isMarked = this.examManager.userAnswers[this.examManager.currentQuestionIndex].isMarkedForReview;
-        // CSS sınıflarını toggle ile yönet
-        this.dom.markReviewBtn.classList.toggle('marked', isMarked);
-        this.dom.flagOutlineIcon.classList.toggle('hidden', isMarked);
-        this.dom.flagSolidIcon.classList.toggle('hidden', !isMarked);
+        if (this.dom.markReviewBtn) {
+            // CSS sınıflarını toggle ile yönet
+            this.dom.markReviewBtn.classList.toggle('marked', isMarked);
+        }
+        if (this.dom.flagOutlineIcon) {
+            this.dom.flagOutlineIcon.classList.toggle('hidden', isMarked);
+        }
+        if (this.dom.flagSolidIcon) {
+            this.dom.flagSolidIcon.classList.toggle('hidden', !isMarked);
+        }
     }
 
     renderResultsPage(incorrectQuestions, markedQuestions) {
@@ -686,6 +743,7 @@ class UIManager {
 
     renderWrongAnswers(incorrectQuestions) {
         const container = this.dom.wrongAnswersContainer;
+        if (!container) return; // Element yoksa çık
         container.innerHTML = ''; // Önce temizle
 
         // Eğer yanlış soru yoksa, kutlu mesaj göster
@@ -753,6 +811,7 @@ class UIManager {
 
     renderMarkedQuestions(markedQuestions) {
         const container = this.dom.markedQuestionsContainer;
+        if (!container) return; // Element yoksa çık
         container.innerHTML = ''; // Önce temizle
 
         // Eğer işaretli soru yoksa, bilgi mesajı göster
@@ -831,6 +890,8 @@ class UIManager {
         const text = this.dom.successText;
         const summary = this.dom.performanceSummary;
 
+        if (!box || !text || !summary) return; // Elementlerden biri yoksa çık
+
         // Önceki sınıfları temizle
         box.className = 'p-4 rounded-lg';
         text.className = '';
@@ -853,10 +914,11 @@ class UIManager {
             summary.textContent = "Konuları tekrar gözden geçirmende fayda var. Pes etme!";
         }
         // Başarı yazısı
-        text.textContent = 'Başarı';
+        if (text) text.textContent = 'Başarı';
     }
 
     switchResultTab(tabName) {
+        if (!this.dom.wrongAnswersPanel || !this.dom.markedQuestionsPanel || !this.dom.wrongAnswersTab || !this.dom.markedQuestionsTab) return;
         if (tabName === 'wrong') {
             this.dom.wrongAnswersPanel.classList.remove('hidden');
             this.dom.markedQuestionsPanel.classList.add('hidden');
@@ -873,21 +935,29 @@ class UIManager {
     // Quiz ekranındaki butonlara event listener bağla
     bindQuizEvents() {
         // Önceki, Sonraki, İşaretle, Bitir butonları
-        this.dom.nextBtn.addEventListener('click', () => {
-            this.examManager.goToNextQuestion();
-        });
+        if (this.dom.nextBtn) {
+            this.dom.nextBtn.addEventListener('click', () => {
+                this.examManager.goToNextQuestion();
+            });
+        }
 
-        this.dom.prevBtn.addEventListener('click', () => {
-            this.examManager.goToPrevQuestion();
-        });
+        if (this.dom.prevBtn) {
+            this.dom.prevBtn.addEventListener('click', () => {
+                this.examManager.goToPrevQuestion();
+            });
+        }
 
-        this.dom.markReviewBtn.addEventListener('click', () => {
-            this.examManager.toggleMarkForReview();
-        });
+        if (this.dom.markReviewBtn) {
+            this.dom.markReviewBtn.addEventListener('click', () => {
+                this.examManager.toggleMarkForReview();
+            });
+        }
 
-        this.dom.finishBtn.addEventListener('click', () => {
-            this.examManager.finishQuiz(false); // Onay iste
-        });
+        if (this.dom.finishBtn) {
+            this.dom.finishBtn.addEventListener('click', () => {
+                this.examManager.finishQuiz(false); // Onay iste
+            });
+        }
     }
 }
 
@@ -899,13 +969,16 @@ class ModalManager {
 
     bindModalEvents() {
         // Alert modal'ındaki "Tamam" butonuna event bağla
-        this.dom.alertModalOkBtn.addEventListener('click', () => {
-            this.hide(); // Modal'i gizle
-        });
+        if (this.dom.alertModalOkBtn) {
+            this.dom.alertModalOkBtn.addEventListener('click', () => {
+                this.hide(); // Modal'i gizle
+            });
+        }
     }
 
     // Alert modal'ı göster
     show(config) {
+        if (!this.dom.alertModal || !this.dom.alertModalTitle || !this.dom.alertModalMessage || !this.dom.alertModalOkBtn) return;
         // Başlık ve mesajı güncelle
         this.dom.alertModalTitle.textContent = config.title;
         this.dom.alertModalMessage.textContent = config.message;
@@ -928,14 +1001,18 @@ class ModalManager {
 
     // Alert modal'ı gizle
     hide() {
-        this.dom.alertModal.classList.add('hidden');
-        this.dom.alertModal.classList.remove('flex');
+        if (this.dom.alertModal) {
+            this.dom.alertModal.classList.add('hidden');
+            this.dom.alertModal.classList.remove('flex');
+        }
     }
 }
 
 
 // Sadece deneme sınavı veya test sayfalarında bu motoru çalıştır.
 // 'app-container' ID'li bir element varsa, uygulamayı başlat.
-if (document.getElementById('app-container')) {
-    new JusticeExamApp();
-}
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('app-container')) {
+        new JusticeExamApp();
+    }
+});
