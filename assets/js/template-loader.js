@@ -3,17 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCommonTemplate();
     }
 });
-
 async function loadCommonTemplate() {
     try {
-        // BU DOSYANIN KENDİSİNE GÖRE YOL: ../../_templates/...
-        const response = await fetch('../../../_templates/sinav-sablonu.html'); 
+        // YENİ KÖK-GÖRECELİ YOL
+        const response = await fetch('/adalet-gys-portal/_templates/sinav-sablonu.html'); 
         if (!response.ok) {
             throw new Error(`Şablon dosyası yüklenemedi: ${response.statusText}`);
         }
         const templateText = await response.text();
-
-        // ... Geri kalan kod aynı...
         const tempContainer = document.createElement('div');
         tempContainer.innerHTML = templateText;
         const header = tempContainer.querySelector('.navbar');
@@ -25,11 +22,9 @@ async function loadCommonTemplate() {
         if (footer) body.appendChild(footer);
         if (alertModal) body.appendChild(alertModal);
         if (resultModal) body.appendChild(resultModal);
-
         document.dispatchEvent(new Event('template-loaded'));
-
     } catch (error) {
         console.error('Şablon yükleme hatası:', error);
-        document.body.innerHTML = '<h1 style="text-align: center; margin-top: 50px;">Sayfa yüklenirken kritik bir hata oluştu.</h1>';
+        document.body.innerHTML = '<h1 style="text-align: center; margin-top: 50px;">Sayfa şablonu yüklenirken bir hata oluştu.</h1>';
     }
 }
