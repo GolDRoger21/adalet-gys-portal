@@ -163,7 +163,7 @@ class JusticeExamApp {
                 }
             } else if (char === '\n' && !inQuotes) {
                 // Tırnak içinde değilsek ve yeni satıra geldiysek, satırı tamamla
-                if (currentRow) {
+                if (currentRow.trim()) { // Boş satırları atla
                     rows.push(currentRow);
                 }
                 currentRow = ''; // Yeni satır için sıfırla
@@ -173,8 +173,8 @@ class JusticeExamApp {
             }
         }
 
-        // Son satırı da ekle (dosya \n ile bitmeyebilir)
-        if (currentRow) {
+        // Son satırı da ekle (dosya \n ile bitmeyebilir ve boş olmayabilir)
+        if (currentRow.trim()) {
             rows.push(currentRow);
         }
 
@@ -234,14 +234,16 @@ class JusticeExamApp {
 
             // 2. CSV'yi satırlara ayır
             const rows = this.robustCsvParse(csvText);
+            console.log("CSV'den çekilen toplam satır sayısı (başlık dahil):", rows.length); // Debug
             if (rows.length < 2) { // Başlık + en az 1 soru satırı gerekli
                 throw new Error("CSV dosyasında yeterli veri bulunamadı (başlık ve en az bir soru satırı olmalı).");
             }
 
             // 3. Başlıkları al
             const headers = this.parseCsvRow(rows[0]);
+            console.log("CSV Başlıkları:", headers); // Debug
             // Gerekli başlıkları tanımla (optionE dahil)
-            const requiredHeaders = ['questionText', 'optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'correctAnswer', 'explanation'];
+            const requiredHeaders = ['questionText', 'optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'correctAnswer', 'explanation']; // EKLENDİ: optionE
             const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
             if (missingHeaders.length > 0) {
                 throw new Error(`Eksik başlıklar: ${missingHeaders.join(', ')}`);
@@ -251,18 +253,19 @@ class JusticeExamApp {
             const questionPool = rows.slice(1) // Başlık satırını atla
                 .map((row, index) => {
                     // console.log(`Satır ${index + 2} işleniyor:`, row); // Debug için
-                    if (!row) return null; // Boş satırı atla
+                    if (!row.trim()) return null; // Gerçekten boş satırı atla
                     const values = this.parseCsvRow(row);
                     // console.log(`Satır ${index + 2} değerleri:`, values); // Debug için
                     // Satır, başlık sayısı kadar sütun içermiyorsa atla
                     if (values.length < headers.length) {
-                        console.warn(`Satır ${index + 2} yeterli sütun içermiyor. Atlandı.`, values);
+                        console.warn(`Satır ${index + 2} yeterli sütun içermiyor. Atlandı. Beklenen: ${headers.length}, Alınan: ${values.length}`, values);
                         return null;
                     }
 
                     // Başlıklara göre obje oluştur
                     const data = headers.reduce((obj, h, i) => {
-                        obj[h] = values[i] || ''; // Eksik hücreler için boş string
+                        // Eksik hücreler için boş string, aksi halde değeri ata
+                        obj[h] = (i < values.length) ? (values[i] || '') : '';
                         return obj;
                     }, {});
 
@@ -291,7 +294,7 @@ class JusticeExamApp {
 
             // 5. Veri başarıyla çekildiyse, uygulamayı başlat
             console.log("Sorular başarıyla çekildi. Toplam soru sayısı:", questionPool.length);
-            console.log("İlk 3 soru örneği:", questionPool.slice(0, 3)); // Debug için
+            // console.log("İlk 3 soru örneği:", questionPool.slice(0, 3)); // Debug için
             this.initializeApp(questionPool); // Uygulamayı başlat
 
         } catch (error) {
@@ -384,16 +387,15 @@ class ExamManager {
             this.app.uiManager.renderQuestion();
         }
 
-        // Otomatik ilerleme (isteğe bağlı): Son soru değilse, bir sonraki soruya geç
-        // Not: Bu davranış isteğe bağlıdır. Şu an yorum yapılmış durumda.
-        /*
+        // === OTOMATİK GEÇİŞ ETKİNLEŞTİRİLDİ ===
+        // Otomatik ilerleme: Son soru değilse, bir sonraki soruya geç
         if (this.currentQuestionIndex < this.questions.length - 1) {
              // Küçük bir gecikme ekleyerek kullanıcıya seçiminin yansıdığını göster
             setTimeout(() => {
                 this.goToNextQuestion();
-            }, 200); // 200ms gecikme
+            }, 300); // 300ms gecikme
         }
-        */
+        // === OTOMATİK GEÇİŞ ETKİNLEŞTİRİLDİ ===
     }
 
     toggleMarkForReview() {
