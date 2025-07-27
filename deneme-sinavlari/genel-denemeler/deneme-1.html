@@ -20,7 +20,7 @@
         }
         body { font-family: 'Inter', sans-serif; background-color: var(--light-bg); color: var(--text-primary); }
         .card { background-color: var(--card-bg); border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-        .btn-primary { background-color: var(--primary-color); color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 600; transition: background-color 0.2s; }
+        .btn-primary { background-color: var(--primary-color); color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 600; transition: background-color 0.2s; display: inline-flex; align-items: center; justify-content: center; }
         .btn-primary:hover { background-color: #087f5b; }
         .btn-secondary { background-color: var(--secondary-color); color: white; }
         .btn-secondary:hover { background-color: #065f46; }
@@ -34,13 +34,17 @@
         .timer-warning { color: #dc2626; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
         .explanation-box { background-color: #f0f9ff; border-left: 4px solid #38bdf8; padding: 1.25rem; margin-top: 1.25rem; border-radius: 0.5rem; }
-        .explanation-box h4 { font-weight: bold; color: #0c4a6e; }
+        .explanation-section { margin-top: 1rem; }
+        .explanation-section h5 { font-weight: 600; color: #0c4a6e; display: flex; align-items: center; }
         .nav-box { transition: all 0.2s ease-in-out; cursor: pointer; }
         .tab-btn { transition: all 0.2s ease-in-out; border-radius: 0.5rem; padding: 0.75rem 1rem; font-weight: 600; background-color: #e2e8f0; color: #475569; border: 2px solid transparent; }
         .tab-btn:hover { background-color: #cbd5e1; transform: translateY(-1px); }
         .tab-active { background-color: #f0fdfa; color: var(--primary-color) !important; border-color: var(--primary-color); }
         pre { white-space: pre-wrap; word-wrap: break-word; font-family: 'Inter', sans-serif; font-size: 1.125rem; line-height: 1.8; text-align: justify; user-select: none; }
         #timer-announcer { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+        .flag-icon { transition: color 0.2s; }
+        .flag-icon:hover { color: #f59e0b !important; }
+        .flag-icon.marked { color: #f59e0b; }
     </style>
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/test.css">
@@ -88,6 +92,9 @@
                 </div>
             </div>
             <button id="start-exam-btn" class="btn-primary w-full md:w-auto text-white font-bold text-lg px-12 py-4 rounded-lg" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                </svg>
                 <span id="start-btn-full-text">Sorular Yükleniyor...</span>
             </button>
         </div>
@@ -101,7 +108,7 @@
                         <div class="w-px h-8 bg-slate-200"></div>
                         <div><span class="text-xs font-medium text-slate-500">KALAN SÜRE</span><div id="remaining-time" class="text-xl font-bold text-teal-600">00:00:00</div></div>
                     </div>
-                    <button id="mark-review-btn" title="İncelemek için işaretle" class="text-slate-400 hover:text-yellow-500" aria-label="Soruyu işaretle">
+                    <button id="mark-review-btn" title="İncelemek için işaretle" class="flag-icon text-slate-400 hover:text-yellow-500" aria-label="Soruyu işaretle">
                         <svg id="flag-outline-icon" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6H8.5l-1-1H5a2 2 0 00-2 2z"></path>
                         </svg>
@@ -114,9 +121,9 @@
                 <div id="options-container" class="grid grid-cols-1 gap-4"></div>
             </div>
              <div class="flex justify-between items-center mt-6">
-                <button id="prev-btn" class="px-6 py-2 bg-white rounded-md hover:bg-slate-50 shadow-sm">Önceki</button>
-                <button id="finish-btn" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm">Sınavı Bitir</button>
-                <button id="next-btn" class="px-6 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 shadow-sm">Sonraki</button>
+                <button id="prev-btn" class="px-6 py-2 bg-white rounded-md hover:bg-slate-50 shadow-sm disabled:opacity-50" aria-label="Önceki soru">Önceki</button>
+                <button id="finish-btn" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm" aria-label="Sınavı bitir">Sınavı Bitir</button>
+                <button id="next-btn" class="px-6 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 shadow-sm disabled:opacity-50" aria-label="Sonraki soru">Sonraki</button>
             </div>
              <div class="card p-4 mt-6">
                 <h3 class="text-lg font-semibold mb-3">Soru Gezgini</h3>
