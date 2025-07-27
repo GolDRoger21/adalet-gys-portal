@@ -1,16 +1,11 @@
 /* ================================================= */
-/* == GELİŞMİŞ SINAV SİSTEMİ İÇİN TEMEL STİLLER == */
+/* == GELİŞMİŞ SINAV SİSTEMİ İÇİN STİLLER == */
 /* ================================================= */
 
 :root {
-    --primary-color: #0d9488;
-    --secondary-color: #087f5b;
-    --accent-color: #f59e0b;
-    --danger-color: #dc2626;
-    --light-bg: #f0f4f8;
-    --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
+    --primary-color: #0d9488; --secondary-color: #087f5b; --accent-color: #f59e0b;
+    --danger-color: #dc2626; --light-bg: #f0f4f8; --card-bg: #ffffff;
+    --text-primary: #1e293b; --text-secondary: #64748b;
     --border-color: #e2e8f0;
 }
 
@@ -47,7 +42,7 @@ pre {
 }
 
 .start-btn:hover { 
-    transform: translateY(-2px); 
+    transform: translateY(-px); 
     box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08); 
     background-image: linear-gradient(to right, var(--secondary-color), #065f46); 
 }
@@ -115,6 +110,8 @@ pre {
 .explanation-box { background-color: #f0f9ff; border-left: 4px solid #38bdf8; padding: 1.25rem; margin-top: 1.25rem; border-radius: 0.5rem; }
 .explanation-section { margin-top: 1rem; }
 .explanation-section h5 { font-weight: 600; color: #0c4a6e; display: flex; align-items: center; }
+.explanation-section p { font-size: 0.95rem; line-height: 1.7; color: #0c4a6e; text-align: justify; }
+.explanation-section:not(:last-child) { margin-bottom: 1rem; }
 
 .nav-box { transition: all 0.2s ease-in-out; cursor: pointer; }
 
