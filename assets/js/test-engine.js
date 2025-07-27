@@ -26,7 +26,7 @@ class JusticeExamApp {
             startExamBtn: document.getElementById('start-exam-btn'),
             elapsedTime: document.getElementById('elapsed-time'),
             remainingTime: document.getElementById('remaining-time'),
-            timerAnnouncer: document.getElementById('timer-announcer'), // Olmayabilir, ama tanımlayalım
+            timerAnnouncer: document.getElementById('timer-announcer'),
             counter: document.getElementById('question-counter'),
             questionText: document.getElementById('question-text'),
             optionsContainer: document.getElementById('options-container'),
@@ -240,7 +240,8 @@ class JusticeExamApp {
 
             // 3. Başlıkları al
             const headers = this.parseCsvRow(rows[0]);
-            const requiredHeaders = ['questionText', 'optionA', 'optionB', 'optionC', 'optionD', 'correctAnswer'];
+            // Gerekli başlıkları tanımla (optionE dahil)
+            const requiredHeaders = ['questionText', 'optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'correctAnswer', 'explanation'];
             const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
             if (missingHeaders.length > 0) {
                 throw new Error(`Eksik başlıklar: ${missingHeaders.join(', ')}`);
@@ -248,11 +249,16 @@ class JusticeExamApp {
 
             // 4. Soruları işle
             const questionPool = rows.slice(1) // Başlık satırını atla
-                .map(row => {
+                .map((row, index) => {
+                    // console.log(`Satır ${index + 2} işleniyor:`, row); // Debug için
                     if (!row) return null; // Boş satırı atla
                     const values = this.parseCsvRow(row);
+                    // console.log(`Satır ${index + 2} değerleri:`, values); // Debug için
                     // Satır, başlık sayısı kadar sütun içermiyorsa atla
-                    if (values.length < headers.length) return null;
+                    if (values.length < headers.length) {
+                        console.warn(`Satır ${index + 2} yeterli sütun içermiyor. Atlandı.`, values);
+                        return null;
+                    }
 
                     // Başlıklara göre obje oluştur
                     const data = headers.reduce((obj, h, i) => {
@@ -261,7 +267,7 @@ class JusticeExamApp {
                     }, {});
 
                     // Soru objesini oluştur
-                    return {
+                    const questionObj = {
                         questionText: data.questionText,
                         options: {
                             A: data.optionA,
@@ -273,6 +279,8 @@ class JusticeExamApp {
                         correctAnswer: data.correctAnswer,
                         explanation: data.explanation || '' // Açıklama olmayabilir
                     };
+                    // console.log(`İşlenen Soru ${index + 1}:`, questionObj); // Debug için
+                    return questionObj;
                 })
                 // Geçersiz (null) soruları filtrele
                 .filter(q => q && q.questionText && q.correctAnswer); // Sadece metni ve doğru cevabı olan soruları al
@@ -282,7 +290,8 @@ class JusticeExamApp {
             }
 
             // 5. Veri başarıyla çekildiyse, uygulamayı başlat
-            console.log("Sorular başarıyla çekildi:", questionPool); // Debug için
+            console.log("Sorular başarıyla çekildi. Toplam soru sayısı:", questionPool.length);
+            console.log("İlk 3 soru örneği:", questionPool.slice(0, 3)); // Debug için
             this.initializeApp(questionPool); // Uygulamayı başlat
 
         } catch (error) {
@@ -609,7 +618,7 @@ class UIManager {
         button.setAttribute('aria-checked', isSelected ? 'true' : 'false'); // Seçili durumu
 
         // HTML içeriği: Seçenek tuşu ve metin
-        // Seçenek tuşu (A, B, C, D)
+        // Seçenek tuşu (A, B, C, D, E)
         const optionKeySpan = document.createElement('span');
         optionKeySpan.className = 'option-key flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full border font-bold mr-4';
         optionKeySpan.textContent = key;
