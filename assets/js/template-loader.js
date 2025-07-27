@@ -1,7 +1,7 @@
 /**
  * @file Adalet GYS Portalı için ortak şablon yükleyici.
  * @description Header, footer gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
- * @version 2.0 (Conditional Template Loading)
+ * @version 2.1 (Path Fix for _templates)
  */
 
 // Sayfa tamamen yüklendiğinde çalışacak ana olay dinleyici.
@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function loadCommonTemplate() {
     try {
-        // Şablon dosyasını sunucudan al.
-        const response = await fetch('/adalet-gys-portal/templates/sinav-sablonu.html');
+        // DÜZELTME: Yol, klasörün orijinal adı olan '_templates' olarak güncellendi.
+        const response = await fetch('/adalet-gys-portal/_templates/sinav-sablonu.html');
         if (!response.ok) {
             throw new Error(`Şablon dosyası yüklenemedi: ${response.statusText}`);
         }
