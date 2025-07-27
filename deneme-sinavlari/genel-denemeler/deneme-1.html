@@ -4,245 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adalet Bakanlığı GYS - Deneme Sınavı</title>
-    <!-- Tailwind CSS CDN -->
+    
+    <!-- Gerekli Stil Dosyaları -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Proje Genel Stil Dosyaları -->
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/test.css">
-    
-    <!-- Sayfaya Özel Stiller -->
-    <style>
-        :root {
-            --primary-color: #0d9488;
-            --secondary-color: #087f5b;
-            --accent-color: #f59e0b;
-            --danger-color: #dc2626;
-            --light-bg: #f0f4f8;
-            --card-bg: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--light-bg);
-            color: var(--text-primary);
-        }
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 0.75rem; /* 12px */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.125rem; /* 18px */
-            line-height: 1.8;
-            text-align: justify;
-            user-select: none;
-        }
-        .start-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-            background-image: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-        }
-        .start-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-            background-image: linear-gradient(to right, var(--secondary-color), #065f46);
-        }
-        .flag-icon {
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-        .flag-icon:hover {
-            color: var(--accent-color) !important;
-        }
-        .flag-icon.marked #flag-solid-icon {
-            color: var(--accent-color);
-        }
-        .option-btn {
-            transition: all 0.2s ease-in-out;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            width: 100%;
-            text-align: left;
-            padding: 1rem; /* 16px */
-            border-radius: 0.5rem; /* 8px */
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        .option-btn:hover {
-            border-color: #38bdf8;
-            background-color: rgba(56, 189, 248, 0.1);
-        }
-        .option-selected {
-            border-color: var(--primary-color);
-            background-color: rgba(13, 148, 136, 0.1);
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-        .option-key {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 2rem; /* 32px */
-            width: 2rem; /* 32px */
-            border-radius: 9999px;
-            border: 1px solid var(--border-color);
-            font-weight: bold;
-            margin-right: 1rem; /* 16px */
-        }
-        .option-selected .option-key {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        .timer-warning {
-            color: var(--danger-color);
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        .explanation-box {
-            background-color: #f0f9ff;
-            border-left: 4px solid #38bdf8;
-            padding: 1.25rem; /* 20px */
-            margin-top: 1.25rem; /* 20px */
-            border-radius: 0.5rem; /* 8px */
-        }
-        .explanation-section {
-            margin-top: 1rem; /* 16px */
-        }
-        .explanation-section h5 {
-            font-weight: 600;
-            color: #0c4a6e;
-            display: flex;
-            align-items: center;
-        }
-        .nav-box {
-            transition: all 0.2s ease-in-out;
-            cursor: pointer;
-        }
-        .tab-btn {
-            transition: all 0.2s ease-in-out;
-            border-radius: 0.5rem; /* 8px */
-            padding: 0.75rem 1rem; /* 12px 16px */
-            font-weight: 600;
-            background-color: #e2e8f0;
-            color: #475569;
-            border: 2px solid transparent;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem; /* 8px */
-        }
-        .tab-btn:hover {
-            background-color: #cbd5e1;
-            transform: translateY(-1px);
-        }
-        .tab-active {
-            background-color: #f0fdfa;
-            color: var(--primary-color) !important;
-            border-color: var(--primary-color);
-        }
-        #timer-announcer {
-            position: absolute;
-            left: -10000px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-    </style>
 </head>
 <body class="text-slate-800">
 
     <!-- Zamanlayıcı duyurusu için gizli element -->
     <div id="timer-announcer" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- Navigasyon Menüsü (style.css'den gelen) -->
-    <header class="navbar">
-        <div class="container">
-            <a href="/adalet-gys-portal/index.html" class="navbar-brand">Adalet GYS Portalı</a>
-            <nav class="navbar-nav">
-                <a href="/adalet-gys-portal/index.html" class="nav-link">Ana Sayfa</a>
-                <a href="/adalet-gys-portal/hakkinda.html" class="nav-link">Hakkında</a>
-                <a href="/adalet-gys-portal/iletisim.html" class="nav-link">İletişim</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Ana İçerik Alanı -->
-    <main id="app-container" data-sheet-url="https://docs.google.com/spreadsheets/d/1TLyIqpuCQTkp2JkEUybY4Xc1Ty9rWSBqJ3aQF4j7OOE/export?format=csv&gid=0" class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-
+    <!-- SADECE BU SAYFAYA ÖZEL ANA İÇERİK ALANI -->
+    <!-- data-exam-duration="120" özelliği eklendi! -->
+    <main id="app-container" 
+          data-sheet-url="https://docs.google.com/spreadsheets/d/1TLyIqpuCQTkp2JkEUybY4Xc1Ty9rWSBqJ3aQF4j7OOE/export?format=csv&gid=0" 
+          data-exam-duration="120" 
+          class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+        
         <!-- HOŞGELDİN EKRANI -->
         <div id="welcome-screen" class="card p-8 md:p-12 text-center">
             <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-10">
                 <h1 class="text-3xl md:text-4xl font-bold text-slate-800 bg-teal-50 p-2 rounded">Adalet Bakanlığı Görevde Yükselme Sınavı</h1>
                 <p class="text-lg md:text-xl text-slate-500 mt-3">Yazı İşleri Müdürlüğü Deneme Sınavı</p>
             </div>
-            
-            <!-- Uyarı kutusu (hata durumunda gösterilir) -->
             <div id="warning-box" class="hidden text-left mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-md">
                 <h3 class="font-bold text-yellow-800">Uyarı</h3>
                 <p class="text-yellow-700 mt-2" id="warning-message"></p>
             </div>
-
-            <!-- Sınav Bilgileri ve Kullanım Kılavuzu -->
             <div class="text-left grid md:grid-cols-2 gap-8 mt-12 mb-10">
                 <div class="bg-slate-50 p-6 rounded-lg border">
                     <h2 class="text-xl font-semibold text-slate-800 border-b pb-3 mb-4">Sınav Bilgileri</h2>
                     <ul class="space-y-3 text-slate-700">
-                        <li><b>Toplam Süre:</b><span id="total-duration-display">&nbsp;Hesaplanıyor...</span></li>
-                        <li><b>Toplam Soru Sayısı:</b>&nbsp;<span id="total-question-count">0</span>&nbsp;Soru</li>
+                        <li><b>Toplam Süre:</b><span id="total-duration-display"> Hesaplanıyor...</span></li>
+                        <li><b>Toplam Soru Sayısı:</b> <span id="total-question-count">0</span> Soru</li>
                     </ul>
                 </div>
                 <div class="bg-slate-50 p-6 rounded-lg border">
                     <h2 class="text-xl font-semibold text-slate-800 border-b pb-3 mb-4">Kullanım Kılavuzu</h2>
                     <ul class="space-y-3 text-slate-700">
-                        <li class="flex items-start">
-                            <span class="mr-3 text-teal-500">✓</span>
-                            <p class="text-justify"><b>Cevaplama:</b> Bir seçeneği işaretlemek için doğrudan üzerine tıklayın.</p>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="mr-3 text-teal-500">✓</span>
-                            <p class="text-justify"><b>İşaretleme:</b> Sağ üstteki <svg class="inline-block h-5 w-5 text-slate-500 -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6H8.5l-1-1H5a2 2 0 00-2 2z" /></svg> simgesine tıklayarak bir soruyu daha sonra gözden geçirmek için işaretleyebilirsiniz.</p>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="mr-3 text-teal-500">✓</span>
-                            <p class="text-justify"><b>Gezinme:</b> "Önceki" ve "Sonraki" butonlarını kullanarak sorular arasında geçiş yapabilirsiniz.</p>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="mr-3 text-teal-500">✓</span>
-                            <p class="text-justify"><b>Raporlama:</b> Sınav bitiminde, performans özetinizi, yanlış cevaplarınızı ve işaretlediğiniz soruları içeren tam ekran bir analiz sayfası sizi karşılayacaktır.</p>
-                        </li>
+                        <li class="flex items-start"><span class="mr-3 text-teal-500">✓</span><p class="text-justify"><b>Cevaplama:</b> Bir seçeneği işaretlemek için doğrudan üzerine tıklayın.</p></li>
+                        <li class="flex items-start"><span class="mr-3 text-teal-500">✓</span><p class="text-justify"><b>İşaretleme:</b> Sağ üstteki <svg class="inline-block h-5 w-5 text-slate-500 -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6H8.5l-1-1H5a2 2 0 00-2 2z" /></svg> simgesine tıklayarak bir soruyu daha sonra gözden geçirmek için işaretleyebilirsiniz.</p></li>
+                        <li class="flex items-start"><span class="mr-3 text-teal-500">✓</span><p class="text-justify"><b>Gezinme:</b> "Önceki" ve "Sonraki" butonlarını kullanarak sorular arasında geçiş yapabilirsiniz.</p></li>
+                        <li class="flex items-start"><span class="mr-3 text-teal-500">✓</span><p class="text-justify"><b>Raporlama:</b> Sınav bitiminde, performans özetinizi, yanlış cevaplarınızı ve işaretlediğiniz soruları içeren tam ekran bir analiz sayfası sizi karşılayacaktır.</p></li>
                     </ul>
                 </div>
             </div>
-
-            <!-- Sınavı Başlat Butonu -->
             <button id="start-exam-btn" class="start-btn w-full md:w-auto inline-flex items-center justify-center text-white font-bold text-lg px-12 py-4 rounded-lg" disabled>
-                <!-- SVG İkon: Play -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span id="start-btn-full-text">Sorular Yükleniyor...</span>
             </button>
         </div>
@@ -250,171 +60,44 @@
         <!-- SORU EKRANI -->
         <div id="quiz-screen" class="hidden">
             <div class="card p-6 relative">
-                <!-- Üst Bilgi Çubuğu (Soru numarası, zamanlayıcı, işaretleme) -->
                 <div class="flex justify-between items-center mb-6 bg-slate-50 -m-6 p-6 pb-4 rounded-t-lg border-b">
                     <span id="question-counter" class="text-lg font-bold text-teal-500"></span>
                     <div class="flex items-center space-x-4 sm:space-x-6 text-center">
-                        <div>
-                            <span class="text-xs font-medium text-slate-500">GEÇEN SÜRE</span>
-                            <div id="elapsed-time" class="text-xl font-bold">00:00:00</div>
-                        </div>
+                        <div><span class="text-xs font-medium text-slate-500">GEÇEN SÜRE</span><div id="elapsed-time" class="text-xl font-bold">00:00:00</div></div>
                         <div class="w-px h-8 bg-slate-200"></div>
-                        <div>
-                            <span class="text-xs font-medium text-slate-500">KALAN SÜRE</span>
-                            <div id="remaining-time" class="text-xl font-bold text-teal-600">00:00:00</div>
-                        </div>
+                        <div><span class="text-xs font-medium text-slate-500">KALAN SÜRE</span><div id="remaining-time" class="text-xl font-bold text-teal-600">00:00:00</div></div>
                     </div>
-                    <!-- Soruyu İşaretleme Butonu (Bayrak İkonu) -->
                     <button id="mark-review-btn" title="İncelemek için işaretle" class="flag-icon text-slate-400 hover:text-yellow-500" aria-label="Soruyu işaretle">
-                        <!-- SVG İkon: Bayrak (Çizgili) -->
-                        <svg id="flag-outline-icon" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6H8.5l-1-1H5a2 2 0 00-2 2z" />
-                        </svg>
-                        <!-- SVG İkon: Bayrak (Dolu) -->
-                        <svg id="flag-solid-icon" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 hidden" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" />
-                        </svg>
+                        <svg id="flag-outline-icon" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6H8.5l-1-1H5a2 2 0 00-2 2z" /></svg>
+                        <svg id="flag-solid-icon" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 hidden" viewBox="0 0 20 20" fill="currentColor"><path d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" /></svg>
                     </button>
                 </div>
-
-                              <!-- Soru Metni -->
-                <div class="mt-8 mb-8">
-                    <div id="question-text-container">
-                        <pre id="question-text"></pre>
-                    </div>
-                </div>
-
-                <!-- Seçenekler -->
+                <div class="mt-8 mb-8"><div id="question-text-container"><pre id="question-text"></pre></div></div>
                 <div id="options-container" class="grid grid-cols-1 gap-4"></div>
             </div>
-
-            <!-- Gezinti Butonları -->
             <div class="flex justify-between items-center mt-6">
                 <button id="prev-btn" class="px-6 py-2 bg-white rounded-md hover:bg-slate-50 shadow-sm disabled:opacity-50" aria-label="Önceki soru">Önceki</button>
                 <button id="finish-btn" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm" aria-label="Sınavı bitir">Sınavı Bitir</button>
                 <button id="next-btn" class="px-6 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 shadow-sm disabled:opacity-50" aria-label="Sonraki soru">Sonraki</button>
             </div>
-
-            <!-- Soru Gezgini -->
             <div class="card p-4 mt-6">
                 <h3 class="text-lg font-semibold mb-3">Soru Gezgini</h3>
-                <!-- Soru Gezgini Açıklaması -->
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 mb-4 pb-2 border-b">
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-green-500"></span>Cevaplanmış
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <!-- SVG İkon: Bayrak (Dolu, küçük) - İşaretli Sorular -->
-                        <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"></path>
-                        </svg>İşaretli
-                    </div>
-                    <!-- EKLENDİ: Boş Sorular için açıklama -->
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-slate-300"></span>Boş
-                    </div>
+                    <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-green-500"></span>Cevaplanmış</div>
+                    <div class="flex items-center gap-1.5"><svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"></path></svg>İşaretli</div>
+                    <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-slate-300"></span>Boş</div>
                 </div>
-                <!-- Soru Kutucukları -->
                 <div id="nav-palette-container" class="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-15 lg:grid-cols-20 gap-2"></div>
             </div>
         </div>
 
-        <!-- SONUÇ MODALI -->
-        <div id="result-modal" class="hidden fixed inset-0 bg-slate-100 z-40 overflow-y-auto p-6 sm:p-12">
-            <div class="max-w-4xl mx-auto relative">
-                <!-- Modal Kapatma Butonu -->
-                <button id="close-result-modal-btn" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800" aria-label="Sonuçları kapat">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-
-                <h2 id="result-title" class="text-3xl font-bold text-center mb-4">Sınav Sonucu</h2>
-                <div id="performance-summary" class="text-center text-lg text-slate-700 mb-8"></div>
-
-                <!-- İstatistikler -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-10">
-                    <div class="p-4 bg-green-100 rounded-lg">
-                        <p class="text-2xl font-bold" id="correct-count">0</p>
-                        <p>Doğru</p>
-                    </div>
-                    <div class="p-4 bg-red-100 rounded-lg">
-                        <p class="text-2xl font-bold" id="incorrect-count">0</p>
-                        <p>Yanlış</p>
-                    </div>
-                    <div class="p-4 bg-slate-200 rounded-lg">
-                        <p class="text-2xl font-bold" id="empty-count">0</p>
-                        <p>Boş</p>
-                    </div>
-                    <div id="success-rate-box" class="p-4 bg-blue-100 rounded-lg">
-                        <p class="text-2xl font-bold" id="success-rate">0%</p>
-                        <p id="success-text">Başarı</p>
-                    </div>
-                </div>
-
-                <!-- Sonuç Sekmeleri -->
-                <div class="flex items-center gap-4 mb-6">
-                    <!-- Yanlış Cevaplar Sekmesi - Çarpı İkonu Eklendi -->
-                    <button class="tab-btn flex-1 tab-active" id="wrong-answers-tab">
-                        <!-- SVG İkon: Çarpı (Yuvarlak içine alınmış) -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                        </svg>
-                        <span>Yanlış Cevaplar</span>
-                    </button>
-                    <!-- İşaretlenen Sorular Sekmesi - Bayrak İkonu Eklendi -->
-                    <button class="tab-btn flex-1" id="marked-questions-tab">
-                        <!-- SVG İkon: Bayrak (Dolu, küçük) -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span>İşaretlenen Sorular</span>
-                    </button>
-                </div>
-
-                <!-- Sonuç Panelleri -->
-                <div id="wrong-answers-panel">
-                    <div id="wrong-answers-container" aria-live="polite"></div>
-                </div>
-                <div id="marked-questions-panel" class="hidden">
-                    <div id="marked-questions-container" aria-live="polite"></div>
-                </div>
-
-                <!-- Tekrar Dene Butonu -->
-                <div class="text-center mt-12">
-                    <!-- DEĞİŞİKLİK: Buton metni isteğiniz üzerine güncellendi. -->
-                    <button id="restart-btn" class="start-btn text-white font-bold px-8 py-3 rounded-lg">Ana Sayfaya Dön</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Uyarı Modalı (Alert) -->
-        <div id="alert-modal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
-            <div class="card p-8 max-w-sm mx-auto text-center">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 mb-4">
-                    <svg class="h-6 w-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-4" id="alert-modal-title">UYARI</h3>
-                <p class="text-slate-600 mb-8" id="alert-modal-message"></p>
-                <button id="alert-modal-ok-btn" class="px-8 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">Tamam</button>
-            </div>
-        </div>
-
     </main>
-
-    <!-- Footer (style.css'den gelen) -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
-        </div>
-    </footer>
-
+    
     <!-- JavaScript Dosyaları -->
-    <script src="/adalet-gys-portal/assets/js/main.js"></script>
-    <!-- test-engine.js dosyası, uygulamanın tamamını içerir. -->
-    <script src="/adalet-gys-portal/assets/js/test-engine.js"></script>
+    <!-- 'defer' attribute'u sayfa yükleme performansını artırır -->
+    <script src="/adalet-gys-portal/assets/js/template-loader.js" defer></script>
+    <script src="/adalet-gys-portal/assets/js/main.js" defer></script>
+    <script src="/adalet-gys-portal/assets/js/test-engine.js" defer></script>
 
 </body>
 </html>
