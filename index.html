@@ -4,21 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adalet GYS Portalı - Ana Sayfa</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
+    
+    <script src="/adalet-gys-portal/templates/template-loader.js" defer></script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="index.html" class="navbar-brand">
-                Adalet GYS Portalı
-            </a>
-            <nav class="navbar-nav">
-                <a href="index.html" class="nav-link active">Ana Sayfa</a>
-                <a href="hakkinda.html" class="nav-link">Hakkında</a>
-                <a href="iletisim.html" class="nav-link">İletişim</a>
-            </nav>
-        </div>
-    </header>
+
+<body data-needs-template="true">
 
     <main class="container page-content">
         <section class="hero">
@@ -30,31 +22,24 @@
             <div class="category-card">
                 <h2>📘 Ortak Konular</h2>
                 <p>Tüm unvanlar için zorunlu olan %40'lık bölümün konu anlatımları ve testleri.</p>
-                <a href="ortak-konular/" class="btn">Konuları İncele</a>
-                <a href="testler/ortak-konular/" class="btn btn-secondary">Testleri Çöz</a>
+                <a href="/adalet-gys-portal/ortak-konular/" class="btn">Konuları İncele</a>
+                <a href="/adalet-gys-portal/testler/ortak-konular/" class="btn btn-secondary">Testleri Çöz</a>
             </div>
 
             <div class="category-card">
                 <h2>📙 Alan Konuları</h2>
                 <p>Yazı İşleri Müdürlüğü için özel olarak hazırlanmış %60'lık bölümün içerikleri.</p>
-                 <a href="alan-konulari/" class="btn">Konuları İncele</a>
-                 <a href="testler/alan-konulari/" class="btn btn-secondary">Testleri Çöz</a>
+                 <a href="/adalet-gys-portal/alan-konulari/" class="btn">Konuları İncele</a>
+                 <a href="/adalet-gys-portal/testler/alan-konulari/" class="btn btn-secondary">Testleri Çöz</a>
             </div>
 
             <div class="category-card">
                 <h2>⏱️ Deneme Sınavları</h2>
                 <p>Gerçek sınav formatında, süre tutarak kendinizi deneyin ve ilerlemenizi takip edin.</p>
-                 <a href="deneme-sinavlari/" class="btn">Denemelere Başla</a>
+                 <a href="/adalet-gys-portal/deneme-sinavlari/" class="btn">Denemelere Başla</a>
             </div>
         </section>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
-        </div>
-    </footer>
-
-    <script src="assets/js/main.js"></script>
-</body>
+    </body>
 </html>
