@@ -382,22 +382,43 @@ class UIManager {
     }
 }
 
+/**
+ * Onay ve uyarı pencerelerini (modallar) yönetir.
+ * @class ModalManager
+ */
 class ModalManager {
-    constructor(domElements) { this.dom = domElements; this._bindModalEvents(); }
-    _bindModalEvents() { this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide()); }
+    constructor(domElements) {
+        this.dom = domElements;
+        this._bindModalEvents();
+    }
+    
+    _bindModalEvents() {
+        this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide());
+    }
+    
     show(config) {
         const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
         if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) return;
+        
         alertModalTitle.textContent = config.title;
         alertModalMessage.textContent = config.message;
+        
+        // DÜZELTME: Pencereyi görünür yapmak için 'flex' sınıfı eklendi.
         alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
-        alertModalOkBtn.onclick = () => { this.hide(); if (config.onConfirm) config.onConfirm(); };
+        alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
+        
+        alertModalOkBtn.focus();
+        alertModalOkBtn.onclick = () => {
+            this.hide();
+            if (config.onConfirm) config.onConfirm();
+        };
     }
-    hide() { this.dom.alertModal?.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN); }
+    
+    hide() {
+        if (this.dom.alertModal) {
+            // DÜZELTME: Pencereyi gizlerken 'flex' sınıfı kaldırıldı.
+            this.dom.alertModal.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
+            this.dom.alertModal.classList.remove(CONSTANTS.CSS_CLASSES.FLEX);
+        }
+    }
 }
-
-document.addEventListener('template-loaded', () => {
-    if (document.getElementById(CONSTANTS.DOM.APP_CONTAINER_ID)) {
-        new JusticeExamApp();
-    }
-});
