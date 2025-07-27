@@ -143,75 +143,68 @@ class JusticeExamApp {
     }
 
     // GOOGLE_SHEET_URL'i güvenli bir şekilde satırlara ayıran fonksiyon
+    // Bu fonksiyon, çok satırlı hücreler ve kaçışlı tırnaklarla başa çıkmak için daha sağlam hale getirildi.
     robustCsvParse(csvText) {
         const rows = [];
-        let currentRow = '';
+        let currentRow = [];
+        let currentField = '';
         let inQuotes = false;
-        // Farklı satır sonu karakterlerini normalize et
+
+        // Normalize line endings
         const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
         for (let i = 0; i < normalizedText.length; i++) {
             const char = normalizedText[i];
+            const nextChar = normalizedText[i + 1];
+
             if (char === '"') {
-                // Kaçışlı çift tırnak ("") kontrolü
-                if (inQuotes && normalizedText[i + 1] === '"') {
-                    currentRow += '"';
-                    i++; // Bir sonraki " karakterini atla
+                if (inQuotes && nextChar === '"') {
+                    // Handle escaped quotes ""
+                    currentField += '"';
+                    i++; // Skip the next quote
                 } else {
-                    // Tırnak durumunu değiştir
+                    // Toggle quote state
                     inQuotes = !inQuotes;
                 }
+            } else if (char === ',' && !inQuotes) {
+                // End of field
+                currentRow.push(currentField);
+                currentField = '';
             } else if (char === '\n' && !inQuotes) {
-                // Tırnak içinde değilsek ve yeni satıra geldiysek, satırı tamamla
-                if (currentRow.trim()) { // Boş satırları atla
-                    rows.push(currentRow);
+                // End of row
+                currentRow.push(currentField); // Push the last field
+                // Only add non-empty rows
+                if (currentRow.some(field => field.trim() !== '')) {
+                     rows.push(currentRow);
                 }
-                currentRow = ''; // Yeni satır için sıfırla
+                currentRow = [];
+                currentField = '';
             } else {
-                // Normal karakterleri satıra ekle
-                currentRow += char;
+                // Regular character
+                currentField += char;
             }
         }
 
-        // Son satırı da ekle (dosya \n ile bitmeyebilir ve boş olmayabilir)
-        if (currentRow.trim()) {
-            rows.push(currentRow);
+        // Handle the last field/row if the file doesn't end with a newline
+        if (currentField !== '' || currentRow.length > 0) {
+            currentRow.push(currentField);
+             if (currentRow.some(field => field.trim() !== '')) {
+                 rows.push(currentRow);
+             }
         }
 
         return rows;
     }
 
     // Tek bir CSV satırını değer dizisine ayıran fonksiyon
-    parseCsvRow(row) {
-        const values = [];
-        let currentVal = '';
-        let inQuotes = false;
-
-        for (let i = 0; i < row.length; i++) {
-            const char = row[i];
-            if (char === '"') {
-                // Kaçışlı çift tırnak ("") kontrolü
-                if (inQuotes && row[i + 1] === '"') {
-                    currentVal += '"';
-                    i++; // Bir sonraki " karakterini atla
-                } else {
-                    // Tırnak durumunu değiştir
-                    inQuotes = !inQuotes;
-                }
-            } else if (char === ',' && !inQuotes) {
-                // Virgülle ayrılmış değeri ekle ve sıfırla
-                values.push(currentVal);
-                currentVal = '';
-            } else {
-                // Normal karakterleri değere ekle
-                currentVal += char;
-            }
-        }
-        // Son değeri de ekle
-        values.push(currentVal);
-
-        // Değerleri temizle (başında/sonunda tırnakları kaldır, boşlukları temizle)
-        return values.map(v => v.trim().replace(/^"|"$/g, ''));
+    // Bu fonksiyon artık gerekli değil, çünkü robustCsvParse doğrudan dizi döndürüyor.
+    // Ancak, uyumluluk için ve potansiyel farklılıklar için burada tutuluyor.
+    // Aslında robustCsvParse zaten doğru işi yapıyor.
+    parseCsvRow(rowArray) {
+        // Bu fonksiyon artık sadece trim ve boş string kontrolü yapabilir.
+        // Ama robustCsvParse zaten bu işi yapmış durumda.
+        // Güvenlik için tekrar trim yapalım.
+        return rowArray.map(field => field.trim());
     }
 
     // Google Sheet'ten veri çekip işleyen ana fonksiyon
@@ -222,52 +215,59 @@ class JusticeExamApp {
         }
 
         try {
+            console.log("Veri çekme işlemi başlatılıyor..."); // Debug
             // 1. Veriyi çek
             const response = await fetch(this.GOOGLE_SHEET_URL);
+            console.log("Fetch isteği yapıldı, yanıt durumu:", response.status); // Debug
             if (!response.ok) {
                 throw new Error(`Ağ yanıtı başarısız: ${response.status} ${response.statusText}`);
             }
             const csvText = await response.text();
+            console.log("CSV verisi çekildi. İlk 500 karakter:", csvText.substring(0, 500)); // Debug
             if (!csvText) {
                 throw new Error("CSV verisi boş.");
             }
 
-            // 2. CSV'yi satırlara ayır
-            const rows = this.robustCsvParse(csvText);
-            console.log("CSV'den çekilen toplam satır sayısı (başlık dahil):", rows.length); // Debug
-            if (rows.length < 2) { // Başlık + en az 1 soru satırı gerekli
+            // 2. CSV'yi satırlara ayır (dizilerin dizisi olarak)
+            const parsedRows = this.robustCsvParse(csvText);
+            console.log("CSV ayrıştırıldı. Toplam satır (başlık dahil):", parsedRows.length); // Debug
+            console.log("İlk satır (Başlıklar):", parsedRows[0]); // Debug
+            if (parsedRows.length < 2) { // Başlık + en az 1 soru satırı gerekli
                 throw new Error("CSV dosyasında yeterli veri bulunamadı (başlık ve en az bir soru satırı olmalı).");
             }
 
-            // 3. Başlıkları al
-            const headers = this.parseCsvRow(rows[0]);
-            console.log("CSV Başlıkları:", headers); // Debug
+            // 3. Başlıkları al (ilk satır)
+            const headers = this.parseCsvRow(parsedRows[0]); // Headers zaten bir dizi
+            console.log("İşlenen Başlıklar:", headers); // Debug
             // Gerekli başlıkları tanımla (optionE dahil)
-            const requiredHeaders = ['questionText', 'optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'correctAnswer', 'explanation']; // EKLENDİ: optionE
+            const requiredHeaders = ['questionText', 'optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'correctAnswer', 'explanation'];
             const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
             if (missingHeaders.length > 0) {
                 throw new Error(`Eksik başlıklar: ${missingHeaders.join(', ')}`);
             }
 
             // 4. Soruları işle
-            const questionPool = rows.slice(1) // Başlık satırını atla
-                .map((row, index) => {
-                    // console.log(`Satır ${index + 2} işleniyor:`, row); // Debug için
-                    if (!row.trim()) return null; // Gerçekten boş satırı atla
-                    const values = this.parseCsvRow(row);
-                    // console.log(`Satır ${index + 2} değerleri:`, values); // Debug için
-                    // Satır, başlık sayısı kadar sütun içermiyorsa atla
-                    if (values.length < headers.length) {
-                        console.warn(`Satır ${index + 2} yeterli sütun içermiyor. Atlandı. Beklenen: ${headers.length}, Alınan: ${values.length}`, values);
-                        return null;
+            const questionPool = parsedRows.slice(1) // Başlık satırını atla
+                .map((rowArray, index) => {
+                    // console.log(`Satır ${index + 2} işleniyor (dizi):`, rowArray); // Debug için
+                    // Boş satır kontrolü (tüm alanlar boşsa)
+                    if (rowArray.every(field => field.trim() === '')) {
+                         console.warn(`Satır ${index + 2} tamamen boş atlandı.`); // Debug
+                         return null;
+                    }
+                    // Satır, başlık sayısı kadar sütun içermiyorsa uyarı ver (ama yine de işlemeye çalış)
+                    if (rowArray.length !== headers.length) {
+                         console.warn(`Satır ${index + 2} sütun sayısı uyuşmuyor. Beklenen: ${headers.length}, Alınan: ${rowArray.length}`, rowArray);
+                         // return null; // Bu satırı atlamak yerine, mevcut alanları işleyelim.
                     }
 
                     // Başlıklara göre obje oluştur
-                    const data = headers.reduce((obj, h, i) => {
-                        // Eksik hücreler için boş string, aksi halde değeri ata
-                        obj[h] = (i < values.length) ? (values[i] || '') : '';
-                        return obj;
-                    }, {});
+                    // headers dizisinin uzunluğu kadar döngü yap, rowArray daha kısa bile olsa
+                    const data = {};
+                    for (let i = 0; i < headers.length; i++) {
+                        // rowArray yeterince uzunsa değeri al, değilse boş string ata
+                        data[headers[i]] = (i < rowArray.length) ? (rowArray[i] || '') : '';
+                    }
 
                     // Soru objesini oluştur
                     const questionObj = {
