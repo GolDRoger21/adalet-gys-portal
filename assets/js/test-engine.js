@@ -2,7 +2,7 @@
  * @file Adalet GYS Portalı için ana sınav motoru ve uygulama mantığı.
  * @description Bu dosya, Google Sheet'ten sınav verilerini çeken, sınavı yöneten (zamanlayıcı, soru geçişleri),
  * kullanıcı arayüzünü güncelleyen ve sonuçları gösteren tüm sınıfları içerir.
- * @version 3.0 (Final Sync)
+ * @version 3.1 (Debug)
  */
 
 const CONSTANTS = {
@@ -386,39 +386,59 @@ class UIManager {
  * Onay ve uyarı pencerelerini (modallar) yönetir.
  * @class ModalManager
  */
+/**
+ * Onay ve uyarı pencerelerini (modallar) yönetir.
+ * @class ModalManager
+ */
 class ModalManager {
-    constructor(domElements) {
-        this.dom = domElements;
-        this._bindModalEvents();
-    }
-    
-    _bindModalEvents() {
-        this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide());
-    }
-    
-    show(config) {
-        const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
-        if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) return;
-        
-        alertModalTitle.textContent = config.title;
-        alertModalMessage.textContent = config.message;
-        
-        // DÜZELTME: Pencereyi görünür yapmak için 'flex' sınıfı eklendi.
-        alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
-        alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
-        
-        alertModalOkBtn.focus();
-        alertModalOkBtn.onclick = () => {
-            this.hide();
-            if (config.onConfirm) config.onConfirm();
-        };
-    }
-    
-    hide() {
-        if (this.dom.alertModal) {
-            // DÜZELTME: Pencereyi gizlerken 'flex' sınıfı kaldırıldı.
-            this.dom.alertModal.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
-            this.dom.alertModal.classList.remove(CONSTANTS.CSS_CLASSES.FLEX);
-        }
-    }
+    constructor(domElements) {
+        this.dom = domElements;
+        this._bindModalEvents();
+    }
+    
+    _bindModalEvents() {
+        this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide());
+    }
+    
+    show(config) {
+        // --- YENİ TEST KODLARI BAŞLANGIÇ ---
+        console.log("--- ModalManager.show() Testi Başladı ---");
+        console.log("Aranan Element #alert-modal:", this.dom.alertModal);
+        console.log("Aranan Element #alert-modal-title:", this.dom.alertModalTitle);
+        console.log("Aranan Element #alert-modal-message:", this.dom.alertModalMessage);
+        console.log("Aranan Element #alert-modal-ok-btn:", this.dom.alertModalOkBtn);
+        // --- YENİ TEST KODLARI BİTİŞ ---
+
+        const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
+
+        if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) {
+            // Hata durumunda konsola kırmızı bir mesaj yazdır
+            console.error("MODAL ELEMENTLERİNDEN BİRİ VEYA BİRKAÇI 'null' OLDUĞU İÇİN FONKSİYON DURDURULDU!");
+            return;
+        }
+        
+        alertModalTitle.textContent = config.title;
+        alertModalMessage.textContent = config.message;
+        
+        alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
+        alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
+        
+        alertModalOkBtn.focus();
+        alertModalOkBtn.onclick = () => {
+            this.hide();
+            if (config.onConfirm) config.onConfirm();
+        };
+    }
+    
+    hide() {
+        if (this.dom.alertModal) {
+            this.dom.alertModal.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
+            this.dom.alertModal.classList.remove(CONSTANTS.CSS_CLASSES.FLEX);
+        }
+    }
 }
+document.addEventListener('template-loaded', () => {
+    if (document.getElementById(CONSTANTS.DOM.APP_CONTAINER_ID)) {
+        new JusticeExamApp();
+    }
+});
