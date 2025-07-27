@@ -2,7 +2,7 @@
  * @file Adalet GYS Portalı için ana sınav motoru ve uygulama mantığı.
  * @description Bu dosya, Google Sheet'ten sınav verilerini çeken, sınavı yöneten (zamanlayıcı, soru geçişleri),
  * kullanıcı arayüzünü güncelleyen ve sonuçları gösteren tüm sınıfları içerir.
- * @version 3.2 (Timing Fix)
+ * @version 4.0 (Final Version with Timing Fix)
  */
 
 const CONSTANTS = {
@@ -392,37 +392,25 @@ class ModalManager {
         this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide());
     }
     
-   // 'show' fonksiyonunun YENİ ve TEST AMAÇLI hali
-
-show(config) {
-    // --- YENİ TEST KODLARI BAŞLANGIÇ ---
-    console.log("--- ModalManager.show() Testi Başladı ---");
-    console.log("Aranan Element #alert-modal:", this.dom.alertModal);
-    console.log("Aranan Element #alert-modal-title:", this.dom.alertModalTitle);
-    console.log("Aranan Element #alert-modal-message:", this.dom.alertModalMessage);
-    console.log("Aranan Element #alert-modal-ok-btn:", this.dom.alertModalOkBtn);
-    // --- YENİ TEST KODLARI BİTİŞ ---
-
-    const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
-
-    if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) {
-        // Hata durumunda konsola kırmızı bir mesaj yazdır
-        console.error("MODAL ELEMENTLERİNDEN BİRİ VEYA BİRKAÇI 'null' OLDUĞU İÇİN FONKSİYON DURDURULDU!");
-        return;
+    show(config) {
+        const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
+        if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) {
+            console.error("MODAL ELEMENTLERİNDEN BİRİ VEYA BİRKAÇI 'null' OLDUĞU İÇİN FONKSİYON DURDURULDU!");
+            return;
+        }
+        
+        alertModalTitle.textContent = config.title;
+        alertModalMessage.textContent = config.message;
+        
+        alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
+        alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
+        
+        alertModalOkBtn.focus();
+        alertModalOkBtn.onclick = () => {
+            this.hide();
+            if (config.onConfirm) config.onConfirm();
+        };
     }
-    
-    alertModalTitle.textContent = config.title;
-    alertModalMessage.textContent = config.message;
-    
-    alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
-    alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
-    
-    alertModalOkBtn.focus();
-    alertModalOkBtn.onclick = () => {
-        this.hide();
-        if (config.onConfirm) config.onConfirm();
-    };
-}
     
     hide() {
         if (this.dom.alertModal) {
@@ -432,7 +420,7 @@ show(config) {
     }
 }
 
-// --- DÜZELTME: ZAMANLAMA SORUNU İÇİN setTimeout EKLENDİ ---
+// --- NİHAİ DÜZELTME: ZAMANLAMA SORUNU İÇİN setTimeout EKLENDİ ---
 document.addEventListener('template-loaded', () => {
     if (document.getElementById(CONSTANTS.DOM.APP_CONTAINER_ID)) {
         // Tarayıcıya DOM'u güncellemesi için bir anlık süre tanı.
