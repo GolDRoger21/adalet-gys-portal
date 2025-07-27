@@ -2,47 +2,45 @@
  * @file Ortak HTML şablonlarını sayfalara dinamik olarak yükler.
  * @description Bu script, header, footer ve modallar gibi ortak bileşenleri
  * bir şablon dosyasından alıp ilgili sayfanın DOM'una enjekte eder.
- * Bu sayede kod tekrarı önlenir ve bakım kolaylaşır.
+ * İşlem tamamlandığında 'template-loaded' event'ini tetikler.
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // Sadece sınav sayfalarında değil, ortak yapıya ihtiyaç duyan tüm sayfalarda çalışabilir.
-    // Şimdilik sınav sayfalarını hedefliyoruz.
-    if (document.getElementById('app-container')) {
-        loadExamTemplate();
+    // Şablon gerektiren sayfalarda yükleyiciyi çalıştır.
+    if (document.body.dataset.needsTemplate) {
+        loadCommonTemplate();
     }
 });
 
-async function loadExamTemplate() {
+async function loadCommonTemplate() {
     try {
+        // Not: Bu yol, projenin kök dizinine göre ayarlanmalıdır. GitHub Pages için bu yol doğrudur.
         const response = await fetch('/adalet-gys-portal/_templates/sinav-sablonu.html');
         if (!response.ok) {
             throw new Error(`Şablon dosyası yüklenemedi: ${response.statusText}`);
         }
         const templateText = await response.text();
 
-        // Şablon metnini geçici bir container'a yükle
         const tempContainer = document.createElement('div');
         tempContainer.innerHTML = templateText;
 
-        // Şablondan elementleri seç
         const header = tempContainer.querySelector('.navbar');
         const resultModal = tempContainer.querySelector('#result-modal');
         const alertModal = tempContainer.querySelector('#alert-modal');
         const footer = tempContainer.querySelector('.footer');
         
-        // Sayfadaki ana elementleri seç
         const body = document.body;
-        const mainContent = document.querySelector('main');
+        
+        if (header) body.prepend(header);
+        if (footer) body.appendChild(footer); // Footer en sona
+        if (alertModal) body.appendChild(alertModal); // Modallar da en sona
+        if (resultModal) body.appendChild(resultModal);
 
-        // Elementleri sayfaya enjekte et
-        if (header) body.prepend(header); // Header'ı body'nin en başına
-        if (resultModal && mainContent) mainContent.after(resultModal); // Modalları <main> etiketinden sonra
-        if (alertModal && resultModal) resultModal.after(alertModal);
-        if (footer) body.appendChild(footer); // Footer'ı body'nin en sonuna
+        // --- EN ÖNEMLİ DEĞİŞİKLİK BURADA ---
+        // Her şeyin yüklendiğini diğer script'lere haber ver.
+        document.dispatchEvent(new Event('template-loaded'));
 
     } catch (error) {
         console.error('Şablon yükleme hatası:', error);
-        // Hata durumunda kullanıcıya bilgi ver
         document.body.innerHTML = '<h1 style="text-align: center; margin-top: 50px;">Sayfa yüklenirken kritik bir hata oluştu.</h1>';
     }
 }
