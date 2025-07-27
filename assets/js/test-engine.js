@@ -2,7 +2,7 @@
  * @file Adalet GYS Portalı için ana sınav motoru ve uygulama mantığı.
  * @description Bu dosya, Google Sheet'ten sınav verilerini çeken, sınavı yöneten (zamanlayıcı, soru geçişleri),
  * kullanıcı arayüzünü güncelleyen ve sonuçları gösteren tüm sınıfları içerir.
- * @version 2.1.0 (Flexible Duration & Professional Refactoring)
+ * @version 2.1.1 (UI DOM Fix)
  */
 
 const CONSTANTS = {
@@ -19,8 +19,8 @@ const CONSTANTS = {
     },
     EXAM: {
         DEFAULT_MINUTES_PER_QUESTION: 1.2, // data-exam-duration yoksa varsayılan süre (soru başına)
-        TIMER_WARNING_SECONDS: 300,        // Son 5 dakika uyarısı (saniye)
-        AUTO_NEXT_QUESTION_DELAY: 300      // Cevap sonrası otomatik geçiş gecikmesi (ms)
+        TIMER_WARNING_SECONDS: 300,      // Son 5 dakika uyarısı (saniye)
+        AUTO_NEXT_QUESTION_DELAY: 300    // Cevap sonrası otomatik geçiş gecikmesi (ms)
     },
     DOM: {
         APP_CONTAINER_ID: 'app-container'
@@ -55,14 +55,14 @@ class JusticeExamApp {
      */
     _initializeDOMElements() {
         const elementIds = [
-            'app-container', 'welcome-screen', 'quiz-screen', 'start-exam-btn', 'elapsed-time', 'remaining-time', 
-            'timer-announcer', 'question-counter', 'question-text', 'options-container', 'prev-btn', 'next-btn', 
-            'mark-review-btn', 'finish-btn', 'nav-palette-container', 'result-modal', 'correct-count', 
-            'incorrect-count', 'empty-count', 'success-rate', 'success-rate-box', 'success-text', 
-            'performance-summary', 'wrong-answers-container', 'marked-questions-container', 'wrong-answers-tab', 
-            'marked-questions-tab', 'wrong-answers-panel', 'marked-questions-panel', 'start-btn-full-text', 
-            'total-question-count', 'total-duration-display', 'alert-modal', 'alert-modal-title', 
-            'alert-modal-message', 'alert-modal-ok-btn', 'restart-btn', 'close-result-modal-btn', 
+            'app-container', 'welcome-screen', 'quiz-screen', 'start-exam-btn', 'elapsed-time', 'remaining-time',  
+            'timer-announcer', 'question-counter', 'question-text', 'options-container', 'prev-btn', 'next-btn',  
+            'mark-review-btn', 'finish-btn', 'nav-palette-container', 'result-modal', 'correct-count',  
+            'incorrect-count', 'empty-count', 'success-rate', 'success-rate-box', 'success-text',  
+            'performance-summary', 'wrong-answers-container', 'marked-questions-container', 'wrong-answers-tab',  
+            'marked-questions-tab', 'wrong-answers-panel', 'marked-questions-panel', 'start-btn-full-text',  
+            'total-question-count', 'total-duration-display', 'alert-modal', 'alert-modal-title',  
+            'alert-modal-message', 'alert-modal-ok-btn', 'restart-btn', 'close-result-modal-btn',  
             'flag-outline-icon', 'flag-solid-icon', 'warning-box', 'warning-message'
         ];
         const elements = {};
@@ -84,13 +84,12 @@ class JusticeExamApp {
             return;
         }
 
-        // DİNAMİK SÜRE HESAPLAMA
         const examDuration = this.config.duration 
             ? parseInt(this.config.duration, 10) 
             : Math.ceil(questionPool.length * CONSTANTS.EXAM.DEFAULT_MINUTES_PER_QUESTION);
 
         this.domElements.totalQuestionCount.textContent = questionPool.length;
-        this.domElements.totalDurationDisplay.innerHTML = ` ${examDuration} Dakika`;
+        this.domElements.totalDurationDisplay.innerHTML = ` ${examDuration} Dakika`;
         this.domElements.startBtnFullText.textContent = `SINAVA BAŞLA (${questionPool.length} Soru)`;
         this.domElements.startExamBtn.disabled = false;
 
@@ -123,7 +122,6 @@ class JusticeExamApp {
     _bindEventListeners() {
         this.domElements.startExamBtn?.addEventListener('click', () => this.startExam());
         
-        // YENİ KÖK-GÖRECELİ YOL
         this.domElements.restartBtn?.addEventListener('click', () => window.location.href = '/adalet-gys-portal/index.html');
         this.domElements.closeResultModalBtn?.addEventListener('click', () => window.location.href = '/adalet-gys-portal/index.html');
 
@@ -385,7 +383,10 @@ class UIManager {
 
     renderQuestion() {
         const question = this.examManager.questions[this.examManager.currentQuestionIndex];
-        if (this.dom.counter) this.dom.counter.textContent = `Soru ${this.examManager.currentQuestionIndex + 1} / ${this.examManager.questions.length}`;
+        
+        // DÜZELTME 1: this.dom.counter -> this.dom.questionCounter olarak değiştirildi.
+        if (this.dom.questionCounter) this.dom.questionCounter.textContent = `Soru ${this.examManager.currentQuestionIndex + 1} / ${this.examManager.questions.length}`;
+        
         if (this.dom.questionText) {
             const cleanQuestionText = question.questionText.replace(/^\d+[\.\)-]\s*/, '');
             this.dom.questionText.textContent = cleanQuestionText;
@@ -428,8 +429,9 @@ class UIManager {
     }
 
     updateNavPalette() {
-        if (this.dom.navPalette) {
-            this.dom.navPalette.innerHTML = '';
+        // DÜZELTME 2: this.dom.navPalette -> this.dom.navPaletteContainer olarak değiştirildi.
+        if (this.dom.navPaletteContainer) {
+            this.dom.navPaletteContainer.innerHTML = '';
             const fragment = document.createDocumentFragment();
             this.examManager.questions.forEach((_, index) => {
                 const box = document.createElement('button');
@@ -446,7 +448,7 @@ class UIManager {
                 box.onclick = () => this.examManager.navigateToQuestion(index);
                 fragment.appendChild(box);
             });
-            this.dom.navPalette.appendChild(fragment);
+            this.dom.navPaletteContainer.appendChild(fragment);
         }
     }
 
