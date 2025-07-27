@@ -392,35 +392,37 @@ class ModalManager {
         this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide());
     }
     
-    show(config) {
-        // --- YENİ TEST KODLARI BAŞLANGIÇ ---
-        console.log("--- ModalManager.show() Testi Başladı ---");
-        console.log("Aranan Element #alert-modal:", this.dom.alertModal);
-        console.log("Aranan Element #alert-modal-title:", this.dom.alertModalTitle);
-        console.log("Aranan Element #alert-modal-message:", this.dom.alertModalMessage);
-        console.log("Aranan Element #alert-modal-ok-btn:", this.dom.alertModalOkBtn);
-        // --- YENİ TEST KODLARI BİTİŞ ---
+   // 'show' fonksiyonunun YENİ ve TEST AMAÇLI hali
 
-        const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
+show(config) {
+    // --- YENİ TEST KODLARI BAŞLANGIÇ ---
+    console.log("--- ModalManager.show() Testi Başladı ---");
+    console.log("Aranan Element #alert-modal:", this.dom.alertModal);
+    console.log("Aranan Element #alert-modal-title:", this.dom.alertModalTitle);
+    console.log("Aranan Element #alert-modal-message:", this.dom.alertModalMessage);
+    console.log("Aranan Element #alert-modal-ok-btn:", this.dom.alertModalOkBtn);
+    // --- YENİ TEST KODLARI BİTİŞ ---
 
-        if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) {
-            // Hata durumunda konsola kırmızı bir mesaj yazdır
-            console.error("MODAL ELEMENTLERİNDEN BİRİ VEYA BİRKAÇI 'null' OLDUĞU İÇİN FONKSİYON DURDURULDU!");
-            return;
-        }
-        
-        alertModalTitle.textContent = config.title;
-        alertModalMessage.textContent = config.message;
-        
-        alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
-        alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
-        
-        alertModalOkBtn.focus();
-        alertModalOkBtn.onclick = () => {
-            this.hide();
-            if (config.onConfirm) config.onConfirm();
-        };
+    const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
+
+    if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) {
+        // Hata durumunda konsola kırmızı bir mesaj yazdır
+        console.error("MODAL ELEMENTLERİNDEN BİRİ VEYA BİRKAÇI 'null' OLDUĞU İÇİN FONKSİYON DURDURULDU!");
+        return;
     }
+    
+    alertModalTitle.textContent = config.title;
+    alertModalMessage.textContent = config.message;
+    
+    alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
+    alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
+    
+    alertModalOkBtn.focus();
+    alertModalOkBtn.onclick = () => {
+        this.hide();
+        if (config.onConfirm) config.onConfirm();
+    };
+}
     
     hide() {
         if (this.dom.alertModal) {
