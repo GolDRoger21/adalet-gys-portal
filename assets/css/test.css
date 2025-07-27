@@ -188,3 +188,27 @@ pre {
     color: var(--primary-color) !important;
     border-color: var(--primary-color);
 }
+/* --- YENİ: Soru Metni ve Şeçeneklerin Ayrılması --- */
+
+/* Soru metnini çevreleyen modern çerçeve */
+#question-text-container {
+    background-color: #f0fdfa; /* Tailwind bg-teal-50 */
+    padding: 1.5rem; /* p-6 */
+    border-left: 4px solid var(--primary-color); /* Sol tarafta vurgu */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); /* İç gölge */
+    margin-bottom: 1.5rem; /* mb-6 - Seçeneklerle arasında boşluk */
+    /* Yazı tipi ve hizalama */
+    font-family: 'Inter', sans-serif;
+    font-size: 1.125rem; /* text-lg */
+    line-height: 1.7; /* Okunabilirlik için satır yüksekliği */
+    text-align: justify; /* İki yana yasla */
+    color: #0f172a; /* Tailwind text-slate-900 - Daha koyu metin */
+}
+
+/* Seçeneklerin genel kapsayıcısı için üst boşluk */
+#options-container {
+    margin-top: 1rem; /* mt-4 */
+}
+
+/* --- YENİ: Bitiş --- */
