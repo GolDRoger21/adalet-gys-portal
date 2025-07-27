@@ -1,358 +1,259 @@
-// ===================================================================================
-// UYGULAMA MANTIĞI (deneme-1.html ile Uyumlu)
-// ===================================================================================
+/**
+ * @file Adalet GYS Portalı için ana sınav motoru ve uygulama mantığı.
+ * @description Bu dosya, Google Sheet'ten sınav verilerini çeken, sınavı yöneten (zamanlayıcı, soru geçişleri),
+ * kullanıcı arayüzünü güncelleyen ve sonuçları gösteren tüm sınıfları içerir.
+ * @version 2.1.0 (Flexible Duration & Professional Refactoring)
+ */
 
+const CONSTANTS = {
+    API: {
+        REQUIRED_HEADERS: ['questionText', 'optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'correctAnswer', 'explanation']
+    },
+    CSS_CLASSES: {
+        HIDDEN: 'hidden',
+        FLEX: 'flex',
+        MARKED: 'marked',
+        TAB_ACTIVE: 'tab-active',
+        OPTION_SELECTED: 'option-selected',
+        TIMER_WARNING: 'timer-warning'
+    },
+    EXAM: {
+        DEFAULT_MINUTES_PER_QUESTION: 1.2, // data-exam-duration yoksa varsayılan süre (soru başına)
+        TIMER_WARNING_SECONDS: 300,        // Son 5 dakika uyarısı (saniye)
+        AUTO_NEXT_QUESTION_DELAY: 300      // Cevap sonrası otomatik geçiş gecikmesi (ms)
+    },
+    DOM: {
+        APP_CONTAINER_ID: 'app-container'
+    }
+};
+
+/**
+ * Ana uygulama sınıfı. Tüm modülleri başlatır ve veri akışını yönetir.
+ * @class JusticeExamApp
+ */
 class JusticeExamApp {
     constructor() {
-        this.domElements = this.initializeDOMElements();
+        this.domElements = this._initializeDOMElements();
         if (!this.domElements.appContainer) {
-            console.error("Sınav konteyneri bulunamadı, test motoru başlatılmadı.");
+            console.error(`Ana uygulama konteyneri (#${CONSTANTS.DOM.APP_CONTAINER_ID}) bulunamadı. Sınav motoru başlatılmadı.`);
             return;
         }
-        // GOOGLE_SHEET_URL'i HTML dosyasındaki data attribute'tan al
-        this.GOOGLE_SHEET_URL = this.domElements.appContainer.dataset.sheetUrl;
+        this.config = {
+            sheetUrl: this.domElements.appContainer.dataset.sheetUrl,
+            duration: this.domElements.appContainer.dataset.examDuration || null
+        };
         this.examManager = null;
         this.uiManager = null;
         this.modalManager = null;
-        // Uygulama başlatıldığında veri çekimini başlat
-        this.fetchAndParseSheetData();
+        this._fetchAndParseSheetData();
     }
 
-    initializeDOMElements() {
-        return {
-            appContainer: document.getElementById('app-container'), // URL'i okumak için
-            welcomeScreen: document.getElementById('welcome-screen'),
-            quizScreen: document.getElementById('quiz-screen'),
-            startExamBtn: document.getElementById('start-exam-btn'),
-            elapsedTime: document.getElementById('elapsed-time'),
-            remainingTime: document.getElementById('remaining-time'),
-            timerAnnouncer: document.getElementById('timer-announcer'),
-            counter: document.getElementById('question-counter'),
-            questionText: document.getElementById('question-text'),
-            optionsContainer: document.getElementById('options-container'),
-            prevBtn: document.getElementById('prev-btn'),
-            nextBtn: document.getElementById('next-btn'),
-            markReviewBtn: document.getElementById('mark-review-btn'),
-            finishBtn: document.getElementById('finish-btn'),
-            navPalette: document.getElementById('nav-palette-container'),
-            resultModal: document.getElementById('result-modal'),
-            correctCount: document.getElementById('correct-count'),
-            incorrectCount: document.getElementById('incorrect-count'),
-            emptyCount: document.getElementById('empty-count'),
-            successRate: document.getElementById('success-rate'),
-            successRateBox: document.getElementById('success-rate-box'),
-            successText: document.getElementById('success-text'),
-            performanceSummary: document.getElementById('performance-summary'),
-            wrongAnswersContainer: document.getElementById('wrong-answers-container'),
-            markedQuestionsContainer: document.getElementById('marked-questions-container'),
-            wrongAnswersTab: document.getElementById('wrong-answers-tab'),
-            markedQuestionsTab: document.getElementById('marked-questions-tab'),
-            wrongAnswersPanel: document.getElementById('wrong-answers-panel'),
-            markedQuestionsPanel: document.getElementById('marked-questions-panel'),
-            startBtnFullText: document.getElementById('start-btn-full-text'),
-            totalQuestionCount: document.getElementById('total-question-count'),
-            totalDurationDisplay: document.getElementById('total-duration-display'),
-            alertModal: document.getElementById('alert-modal'),
-            alertModalTitle: document.getElementById('alert-modal-title'),
-            alertModalMessage: document.getElementById('alert-modal-message'),
-            alertModalOkBtn: document.getElementById('alert-modal-ok-btn'),
-            restartBtn: document.getElementById('restart-btn'),
-            closeResultModalBtn: document.getElementById('close-result-modal-btn'),
-            flagOutlineIcon: document.getElementById('flag-outline-icon'),
-            flagSolidIcon: document.getElementById('flag-solid-icon'),
-            warningBox: document.getElementById('warning-box'),
-            warningMessage: document.getElementById('warning-message'),
-        };
+    /**
+     * DOM'daki tüm gerekli element referanslarını tek seferde alır ve saklar.
+     * @private
+     * @returns {Object<string, HTMLElement>} Element referanslarını içeren bir obje.
+     */
+    _initializeDOMElements() {
+        const elementIds = [
+            'app-container', 'welcome-screen', 'quiz-screen', 'start-exam-btn', 'elapsed-time', 'remaining-time', 
+            'timer-announcer', 'question-counter', 'question-text', 'options-container', 'prev-btn', 'next-btn', 
+            'mark-review-btn', 'finish-btn', 'nav-palette-container', 'result-modal', 'correct-count', 
+            'incorrect-count', 'empty-count', 'success-rate', 'success-rate-box', 'success-text', 
+            'performance-summary', 'wrong-answers-container', 'marked-questions-container', 'wrong-answers-tab', 
+            'marked-questions-tab', 'wrong-answers-panel', 'marked-questions-panel', 'start-btn-full-text', 
+            'total-question-count', 'total-duration-display', 'alert-modal', 'alert-modal-title', 
+            'alert-modal-message', 'alert-modal-ok-btn', 'restart-btn', 'close-result-modal-btn', 
+            'flag-outline-icon', 'flag-solid-icon', 'warning-box', 'warning-message'
+        ];
+        const elements = {};
+        elementIds.forEach(id => {
+            const camelCaseId = id.replace(/-(\w)/g, (_, letter) => letter.toUpperCase());
+            elements[camelCaseId] = document.getElementById(id);
+        });
+        return elements;
     }
 
-    // Uygulamayı başlatma fonksiyonu
-    initializeApp(questionPool) {
-        // Temel kontroller
+    /**
+     * Veri çekme başarılı olduktan sonra uygulamayı ve modülleri başlatır.
+     * @private
+     * @param {Array<Object>} questionPool - Soru objelerini içeren dizi.
+     */
+    _initializeApp(questionPool) {
         if (!Array.isArray(questionPool) || questionPool.length === 0) {
-            this.showError("Google Sheet'ten soru verisi alınamadı veya format hatalı.");
+            this._showError("Google Sheet'ten soru verisi alınamadı veya format hatalı.");
             return;
         }
 
-        // === SÜREYİ SABİTLE ===
-        // const calculatedDuration = Math.ceil(questionPool.length * 1.2); // Dakika - Eski yöntem
-        const FIXED_DURATION_MINUTES = 120; // Dakika - Yeni sabit süre
-        // === SÜREYİ SABİTLE ===
+        // DİNAMİK SÜRE HESAPLAMA
+        const examDuration = this.config.duration 
+            ? parseInt(this.config.duration, 10) 
+            : Math.ceil(questionPool.length * CONSTANTS.EXAM.DEFAULT_MINUTES_PER_QUESTION);
 
-        // UI'yi güncelle
         this.domElements.totalQuestionCount.textContent = questionPool.length;
-        // === SÜREYİ SABİTLE ===
-        // this.domElements.totalDurationDisplay.innerHTML = `&nbsp;${calculatedDuration} Dakika`;
-        this.domElements.totalDurationDisplay.innerHTML = `&nbsp;${FIXED_DURATION_MINUTES} Dakika`;
-        // === SÜREYİ SABİTLE ===
+        this.domElements.totalDurationDisplay.innerHTML = ` ${examDuration} Dakika`;
         this.domElements.startBtnFullText.textContent = `SINAVA BAŞLA (${questionPool.length} Soru)`;
         this.domElements.startExamBtn.disabled = false;
 
-        // ExamManager, UIManager, ModalManager örneklerini oluştur
-        // === SÜREYİ SABİTLE ===
-        // this.examManager = new ExamManager(questionPool, calculatedDuration, this);
-        this.examManager = new ExamManager(questionPool, FIXED_DURATION_MINUTES, this);
-        // === SÜREYİ SABİTLE ===
+        this.examManager = new ExamManager(questionPool, examDuration, this);
         this.uiManager = new UIManager(this.domElements, this.examManager);
         this.modalManager = new ModalManager(this.domElements);
 
-        // Event listener'ları bağla
-        this.bindEventListeners();
+        this._bindEventListeners();
     }
-
-    // Hata mesajı gösterme fonksiyonu
-    showError(message) {
-        const startExamBtn = this.domElements.startExamBtn;
-        const startBtnFullText = this.domElements.startBtnFullText;
-        const totalQuestionCount = this.domElements.totalQuestionCount;
-        const warningBox = this.domElements.warningBox;
-        const warningMessage = this.domElements.warningMessage;
-
+    
+    /**
+     * Kullanıcı arayüzünde bir hata mesajı gösterir.
+     * @private
+     * @param {string} message - Gösterilecek hata mesajı.
+     */
+    _showError(message) {
+        const { startExamBtn, startBtnFullText, totalQuestionCount, warningBox, warningMessage } = this.domElements;
         if (startExamBtn) startExamBtn.disabled = true;
         if (startBtnFullText) startBtnFullText.textContent = "HATA OLUŞTU";
         if (totalQuestionCount) totalQuestionCount.textContent = "0";
         if (warningMessage) warningMessage.textContent = message;
-        if (warningBox) warningBox.classList.remove('hidden');
-        console.error("Uygulama başlatma hatası:", message); // Konsola da yaz
+        if (warningBox) warningBox.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
+        console.error("Uygulama Hatası:", message);
     }
+    
+    /**
+     * Uygulamanın ana event listener'larını bağlar.
+     * @private
+     */
+    _bindEventListeners() {
+        this.domElements.startExamBtn?.addEventListener('click', () => this.startExam());
+        this.domElements.restartBtn?.addEventListener('click', () => window.location.href = '/adalet-gys-portal/index.html'); // Ana sayfaya yönlendir
+        this.domElements.closeResultModalBtn?.addEventListener('click', () => window.location.href = '/adalet-gys-portal/index.html'); // Ana sayfaya yönlendir
 
-    // Event listener'ları bağlama
-    bindEventListeners() {
-        if (this.domElements.startExamBtn) {
-            this.domElements.startExamBtn.addEventListener('click', () => this.startExam());
-        }
-        if (this.domElements.restartBtn) {
-            this.domElements.restartBtn.addEventListener('click', () => window.location.reload());
-        }
-        if (this.domElements.closeResultModalBtn) {
-            this.domElements.closeResultModalBtn.addEventListener('click', () => {
-                 if (this.domElements.resultModal) {
-                    this.domElements.resultModal.classList.add('hidden');
-                 }
-                 if (this.domElements.welcomeScreen) {
-                    this.domElements.welcomeScreen.classList.remove('hidden');
-                 }
-                 // Sınavı sıfırla
-                 window.location.reload();
-            });
-        }
-        // Eğer bu elementler tanımlıysa, event listener ekle
         if (this.domElements.wrongAnswersTab && this.domElements.markedQuestionsTab && this.uiManager) {
             this.domElements.wrongAnswersTab.addEventListener('click', () => this.uiManager.switchResultTab('wrong'));
             this.domElements.markedQuestionsTab.addEventListener('click', () => this.uiManager.switchResultTab('marked'));
         }
     }
 
-    // Sınavı başlatma
+    /**
+     * Sınavı başlatır.
+     */
     startExam() {
-        if (this.domElements.welcomeScreen) {
-            this.domElements.welcomeScreen.classList.add('hidden');
+        this.domElements.welcomeScreen?.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
+        this.examManager?.startExam();
+    }
+
+    /**
+     * Google Sheet'ten CSV verisini çeker, işler ve uygulamayı başlatır.
+     * @private
+     */
+    async _fetchAndParseSheetData() {
+        if (!this.config.sheetUrl) {
+            this._showError("Google Sheet linki (data-sheet-url) bulunamadı.");
+            return;
         }
-        if (this.examManager) {
-            this.examManager.startExam();
+        try {
+            const response = await fetch(this.config.sheetUrl);
+            if (!response.ok) throw new Error(`Ağ yanıtı başarısız: ${response.statusText}`);
+            const csvText = await response.text();
+            if (!csvText) throw new Error("CSV verisi boş.");
+
+            const parsedRows = this._robustCsvParse(csvText);
+            if (parsedRows.length < 2) throw new Error("CSV dosyasında yeterli veri yok.");
+
+            const headers = parsedRows[0].map(h => h.trim());
+            const missingHeaders = CONSTANTS.API.REQUIRED_HEADERS.filter(h => !headers.includes(h));
+            if (missingHeaders.length > 0) throw new Error(`Eksik başlıklar: ${missingHeaders.join(', ')}`);
+
+            const questionPool = parsedRows.slice(1).map(rowArray => {
+                if (rowArray.every(field => field.trim() === '')) return null;
+                const data = headers.reduce((obj, header, i) => {
+                    obj[header] = rowArray[i] || '';
+                    return obj;
+                }, {});
+                return {
+                    questionText: data.questionText,
+                    options: { A: data.optionA, B: data.optionB, C: data.optionC, D: data.optionD, E: data.optionE || '' },
+                    correctAnswer: data.correctAnswer.trim().toUpperCase(),
+                    explanation: data.explanation || ''
+                };
+            }).filter(q => q && q.questionText && q.correctAnswer);
+
+            if (questionPool.length === 0) throw new Error("Hiç geçerli soru bulunamadı.");
+            this._initializeApp(questionPool);
+
+        } catch (error) {
+            console.error('Veri çekme hatası:', error);
+            this._showError(`Sorular çekilirken hata oluştu: ${error.message}`);
         }
     }
 
-    // GOOGLE_SHEET_URL'i güvenli bir şekilde satırlara ayıran fonksiyon
-    // Bu fonksiyon, çok satırlı hücreler ve kaçışlı tırnaklarla başa çıkmak için daha sağlam hale getirildi.
-    robustCsvParse(csvText) {
+    /**
+     * Tırnak içindeki yeni satır ve virgül karakterlerini koruyarak CSV metnini satırlara ayırır.
+     * @private
+     * @param {string} csvText - İşlenecek ham CSV metni.
+     * @returns {Array<Array<string>>} Her biri sütun dizisi olan satırların dizisi.
+     */
+    _robustCsvParse(csvText) {
         const rows = [];
         let currentRow = [];
         let currentField = '';
         let inQuotes = false;
-
-        // Normalize line endings
         const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-
         for (let i = 0; i < normalizedText.length; i++) {
             const char = normalizedText[i];
             const nextChar = normalizedText[i + 1];
-
             if (char === '"') {
-                if (inQuotes && nextChar === '"') {
-                    // Handle escaped quotes ""
-                    currentField += '"';
-                    i++; // Skip the next quote
-                } else {
-                    // Toggle quote state
-                    inQuotes = !inQuotes;
-                }
+                if (inQuotes && nextChar === '"') { currentField += '"'; i++; } 
+                else { inQuotes = !inQuotes; }
             } else if (char === ',' && !inQuotes) {
-                // End of field
-                currentRow.push(currentField);
-                currentField = '';
+                currentRow.push(currentField); currentField = '';
             } else if (char === '\n' && !inQuotes) {
-                // End of row
-                currentRow.push(currentField); // Push the last field
-                // Only add non-empty rows
-                if (currentRow.some(field => field.trim() !== '')) {
-                     rows.push(currentRow);
-                }
-                currentRow = [];
-                currentField = '';
+                currentRow.push(currentField);
+                if (currentRow.some(field => field.trim() !== '')) rows.push(currentRow);
+                currentRow = []; currentField = '';
             } else {
-                // Regular character
                 currentField += char;
             }
         }
-
-        // Handle the last field/row if the file doesn't end with a newline
         if (currentField !== '' || currentRow.length > 0) {
             currentRow.push(currentField);
-             if (currentRow.some(field => field.trim() !== '')) {
-                 rows.push(currentRow);
-             }
+            if (currentRow.some(field => field.trim() !== '')) rows.push(currentRow);
         }
-
         return rows;
-    }
-
-
-    // Google Sheet'ten veri çekip işleyen ana fonksiyon
-    async fetchAndParseSheetData() {
-        if (!this.GOOGLE_SHEET_URL) {
-            this.showError("Google Sheet linki bulunamadı.");
-            return;
-        }
-
-        try {
-            console.log("Veri çekme işlemi başlatılıyor..."); // Debug
-            // 1. Veriyi çek
-            const response = await fetch(this.GOOGLE_SHEET_URL);
-            console.log("Fetch isteği yapıldı, yanıt durumu:", response.status); // Debug
-            if (!response.ok) {
-                throw new Error(`Ağ yanıtı başarısız: ${response.status} ${response.statusText}`);
-            }
-            const csvText = await response.text();
-            console.log("CSV verisi çekildi. İlk 500 karakter:", csvText.substring(0, 500)); // Debug
-            if (!csvText) {
-                throw new Error("CSV verisi boş.");
-            }
-
-            // 2. CSV'yi satırlara ayır (dizilerin dizisi olarak)
-            const parsedRows = this.robustCsvParse(csvText);
-            console.log("CSV ayrıştırıldı. Toplam satır (başlık dahil):", parsedRows.length); // Debug
-            console.log("İlk satır (Başlıklar):", parsedRows[0]); // Debug
-            if (parsedRows.length < 2) { // Başlık + en az 1 soru satırı gerekli
-                throw new Error("CSV dosyasında yeterli veri bulunamadı (başlık ve en az bir soru satırı olmalı).");
-            }
-
-            // 3. Başlıkları al (ilk satır)
-            const headers = parsedRows[0].map(h => h.trim()); // Headers zaten bir dizi
-            console.log("İşlenen Başlıklar:", headers); // Debug
-            // Gerekli başlıkları tanımla (optionE dahil)
-            const requiredHeaders = ['questionText', 'optionA', 'optionB', 'optionC', 'optionD', 'optionE', 'correctAnswer', 'explanation']; // optionE EKLENDİ
-            const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
-            if (missingHeaders.length > 0) {
-                throw new Error(`Eksik başlıklar: ${missingHeaders.join(', ')}`);
-            }
-
-            // 4. Soruları işle
-            const questionPool = parsedRows.slice(1) // Başlık satırını atla
-                .map((rowArray, index) => {
-                    // console.log(`Satır ${index + 2} işleniyor (dizi):`, rowArray); // Debug için
-                    // Boş satır kontrolü (tüm alanlar boşsa)
-                    if (rowArray.every(field => field.trim() === '')) {
-                         console.warn(`Satır ${index + 2} tamamen boş atlandı.`); // Debug
-                         return null;
-                    }
-                    // Satır, başlık sayısı kadar sütun içermiyorsa uyarı ver (ama yine de işlemeye çalış)
-                    if (rowArray.length !== headers.length) {
-                         console.warn(`Satır ${index + 2} sütun sayısı uyuşmuyor. Beklenen: ${headers.length}, Alınan: ${rowArray.length}`, rowArray);
-                         // return null; // Bu satırı atlamak yerine, mevcut alanları işleyelim.
-                    }
-
-                    // Başlıklara göre obje oluştur
-                    // headers dizisinin uzunluğu kadar döngü yap, rowArray daha kısa bile olsa
-                    const data = {};
-                    for (let i = 0; i < headers.length; i++) {
-                        // rowArray yeterince uzunsa değeri al, değilse boş string ata
-                        data[headers[i]] = (i < rowArray.length) ? (rowArray[i] || '') : '';
-                    }
-
-                    // Soru objesini oluştur
-                    const questionObj = {
-                        questionText: data.questionText,
-                        options: {
-                            A: data.optionA,
-                            B: data.optionB,
-                            C: data.optionC,
-                            D: data.optionD,
-                            E: data.optionE || '' // E seçeneği olmayabilir
-                        },
-                        correctAnswer: data.correctAnswer.trim().toUpperCase(), // Doğru cevabı temizle ve büyük harfe çevir
-                        explanation: data.explanation || '' // Açıklama olmayabilir
-                    };
-                    // console.log(`İşlenen Soru ${index + 1}:`, questionObj); // Debug için
-                    return questionObj;
-                })
-                // Geçersiz (null) soruları filtrele
-                .filter(q => q && q.questionText && q.correctAnswer); // Sadece metni ve doğru cevabı olan soruları al
-
-            if (questionPool.length === 0) {
-                throw new Error("Hiç geçerli soru bulunamadı. Lütfen Google Sheet dosyanızın formatını kontrol edin.");
-            }
-
-            // 5. Veri başarıyla çekildiyse, uygulamayı başlat
-            console.log("Sorular başarıyla çekildi. Toplam soru sayısı:", questionPool.length);
-            // console.log("İlk 3 soru örneği:", questionPool.slice(0, 3)); // Debug için
-            this.initializeApp(questionPool); // Uygulamayı başlat
-
-        } catch (error) {
-            console.error('Veri çekme hatası:', error); // Tarayıcı konsoluna yaz
-            this.showError(`Sorular çekilirken hata oluştu: ${error.message}`); // Kullanıcıya göster
-        }
     }
 }
 
-// ExamManager sınıfı
+/**
+ * Sınavın durumunu (mevcut soru, cevaplar, zaman) yönetir.
+ * @class ExamManager
+ */
 class ExamManager {
     constructor(questions, durationMinutes, app) {
         this.questions = questions;
         this.durationMinutes = durationMinutes;
-        this.app = app; // JusticeExamApp örneğine referans
+        this.app = app;
         this.currentQuestionIndex = 0;
         this.userAnswers = [];
         this.timerInterval = null;
         this.timeRemaining = 0;
-        // VisibilityChange handler için bağlama (arrow function)
         this.handleVisibilityChange = () => {
-            if (document.hidden) {
-                if (this.app.modalManager) {
-                    this.app.modalManager.show({
-                        title: 'UYARI',
-                        message: 'Sınav sırasında başka bir sekmeye geçtiniz. Lütfen sınava odaklanın.'
-                    });
-                }
+            if (document.hidden && this.app.modalManager) {
+                this.app.modalManager.show({
+                    title: 'UYARI',
+                    message: 'Sınav sırasında başka bir sekmeye geçtiniz. Lütfen sınava odaklanın.'
+                });
             }
         };
     }
 
     startExam() {
-        // Kullanıcı cevaplarını başlat (her soru için null ve işaretlenmemiş)
-        this.userAnswers = Array(this.questions.length).fill(null).map(() => ({
-            userAnswer: null,
-            isMarkedForReview: false
-        }));
-
-        // Zamanlayıcıyı başlat
-        this.timeRemaining = this.durationMinutes * 60; // Dakikayı saniyeye çevir
-
-        // Sınav ekranını göster
-        if (this.app.domElements.quizScreen) {
-            this.app.domElements.quizScreen.classList.remove('hidden');
-        }
-
-        // Zamanlayıcıyı başlat
+        this.userAnswers = Array(this.questions.length).fill(null).map(() => ({ userAnswer: null, isMarkedForReview: false }));
+        this.timeRemaining = this.durationMinutes * 60;
+        this.app.domElements.quizScreen?.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
         this.startTimer();
-
-        // İlk soruyu render et
         if (this.app.uiManager) {
             this.app.uiManager.renderQuestion();
-            // Quiz event listener'larını bağla
             this.app.uiManager.bindQuizEvents();
         }
     }
-
+    
     formatTime(seconds) {
         const h = Math.floor(seconds / 3600);
         const m = Math.floor((seconds % 3600) / 60);
@@ -363,211 +264,117 @@ class ExamManager {
     goToNextQuestion() {
         if (this.currentQuestionIndex < this.questions.length - 1) {
             this.currentQuestionIndex++;
-            if (this.app.uiManager) {
-                this.app.uiManager.renderQuestion();
-            }
+            this.app.uiManager?.renderQuestion();
         }
     }
 
     goToPrevQuestion() {
         if (this.currentQuestionIndex > 0) {
             this.currentQuestionIndex--;
-            if (this.app.uiManager) {
-                this.app.uiManager.renderQuestion();
-            }
+            this.app.uiManager?.renderQuestion();
         }
     }
 
     selectAnswer(optionKey) {
-        // Kullanıcının cevabını kaydet
         this.userAnswers[this.currentQuestionIndex].userAnswer = optionKey;
-
-        // UI'yi güncelle (seçilen seçeneği vurgula)
-        if (this.app.uiManager) {
-            this.app.uiManager.renderQuestion();
-        }
-
-        // === OTOMATİK GEÇİŞ ETKİNLEŞTİRİLDİ ===
-        // Otomatik ilerleme: Son soru değilse, bir sonraki soruya geç
+        this.app.uiManager?.renderQuestion();
         if (this.currentQuestionIndex < this.questions.length - 1) {
-             // Küçük bir gecikme ekleyerek kullanıcıya seçiminin yansıdığını göster
-            setTimeout(() => {
-                this.goToNextQuestion();
-            }, 300); // 300ms gecikme
+            setTimeout(() => this.goToNextQuestion(), CONSTANTS.EXAM.AUTO_NEXT_QUESTION_DELAY);
         }
-        // === OTOMATİK GEÇİŞ ETKİNLEŞTİRİLDİ ===
     }
 
     toggleMarkForReview() {
-        // Mevcut işaret durumunu tersine çevir
-        this.userAnswers[this.currentQuestionIndex].isMarkedForReview =
-            !this.userAnswers[this.currentQuestionIndex].isMarkedForReview;
-
-        // UI'yi güncelle (soru gezgini ve buton)
-        if (this.app.uiManager) {
-            this.app.uiManager.updateNavPalette();
-            this.app.uiManager.updateButtonStates(); // Bayrak butonunun durumunu güncelle
-        }
+        this.userAnswers[this.currentQuestionIndex].isMarkedForReview = !this.userAnswers[this.currentQuestionIndex].isMarkedForReview;
+        this.app.uiManager?.updateNavPalette();
+        this.app.uiManager?.updateButtonStates();
     }
 
     navigateToQuestion(index) {
         if (index >= 0 && index < this.questions.length) {
             this.currentQuestionIndex = index;
-            if (this.app.uiManager) {
-                this.app.uiManager.renderQuestion();
-            }
+            this.app.uiManager?.renderQuestion();
         }
     }
 
     finishQuiz(isAuto = false) {
         if (isAuto) {
-            // Süre dolduğunda otomatik bitir
             this.performFinish();
         } else {
-            // Kullanıcı butona tıkladığında onay iste
-            if (this.app.modalManager) {
-                this.app.modalManager.show({
-                    title: 'Sınavı Bitir',
-                    message: 'Sınavı bitirmek istediğinizden emin misiniz?',
-                    onConfirm: () => this.performFinish() // Onaylanırsa bitir
-                });
-            }
+            this.app.modalManager?.show({
+                title: 'Sınavı Bitir',
+                message: 'Sınavı bitirmek istediğinizden emin misiniz?',
+                onConfirm: () => this.performFinish()
+            });
         }
     }
 
     performFinish() {
-        // Zamanlayıcıyı durdur
-        if (this.timerInterval) {
-            clearInterval(this.timerInterval);
-            this.timerInterval = null;
-        }
-        // VisibilityChange event listener'ını kaldır
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        this.timerInterval = null;
         document.removeEventListener('visibilitychange', this.handleVisibilityChange);
 
-        // Sonuçları hesapla
-        let correct = 0;
-        let incorrect = 0;
-        let empty = 0;
-        const incorrectQuestions = []; // Yanlış cevaplanan sorular
-        const markedQuestions = []; // İşaretlenen sorular
+        let correct = 0, incorrect = 0, empty = 0;
+        const incorrectQuestions = [], markedQuestions = [];
 
         this.questions.forEach((q, i) => {
             const userAnswerData = this.userAnswers[i];
-
-            // İşaretlenen soruları topla
-            if (userAnswerData.isMarkedForReview) {
-                markedQuestions.push({
-                    question: q,
-                    index: i,
-                    userAnswer: userAnswerData.userAnswer
-                });
-            }
-
-            // Cevap durumuna göre sayaçları güncelle
-            if (!userAnswerData.userAnswer) {
-                empty++;
-            } else if (userAnswerData.userAnswer === q.correctAnswer) {
-                correct++;
-            } else {
+            if (userAnswerData.isMarkedForReview) markedQuestions.push({ question: q, index: i, userAnswer: userAnswerData.userAnswer });
+            if (!userAnswerData.userAnswer) empty++;
+            else if (userAnswerData.userAnswer === q.correctAnswer) correct++;
+            else {
                 incorrect++;
-                // Yanlış cevaplanan soruları topla
-                incorrectQuestions.push({
-                    question: q,
-                    index: i,
-                    userAnswer: userAnswerData.userAnswer
-                });
+                incorrectQuestions.push({ question: q, index: i, userAnswer: userAnswerData.userAnswer });
             }
         });
 
         const totalQuestions = this.questions.length;
         const successPercentage = totalQuestions > 0 ? (correct / totalQuestions * 100) : 0;
 
-        // DOM elementlerini güncelle
         if (this.app.domElements.correctCount) this.app.domElements.correctCount.textContent = correct;
         if (this.app.domElements.incorrectCount) this.app.domElements.incorrectCount.textContent = incorrect;
         if (this.app.domElements.emptyCount) this.app.domElements.emptyCount.textContent = empty;
         if (this.app.domElements.successRate) this.app.domElements.successRate.textContent = `${successPercentage.toFixed(1)}%`;
 
-        // Başarı oranına göre stil ve mesaj güncelle
-        if (this.app.uiManager) {
-             this.app.uiManager.updateSuccessRateAppearance(successPercentage);
-        }
-
-        // Quiz ekranını gizle, sonuç modalini göster
-        if (this.app.domElements.quizScreen) {
-            this.app.domElements.quizScreen.classList.add('hidden');
-        }
+        this.app.uiManager?.updateSuccessRateAppearance(successPercentage);
+        this.app.domElements.quizScreen?.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
         if (this.app.domElements.resultModal) {
-            this.app.domElements.resultModal.classList.remove('hidden');
-            this.app.domElements.resultModal.focus(); // Erişilebilirlik için
+            this.app.domElements.resultModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
+            this.app.domElements.resultModal.focus();
         }
-
-        // Sonuçları modal içinde render et
-        if (this.app.uiManager) {
-             this.app.uiManager.renderResultsPage(incorrectQuestions, markedQuestions);
-        }
+        this.app.uiManager?.renderResultsPage(incorrectQuestions, markedQuestions);
     }
 
     startTimer() {
-        // VisibilityChange event listener'ı ekle
         document.addEventListener('visibilitychange', this.handleVisibilityChange);
+        const totalDuration = this.durationMinutes * 60;
+        if (this.app.domElements.remainingTime) this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
+        if (this.app.domElements.elapsedTime) this.app.domElements.elapsedTime.textContent = this.formatTime(0);
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        this.app.domElements.remainingTime?.classList.remove(CONSTANTS.CSS_CLASSES.TIMER_WARNING);
 
-        const totalDuration = this.durationMinutes * 60; // Toplam süreyi saniye cinsinden al
-
-        // Başlangıçta kalan süreyi göster
-        if (this.app.domElements.remainingTime) {
-            this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
-        }
-        // Başlangıçta geçen süreyi sıfırla
-        if (this.app.domElements.elapsedTime) {
-            this.app.domElements.elapsedTime.textContent = this.formatTime(0);
-        }
-
-        // Timer'ı sıfırla (varsa)
-        if (this.timerInterval) {
-            clearInterval(this.timerInterval);
-        }
-
-        // Uyarı sınıfını kaldır
-        if (this.app.domElements.remainingTime) {
-            this.app.domElements.remainingTime.classList.remove('timer-warning');
-        }
-
-        // Her saniyede bir çalışan timer
         this.timerInterval = setInterval(() => {
-            // Süre doldu mu?
             if (this.timeRemaining <= 0) {
                 clearInterval(this.timerInterval);
-                this.finishQuiz(true); // Otomatik bitir
+                this.finishQuiz(true);
                 return;
             }
-
-            // Süreyi azalt
             this.timeRemaining--;
-
-            // Kalan süreyi güncelle
-            if (this.app.domElements.remainingTime) {
-                this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
-            }
-
-            // Geçen süreyi hesapla ve güncelle
+            if (this.app.domElements.remainingTime) this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
             const elapsedSecondsTotal = totalDuration - this.timeRemaining;
-            if (this.app.domElements.elapsedTime) {
-                this.app.domElements.elapsedTime.textContent = this.formatTime(elapsedSecondsTotal);
+            if (this.app.domElements.elapsedTime) this.app.domElements.elapsedTime.textContent = this.formatTime(elapsedSecondsTotal);
+            
+            if (this.timeRemaining <= CONSTANTS.EXAM.TIMER_WARNING_SECONDS && !this.app.domElements.remainingTime.classList.contains(CONSTANTS.CSS_CLASSES.TIMER_WARNING)) {
+                this.app.domElements.remainingTime.classList.add(CONSTANTS.CSS_CLASSES.TIMER_WARNING);
+                if (this.app.domElements.timerAnnouncer) this.app.domElements.timerAnnouncer.textContent = `Sınavın bitmesine son ${Math.floor(CONSTANTS.EXAM.TIMER_WARNING_SECONDS/60)} dakika kaldı.`;
             }
-
-            // Son 5 dakika uyarısı (300 saniye = 5 dakika)
-            if (this.timeRemaining <= 300 && this.app.domElements.remainingTime && !this.app.domElements.remainingTime.classList.contains('timer-warning')) {
-                this.app.domElements.remainingTime.classList.add('timer-warning');
-                // Ekran okuyucular için duyuru (varsa)
-                if (this.app.domElements.timerAnnouncer) {
-                    this.app.domElements.timerAnnouncer.textContent = 'Sınavın bitmesine son 5 dakika kaldı.';
-                }
-            }
-        }, 1000); // 1 saniye
+        }, 1000);
     }
 }
 
+/**
+ * Kullanıcı arayüzü (UI) ile ilgili tüm DOM manipülasyonlarını yönetir.
+ * @class UIManager
+ */
 class UIManager {
     constructor(domElements, examManager) {
         this.dom = domElements;
@@ -576,454 +383,213 @@ class UIManager {
 
     renderQuestion() {
         const question = this.examManager.questions[this.examManager.currentQuestionIndex];
-
-        // Soru numarasını güncelle
-        if (this.dom.counter) {
-            this.dom.counter.textContent = `Soru ${this.examManager.currentQuestionIndex + 1} / ${this.examManager.questions.length}`;
-        }
-
-        // Soru metnini güncelle (Numarayı temizle)
+        if (this.dom.counter) this.dom.counter.textContent = `Soru ${this.examManager.currentQuestionIndex + 1} / ${this.examManager.questions.length}`;
         if (this.dom.questionText) {
-            const cleanQuestionText = question.questionText.replace(/^\d+[\.\)-]\s*/, ''); // Başındaki "1)", "1.", "1-" gibi ifadeleri kaldır
+            const cleanQuestionText = question.questionText.replace(/^\d+[\.\)-]\s*/, '');
             this.dom.questionText.textContent = cleanQuestionText;
         }
 
-        // Seçenekleri temizle
         if (this.dom.optionsContainer) {
             this.dom.optionsContainer.innerHTML = '';
-        }
-
-        // Seçenekleri oluştur ve ekle
-        if (this.dom.optionsContainer) {
+            const fragment = document.createDocumentFragment();
             Object.entries(question.options).forEach(([key, optionText]) => {
-                // Sadece dolu seçenekleri ekle
                 if (optionText) {
-                    const button = this.createOptionButton(key, optionText);
-                    this.dom.optionsContainer.appendChild(button);
+                    const button = this._createOptionButton(key, optionText);
+                    fragment.appendChild(button);
                 }
             });
+            this.dom.optionsContainer.appendChild(fragment);
         }
 
-        // Soru gezgini ve buton durumlarını güncelle
         this.updateNavPalette();
         this.updateButtonStates();
     }
 
-    createOptionButton(key, optionText) {
+    _createOptionButton(key, optionText) {
         const button = document.createElement('button');
-        // Kullanıcının bu soruya verdiği cevabı al
         const isSelected = this.examManager.userAnswers[this.examManager.currentQuestionIndex].userAnswer === key;
-
-        // Temel sınıf ve erişilebilirlik özellikleri
         button.className = 'option-btn flex items-center w-full text-left p-4 rounded-lg';
-        button.setAttribute('role', 'radio'); // Tek seçim olduğu için radio
-        button.setAttribute('aria-checked', isSelected ? 'true' : 'false'); // Seçili durumu
+        button.setAttribute('role', 'radio');
+        button.setAttribute('aria-checked', isSelected);
 
-        // HTML içeriği: Seçenek tuşu ve metin
-        // Seçenek tuşu (A, B, C, D, E)
         const optionKeySpan = document.createElement('span');
         optionKeySpan.className = 'option-key flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full border font-bold mr-4';
         optionKeySpan.textContent = key;
-
-        // Seçenek metni
         const optionTextSpan = document.createElement('span');
-        optionTextSpan.className = 'text-justify w-full'; // Metni iki yana yasla
+        optionTextSpan.className = 'text-justify w-full';
         optionTextSpan.textContent = optionText;
+        button.append(optionKeySpan, optionTextSpan);
 
-        // Span'ları butona ekle
-        button.appendChild(optionKeySpan);
-        button.appendChild(optionTextSpan);
-
-        // Eğer bu seçenek seçildiyse, özel sınıf ekle
-        if (isSelected) {
-            button.classList.add('option-selected');
-        }
-
-        // Tıklama event'i
-        button.onclick = () => {
-            this.examManager.selectAnswer(key);
-        };
-
+        if (isSelected) button.classList.add(CONSTANTS.CSS_CLASSES.OPTION_SELECTED);
+        button.onclick = () => this.examManager.selectAnswer(key);
         return button;
     }
 
     updateNavPalette() {
-        // Soru gezgini kutularını temizle
         if (this.dom.navPalette) {
             this.dom.navPalette.innerHTML = '';
-        }
-
-        // Her soru için bir kutu oluştur
-        if (this.dom.navPalette) {
+            const fragment = document.createDocumentFragment();
             this.examManager.questions.forEach((_, index) => {
                 const box = document.createElement('button');
-                box.textContent = index + 1; // Kutu içeriği (soru numarası)
-                box.setAttribute('aria-label', `Soru ${index + 1}'ye git`); // Erişilebilirlik
-
-                // Duruma göre sınıf belirle
-                let statusClass = ' bg-slate-300 hover:bg-slate-400'; // Varsayılan (boş)
-                if (this.examManager.userAnswers[index].isMarkedForReview) {
-                    // İşaretli
-                    statusClass = ' bg-yellow-400 text-white hover:bg-yellow-500';
-                } else if (this.examManager.userAnswers[index].userAnswer) {
-                    // Cevaplanmış
-                    statusClass = ' bg-green-500 text-white hover:bg-green-600';
-                }
-                // Aktif soru için özel stil
+                box.textContent = index + 1;
+                box.setAttribute('aria-label', `Soru ${index + 1}'ye git`);
+                
+                let statusClass = ' bg-slate-300 hover:bg-slate-400';
+                const userAnswerData = this.examManager.userAnswers[index];
+                if (userAnswerData.isMarkedForReview) statusClass = ' bg-yellow-400 text-white hover:bg-yellow-500';
+                else if (userAnswerData.userAnswer) statusClass = ' bg-green-500 text-white hover:bg-green-600';
+                
                 let ringClass = index === this.examManager.currentQuestionIndex ? ' ring-4 ring-offset-2 ring-teal-500 scale-110 z-10' : '';
-
-                // Kutuya sınıf ekle
                 box.className = `nav-box w-full h-10 flex items-center justify-center rounded-md border border-transparent${statusClass}${ringClass}`;
-
-                // Tıklama event'i
-                box.onclick = () => {
-                    this.examManager.navigateToQuestion(index);
-                };
-
-                // Kutuyu konteynere ekle
-                this.dom.navPalette.appendChild(box);
+                box.onclick = () => this.examManager.navigateToQuestion(index);
+                fragment.appendChild(box);
             });
+            this.dom.navPalette.appendChild(fragment);
         }
     }
 
     updateButtonStates() {
-        // Önceki ve Sonraki butonlarının durumunu güncelle
-        if (this.dom.prevBtn) {
-            this.dom.prevBtn.disabled = this.examManager.currentQuestionIndex === 0;
-        }
-        if (this.dom.nextBtn) {
-            this.dom.nextBtn.disabled = this.examManager.currentQuestionIndex === this.examManager.questions.length - 1;
-        }
+        this.dom.prevBtn.disabled = this.examManager.currentQuestionIndex === 0;
+        this.dom.nextBtn.disabled = this.examManager.currentQuestionIndex === this.examManager.questions.length - 1;
 
-        // İşaretleme butonunun durumunu güncelle
         const isMarked = this.examManager.userAnswers[this.examManager.currentQuestionIndex].isMarkedForReview;
-        if (this.dom.markReviewBtn) {
-            // CSS sınıflarını toggle ile yönet
-            this.dom.markReviewBtn.classList.toggle('marked', isMarked);
-        }
-        if (this.dom.flagOutlineIcon) {
-            this.dom.flagOutlineIcon.classList.toggle('hidden', isMarked);
-        }
-        if (this.dom.flagSolidIcon) {
-            this.dom.flagSolidIcon.classList.toggle('hidden', !isMarked);
-        }
+        this.dom.markReviewBtn?.classList.toggle(CONSTANTS.CSS_CLASSES.MARKED, isMarked);
+        this.dom.flagOutlineIcon?.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, isMarked);
+        this.dom.flagSolidIcon?.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, !isMarked);
     }
-
+    
     renderResultsPage(incorrectQuestions, markedQuestions) {
-        // Yanlış cevaplar panelini doldur
-        this.renderWrongAnswers(incorrectQuestions);
-        // İşaretlenen sorular panelini doldur
-        this.renderMarkedQuestions(markedQuestions);
+        this._renderResultItems(this.dom.wrongAnswersContainer, incorrectQuestions, 'wrong');
+        this._renderResultItems(this.dom.markedQuestionsContainer, markedQuestions, 'marked');
     }
 
-    // Yanlış cevaplar için HTML seçeneklerini oluşturan yardımcı fonksiyon
+    _renderResultItems(container, items, type) {
+        if (!container) return;
+        container.innerHTML = '';
+        if (items.length === 0) {
+            const message = type === 'wrong' ? 'Tebrikler! Yanlış cevabınız bulunmuyor.' : 'İncelemek için herhangi bir soru işaretlemediniz.';
+            const messageClass = type === 'wrong' ? 'text-green-600 bg-green-50' : 'text-slate-600 bg-slate-50';
+            container.innerHTML = `<p class="${messageClass} p-4 rounded-lg">${message}</p>`;
+            return;
+        }
+        items.forEach((item) => {
+            const { question: q, index, userAnswer } = item;
+            const resultItemDiv = document.createElement('div');
+            resultItemDiv.className = "mb-6 p-4 bg-white rounded-lg border border-slate-200";
+            const cleanQuestionText = q.questionText.replace(/^\d+[\.\)-]\s*/, '');
+            
+            let explanationHTML = '';
+            if (q.explanation) {
+                const separator = "Hafıza Tekniği:";
+                const separatorIndex = q.explanation.indexOf(separator);
+                const konuOzeti = separatorIndex !== -1 ? q.explanation.substring(0, separatorIndex).replace("Konu Özeti:", "").trim() : q.explanation.replace("Konu Özeti:", "").trim();
+                const hafizaTeknigi = separatorIndex !== -1 ? q.explanation.substring(separatorIndex + separator.length).trim() : "";
+                explanationHTML = `<div class="explanation-box"><h4>Soru Analizi</h4>`;
+                if(konuOzeti) explanationHTML += `<div class="explanation-section"><h5><span class="mr-2">📖</span><span>Konu Özeti</span></h5><p>${konuOzeti}</p></div>`;
+                if(hafizaTeknigi) explanationHTML += `<div class="explanation-section"><h5><span class="mr-2">💡</span><span>Hafıza Tekniği</span></h5><p>${hafizaTeknigi}</p></div>`;
+                explanationHTML += `</div>`;
+            }
+
+            let headerHTML = `<p class="font-bold mb-2">Soru ${index + 1}:</p>`;
+            if(type === 'marked') {
+                const isCorrect = userAnswer === q.correctAnswer;
+                const statusText = userAnswer ? (isCorrect ? 'Doğru Cevaplandı' : 'Yanlış Cevaplandı') : 'Boş Bırakıldı';
+                const statusColor = userAnswer ? (isCorrect ? 'text-green-600' : 'text-red-600') : 'text-slate-600';
+                headerHTML = `<div class="flex justify-between items-center mb-2"><p class="font-bold">Soru ${index + 1}:</p><span class="text-sm font-semibold ${statusColor}">${statusText}</span></div>`;
+            }
+
+            resultItemDiv.innerHTML = `${headerHTML}<pre class="mb-4 bg-slate-50 p-3 rounded">${cleanQuestionText}</pre>${this._createResultOptionsHTML(q, userAnswer)}${explanationHTML}`;
+            container.appendChild(resultItemDiv);
+        });
+    }
+
     _createResultOptionsHTML(q, userAnswer) {
-        let optionsHTML = '<div class="space-y-2 mt-4 text-sm">'; // Dış div ve stil
-
-        // Her bir seçeneği kontrol et
-        for (const [key, text] of Object.entries(q.options)) {
-            if (!text) continue; // Boş seçeneği atla
-
-            let classes = 'border-slate-200 bg-slate-50 text-slate-700'; // Varsayılan stil
-            let icon = `<span class="font-bold text-slate-500">${key})</span>`; // Varsayılan simge (sadece harf)
-
-            // Doğru cevap kontrolü
+        let optionsHTML = '<div class="space-y-2 mt-4 text-sm">';
+        Object.entries(q.options).forEach(([key, text]) => {
+            if (!text) return;
+            let classes = 'border-slate-200 bg-slate-50 text-slate-700';
+            let icon = `<span class="font-bold text-slate-500">${key})</span>`;
             if (key === q.correctAnswer) {
-                classes = 'border-green-400 bg-green-50 text-green-800 font-medium'; // Yeşil stil
-                // SVG tik simgesi
+                classes = 'border-green-400 bg-green-50 text-green-800 font-medium';
                 icon = `<svg class="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`;
-
-            // Kullanıcının verdiği yanlış cevap kontrolü
             } else if (key === userAnswer) {
-                classes = 'border-red-400 bg-red-50 text-red-800 font-medium'; // Kırmızı stil
-                // SVG çarpı simgesi
+                classes = 'border-red-400 bg-red-50 text-red-800 font-medium';
                 icon = `<svg class="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>`;
             }
-
-            // HTML'i oluştur ve ekle
-            optionsHTML += `
-                <div class="flex items-start p-3 rounded-lg border ${classes}">
-                    <div class="flex-shrink-0 w-5 h-5 mr-3">${icon}</div>
-                    <p class="text-justify flex-1">${text}</p>
-                </div>
-            `;
-        }
-        optionsHTML += '</div>'; // Dış div'i kapat
-        return optionsHTML;
-    }
-
-    renderWrongAnswers(incorrectQuestions) {
-        const container = this.dom.wrongAnswersContainer;
-        if (!container) return; // Element yoksa çık
-        container.innerHTML = ''; // Önce temizle
-
-        // Eğer yanlış soru yoksa, kutlu mesaj göster
-        if (incorrectQuestions.length === 0) {
-            container.innerHTML = `<p class="text-green-600 p-4 bg-green-50 rounded-lg">Tebrikler! Yanlış cevabınız bulunmuyor.</p>`;
-            return;
-        }
-
-        // Her bir yanlış soruyu işle
-        incorrectQuestions.forEach((item) => {
-            const q = item.question; // Soru objesi
-            const resultItemDiv = document.createElement('div');
-            resultItemDiv.className = "mb-6 p-4 bg-white rounded-lg border border-slate-200"; // Stil
-
-            // Soru metnini temizle
-            const cleanQuestionText = q.questionText.replace(/^\d+[\.\)-]\s*/, '');
-
-            // Açıklama kutusunu hazırla (varsa)
-            let explanationHTML = '';
-            if (q.explanation) {
-                // "Hafıza Tekniği:" ayracını bul
-                const separator = "Hafıza Tekniği:";
-                let fullExplanation = q.explanation;
-                let konuOzeti = "";
-                let hafizaTeknigi = "";
-
-                const separatorIndex = fullExplanation.indexOf(separator);
-
-                if (separatorIndex !== -1) {
-                    // Ayracı bulduysak, metni ikiye ayır
-                    hafizaTeknigi = fullExplanation.substring(separatorIndex + separator.length).trim();
-                    // "Konu Özeti:" kısmını ayır (varsayılan olarak tüm metin, ayraca kadar olan kısım)
-                    konuOzeti = fullExplanation.substring(0, separatorIndex).replace("Konu Özeti:", "").trim();
-                } else {
-                    // Ayrac yoksa, tüm açıklamayı konu özeti olarak kabul et
-                     konuOzeti = fullExplanation.replace("Konu Özeti:", "").trim();
-                }
-
-                // Açıklama HTML'sini oluştur
-                explanationHTML = `<div class="explanation-box"><h4>Soru Analizi</h4>`;
-
-                // Konu Özeti bölümü (varsa)
-                if(konuOzeti) {
-                     explanationHTML += `<div class="explanation-section"><h5><span class="mr-2">📖</span><span>Konu Özeti</span></h5><p>${konuOzeti}</p></div>`;
-                }
-
-                // Hafıza Tekniği bölümü (varsa)
-                if(hafizaTeknigi) {
-                    explanationHTML += `<div class="explanation-section"><h5><span class="mr-2">💡</span><span>Hafıza Tekniği</span></h5><p>${hafizaTeknigi}</p></div>`;
-                }
-
-                explanationHTML += `</div>`; // explanation-box'u kapat
-            }
-
-            // HTML içeriğini oluştur ve ekle
-            resultItemDiv.innerHTML = `
-                <p class="font-bold mb-2">Soru ${item.index + 1}:</p>
-                <pre class="mb-4 bg-slate-50 p-3 rounded">${cleanQuestionText}</pre>
-                ${this._createResultOptionsHTML(q, item.userAnswer)}
-                ${explanationHTML}
-            `;
-            container.appendChild(resultItemDiv);
+            optionsHTML += `<div class="flex items-start p-3 rounded-lg border ${classes}"><div class="flex-shrink-0 w-5 h-5 mr-3">${icon}</div><p class="text-justify flex-1">${text}</p></div>`;
         });
-    }
-
-    renderMarkedQuestions(markedQuestions) {
-        const container = this.dom.markedQuestionsContainer;
-        if (!container) return; // Element yoksa çık
-        container.innerHTML = ''; // Önce temizle
-
-        // Eğer işaretli soru yoksa, bilgi mesajı göster
-        if (markedQuestions.length === 0) {
-            container.innerHTML = `<p class="text-slate-600 p-4 bg-slate-50 rounded-lg">İncelemek için herhangi bir soru işaretlemediniz.</p>`;
-            return;
-        }
-
-        // Her bir işaretli soruyu işle
-        markedQuestions.forEach((item) => {
-            const q = item.question; // Soru objesi
-            const resultItemDiv = document.createElement('div');
-            resultItemDiv.className = "mb-6 p-4 bg-white rounded-lg border border-slate-200"; // Stil
-
-            // Soru durumu (Doğru/Yanlış/Boş)
-            const isCorrect = item.userAnswer === q.correctAnswer;
-            const statusText = item.userAnswer ? (isCorrect ? 'Doğru Cevaplandı' : 'Yanlış Cevaplandı') : 'Boş Bırakıldı';
-            const statusColor = item.userAnswer ? (isCorrect ? 'text-green-600' : 'text-red-600') : 'text-slate-600';
-
-            // Soru metnini temizle
-            const cleanQuestionText = q.questionText.replace(/^\d+[\.\)-]\s*/, '');
-
-             // Açıklama kutusunu hazırla (varsa)
-            let explanationHTML = '';
-            if (q.explanation) {
-                // "Hafıza Tekniği:" ayracını bul
-                const separator = "Hafıza Tekniği:";
-                let fullExplanation = q.explanation;
-                let konuOzeti = "";
-                let hafizaTeknigi = "";
-
-                const separatorIndex = fullExplanation.indexOf(separator);
-
-                if (separatorIndex !== -1) {
-                    // Ayracı bulduysak, metni ikiye ayır
-                    hafizaTeknigi = fullExplanation.substring(separatorIndex + separator.length).trim();
-                    // "Konu Özeti:" kısmını ayır (varsayılan olarak tüm metin, ayraca kadar olan kısım)
-                    konuOzeti = fullExplanation.substring(0, separatorIndex).replace("Konu Özeti:", "").trim();
-                } else {
-                    // Ayrac yoksa, tüm açıklamayı konu özeti olarak kabul et
-                     konuOzeti = fullExplanation.replace("Konu Özeti:", "").trim();
-                }
-
-                // Açıklama HTML'sini oluştur
-                explanationHTML = `<div class="explanation-box"><h4>Soru Analizi</h4>`;
-
-                // Konu Özeti bölümü (varsa)
-                if(konuOzeti) {
-                     explanationHTML += `<div class="explanation-section"><h5><span class="mr-2">📖</span><span>Konu Özeti</span></h5><p>${konuOzeti}</p></div>`;
-                }
-
-                // Hafıza Tekniği bölümü (varsa)
-                if(hafizaTeknigi) {
-                    explanationHTML += `<div class="explanation-section"><h5><span class="mr-2">💡</span><span>Hafıza Tekniği</span></h5><p>${hafizaTeknigi}</p></div>`;
-                }
-
-                explanationHTML += `</div>`; // explanation-box'u kapat
-            }
-
-            // HTML içeriğini oluştur ve ekle
-            resultItemDiv.innerHTML = `
-                <div class="flex justify-between items-center mb-2">
-                    <p class="font-bold">Soru ${item.index + 1}:</p>
-                    <span class="text-sm font-semibold ${statusColor}">${statusText}</span>
-                </div>
-                <pre class="mb-4 bg-slate-50 p-3 rounded">${cleanQuestionText}</pre>
-                ${this._createResultOptionsHTML(q, item.userAnswer)}
-                ${explanationHTML}
-            `;
-            container.appendChild(resultItemDiv);
-        });
+        return optionsHTML + '</div>';
     }
 
     updateSuccessRateAppearance(percentage) {
-        const box = this.dom.successRateBox;
-        const text = this.dom.successText;
-        const summary = this.dom.performanceSummary;
-
-        if (!box || !text || !summary) return; // Elementlerden biri yoksa çık
-
-        // Önceki sınıfları temizle
-        box.className = 'p-4 rounded-lg';
-        text.className = '';
-
-        if (percentage >= 90) {
-            box.classList.add('bg-green-100');
-            text.classList.add('text-green-800');
-            summary.textContent = "Mükemmel! Konulara tamamen hakimsin.";
-        } else if (percentage >= 70) {
-            box.classList.add('bg-green-100');
-            text.classList.add('text-green-800');
-            summary.textContent = "Harika bir sonuç! Başarın göz dolduruyor.";
-        } else if (percentage >= 50) {
-            box.classList.add('bg-yellow-100');
-            text.classList.add('text-yellow-800');
-            summary.textContent = "İyi bir başlangıç. Yanlış yaptığın ve işaretlediğin konuları tekrar etmen faydalı olacaktır.";
-        } else {
-            box.classList.add('bg-red-100');
-            text.classList.add('text-red-800');
-            summary.textContent = "Konuları tekrar gözden geçirmende fayda var. Pes etme!";
-        }
-        // Başarı yazısı
-        if (text) text.textContent = 'Başarı';
+        const { successRateBox: box, successText: text, performanceSummary: summary } = this.dom;
+        if (!box || !text || !summary) return;
+        box.className = 'p-4 rounded-lg'; text.className = '';
+        let message = "Konuları tekrar gözden geçirmende fayda var. Pes etme!", boxClass = 'bg-red-100', textClass = 'text-red-800';
+        if (percentage >= 90) { message = "Mükemmel! Konulara tamamen hakimsin."; boxClass = 'bg-green-100'; textClass = 'text-green-800'; }
+        else if (percentage >= 70) { message = "Harika bir sonuç! Başarın göz dolduruyor."; boxClass = 'bg-green-100'; textClass = 'text-green-800'; }
+        else if (percentage >= 50) { message = "İyi bir başlangıç. Yanlış yaptığın konuları tekrar etmen faydalı olacaktır."; boxClass = 'bg-yellow-100'; textClass = 'text-yellow-800'; }
+        box.classList.add(boxClass); text.classList.add(textClass);
+        summary.textContent = message; text.textContent = 'Başarı';
     }
-
+    
     switchResultTab(tabName) {
-        if (!this.dom.wrongAnswersPanel || !this.dom.markedQuestionsPanel || !this.dom.wrongAnswersTab || !this.dom.markedQuestionsTab) return;
-        if (tabName === 'wrong') {
-            this.dom.wrongAnswersPanel.classList.remove('hidden');
-            this.dom.markedQuestionsPanel.classList.add('hidden');
-            this.dom.wrongAnswersTab.classList.add('tab-active');
-            this.dom.markedQuestionsTab.classList.remove('tab-active');
-        } else if (tabName === 'marked') {
-            this.dom.wrongAnswersPanel.classList.add('hidden');
-            this.dom.markedQuestionsPanel.classList.remove('hidden');
-            this.dom.wrongAnswersTab.classList.remove('tab-active');
-            this.dom.markedQuestionsTab.classList.add('tab-active');
-        }
+        const { wrongAnswersPanel, markedQuestionsPanel, wrongAnswersTab, markedQuestionsTab } = this.dom;
+        if (!wrongAnswersPanel || !markedQuestionsPanel || !wrongAnswersTab || !markedQuestionsTab) return;
+        const isWrongTab = tabName === 'wrong';
+        wrongAnswersPanel.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, !isWrongTab);
+        markedQuestionsPanel.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, isWrongTab);
+        wrongAnswersTab.classList.toggle(CONSTANTS.CSS_CLASSES.TAB_ACTIVE, isWrongTab);
+        markedQuestionsTab.classList.toggle(CONSTANTS.CSS_CLASSES.TAB_ACTIVE, !isWrongTab);
     }
-
-    // Quiz ekranındaki butonlara event listener bağla
+    
     bindQuizEvents() {
-        // Önceki, Sonraki, İşaretle, Bitir butonları
-        if (this.dom.nextBtn) {
-            this.dom.nextBtn.addEventListener('click', () => {
-                this.examManager.goToNextQuestion();
-            });
-        }
-
-        if (this.dom.prevBtn) {
-            this.dom.prevBtn.addEventListener('click', () => {
-                this.examManager.goToPrevQuestion();
-            });
-        }
-
-        if (this.dom.markReviewBtn) {
-            this.dom.markReviewBtn.addEventListener('click', () => {
-                this.examManager.toggleMarkForReview();
-            });
-        }
-
-        if (this.dom.finishBtn) {
-            this.dom.finishBtn.addEventListener('click', () => {
-                this.examManager.finishQuiz(false); // Onay iste
-            });
-        }
+        this.dom.nextBtn?.addEventListener('click', () => this.examManager.goToNextQuestion());
+        this.dom.prevBtn?.addEventListener('click', () => this.examManager.goToPrevQuestion());
+        this.dom.markReviewBtn?.addEventListener('click', () => this.examManager.toggleMarkForReview());
+        this.dom.finishBtn?.addEventListener('click', () => this.examManager.finishQuiz(false));
     }
 }
 
+/**
+ * Onay ve uyarı pencerelerini (modallar) yönetir.
+ * @class ModalManager
+ */
 class ModalManager {
     constructor(domElements) {
         this.dom = domElements;
-        this.bindModalEvents();
+        this._bindModalEvents();
     }
-
-    bindModalEvents() {
-        // Alert modal'ındaki "Tamam" butonuna event bağla
-        if (this.dom.alertModalOkBtn) {
-            this.dom.alertModalOkBtn.addEventListener('click', () => {
-                this.hide(); // Modal'i gizle
-            });
-        }
+    
+    _bindModalEvents() {
+        this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide());
     }
-
-    // Alert modal'ı göster
+    
     show(config) {
-        if (!this.dom.alertModal || !this.dom.alertModalTitle || !this.dom.alertModalMessage || !this.dom.alertModalOkBtn) return;
-        // Başlık ve mesajı güncelle
-        this.dom.alertModalTitle.textContent = config.title;
-        this.dom.alertModalMessage.textContent = config.message;
-
-        // Modal'i görünür yap
-        this.dom.alertModal.classList.remove('hidden');
-        this.dom.alertModal.classList.add('flex'); // Flex kullanarak merkezleme
-
-        // "Tamam" butonuna odaklan (erişilebilirlik)
-        this.dom.alertModalOkBtn.focus();
-
-        // "Tamam" butonuna özel onay fonksiyonu bağla
-        this.dom.alertModalOkBtn.onclick = () => {
-            this.hide(); // Modal'i gizle
-            if (config.onConfirm) {
-                config.onConfirm(); // Onay fonksiyonunu çalıştır
-            }
+        const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
+        if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) return;
+        alertModalTitle.textContent = config.title;
+        alertModalMessage.textContent = config.message;
+        alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
+        alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
+        alertModalOkBtn.focus();
+        alertModalOkBtn.onclick = () => {
+            this.hide();
+            if (config.onConfirm) config.onConfirm();
         };
     }
-
-    // Alert modal'ı gizle
+    
     hide() {
         if (this.dom.alertModal) {
-            this.dom.alertModal.classList.add('hidden');
-            this.dom.alertModal.classList.remove('flex');
+            this.dom.alertModal.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
+            this.dom.alertModal.classList.remove(CONSTANTS.CSS_CLASSES.FLEX);
         }
     }
 }
 
-
-// Sadece deneme sınavı veya test sayfalarında bu motoru çalıştır.
-// 'app-container' ID'li bir element varsa, uygulamayı başlat.
+// --- UYGULAMAYI BAŞLATMA ---
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('app-container')) {
+    if (document.getElementById(CONSTANTS.DOM.APP_CONTAINER_ID)) {
         new JusticeExamApp();
     }
 });
