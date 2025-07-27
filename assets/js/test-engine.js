@@ -296,12 +296,17 @@ class ExamManager {
         }
     }
 
-    finishQuiz(isAuto = false) {
-        if (isAuto) {
-            this.performFinish();
-        } else {
-            this.app.modalManager?.show({
-                title: 'Sınavı Bitir',
+    // ... ExamManager sınıfının içinde ...
+finishQuiz(isAuto = false) {
+    if (isAuto) {
+        this.performFinish();
+    } else {
+        // TEST KODUNU BU SATIRA EKLE
+        console.log("finishQuiz çağrıldı. Modal Yöneticisi:", this.app.modalManager); 
+
+        this.app.modalManager?.show({
+            title: 'Sınavı Bitir',
+// ...
                 message: 'Sınavı bitirmek istediğinizden emin misiniz?',
                 onConfirm: () => this.performFinish()
             });
