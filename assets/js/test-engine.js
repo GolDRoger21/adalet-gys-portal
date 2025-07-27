@@ -588,7 +588,10 @@ class ModalManager {
 }
 
 // --- UYGULAMAYI BAŞLATMA ---
-document.addEventListener('DOMContentLoaded', () => {
+// Şablonun yüklendiğine dair 'template-loaded' olayını dinle.
+// Bu olay, template-loader.js tarafından tetiklenir.
+document.addEventListener('template-loaded', () => {
+    // Sadece sınav motoruna ihtiyaç duyan sayfalarda başlat.
     if (document.getElementById(CONSTANTS.DOM.APP_CONTAINER_ID)) {
         new JusticeExamApp();
     }
