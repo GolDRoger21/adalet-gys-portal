@@ -73,15 +73,25 @@ class JusticeExamApp {
             return;
         }
 
+        // === SÜREYİ SABİTLE ===
+        // const calculatedDuration = Math.ceil(questionPool.length * 1.2); // Dakika - Eski yöntem
+        const FIXED_DURATION_MINUTES = 120; // Dakika - Yeni sabit süre
+        // === SÜREYİ SABİTLE ===
+
         // UI'yi güncelle
-        const calculatedDuration = Math.ceil(questionPool.length * 1.2); // Dakika
         this.domElements.totalQuestionCount.textContent = questionPool.length;
-        this.domElements.totalDurationDisplay.innerHTML = `&nbsp;${calculatedDuration} Dakika`;
+        // === SÜREYİ SABİTLE ===
+        // this.domElements.totalDurationDisplay.innerHTML = `&nbsp;${calculatedDuration} Dakika`;
+        this.domElements.totalDurationDisplay.innerHTML = `&nbsp;${FIXED_DURATION_MINUTES} Dakika`;
+        // === SÜREYİ SABİTLE ===
         this.domElements.startBtnFullText.textContent = `SINAVA BAŞLA (${questionPool.length} Soru)`;
         this.domElements.startExamBtn.disabled = false;
 
         // ExamManager, UIManager, ModalManager örneklerini oluştur
-        this.examManager = new ExamManager(questionPool, calculatedDuration, this);
+        // === SÜREYİ SABİTLE ===
+        // this.examManager = new ExamManager(questionPool, calculatedDuration, this);
+        this.examManager = new ExamManager(questionPool, FIXED_DURATION_MINUTES, this);
+        // === SÜREYİ SABİTLE ===
         this.uiManager = new UIManager(this.domElements, this.examManager);
         this.modalManager = new ModalManager(this.domElements);
 
