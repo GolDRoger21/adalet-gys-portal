@@ -122,8 +122,10 @@ class JusticeExamApp {
      */
     _bindEventListeners() {
         this.domElements.startExamBtn?.addEventListener('click', () => this.startExam());
-        this.domElements.restartBtn?.addEventListener('click', () => window.location.href = '/adalet-gys-portal/index.html'); // Ana sayfaya yönlendir
-        this.domElements.closeResultModalBtn?.addEventListener('click', () => window.location.href = '/adalet-gys-portal/index.html'); // Ana sayfaya yönlendir
+        
+        // YENİ KÖK-GÖRECELİ YOL
+        this.domElements.restartBtn?.addEventListener('click', () => window.location.href = '/adalet-gys-portal/index.html');
+        this.domElements.closeResultModalBtn?.addEventListener('click', () => window.location.href = '/adalet-gys-portal/index.html');
 
         if (this.domElements.wrongAnswersTab && this.domElements.markedQuestionsTab && this.uiManager) {
             this.domElements.wrongAnswersTab.addEventListener('click', () => this.uiManager.switchResultTab('wrong'));
