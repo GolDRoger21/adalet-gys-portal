@@ -1,3 +1,7 @@
+// ===================================================================================
+// UYGULAMA MANTIĞI (deneme-1.html ile Uyumlu)
+// ===================================================================================
+
 class JusticeExamApp {
     constructor() {
         this.domElements = this.initializeDOMElements();
@@ -13,10 +17,49 @@ class JusticeExamApp {
     }
 
     initializeDOMElements() {
-        // Bu fonksiyon, önceki kodunuzdaki gibi tüm elementleri seçer.
-        // ... (Bu bölümün içeriği öncekiyle aynı olduğu için kısaltılmıştır, tam kod aşağıdadır)
         return {
-            appContainer: document.getElementById('app-container'), welcomeScreen: document.getElementById('welcome-screen'), quizScreen: document.getElementById('quiz-screen'), startExamBtn: document.getElementById('start-exam-btn'), elapsedTime: document.getElementById('elapsed-time'), remainingTime: document.getElementById('remaining-time'), timerAnnouncer: document.getElementById('timer-announcer'), counter: document.getElementById('question-counter'), questionText: document.getElementById('question-text'), optionsContainer: document.getElementById('options-container'), prevBtn: document.getElementById('prev-btn'), nextBtn: document.getElementById('next-btn'), markReviewBtn: document.getElementById('mark-review-btn'), finishBtn: document.getElementById('finish-btn'), navPalette: document.getElementById('nav-palette-container'), resultModal: document.getElementById('result-modal'), correctCount: document.getElementById('correct-count'), incorrectCount: document.getElementById('incorrect-count'), emptyCount: document.getElementById('empty-count'), successRate: document.getElementById('success-rate'), successRateBox: document.getElementById('success-rate-box'), successText: document.getElementById('success-text'), performanceSummary: document.getElementById('performance-summary'), wrongAnswersContainer: document.getElementById('wrong-answers-container'), markedQuestionsContainer: document.getElementById('marked-questions-container'), wrongAnswersTab: document.getElementById('wrong-answers-tab'), markedQuestionsTab: document.getElementById('marked-questions-tab'), wrongAnswersPanel: document.getElementById('wrong-answers-panel'), markedQuestionsPanel: document.getElementById('marked-questions-panel'), startBtnFullText: document.getElementById('start-btn-full-text'), totalQuestionCount: document.getElementById('total-question-count'), totalDurationDisplay: document.getElementById('total-duration-display'), alertModal: document.getElementById('alert-modal'), alertModalTitle: document.getElementById('alert-modal-title'), alertModalMessage: document.getElementById('alert-modal-message'), alertModalOkBtn: document.getElementById('alert-modal-ok-btn'), restartBtn: document.getElementById('restart-btn'), closeResultModalBtn: document.getElementById('close-result-modal-btn'), flagOutlineIcon: document.getElementById('flag-outline-icon'), flagSolidIcon: document.getElementById('flag-solid-icon'), warningBox: document.getElementById('warning-box'), warningMessage: document.getElementById('warning-message'),
+            appContainer: document.getElementById('app-container'),
+            welcomeScreen: document.getElementById('welcome-screen'),
+            quizScreen: document.getElementById('quiz-screen'),
+            startExamBtn: document.getElementById('start-exam-btn'),
+            elapsedTime: document.getElementById('elapsed-time'),
+            remainingTime: document.getElementById('remaining-time'),
+            timerAnnouncer: document.getElementById('timer-announcer'),
+            counter: document.getElementById('question-counter'),
+            questionText: document.getElementById('question-text'),
+            optionsContainer: document.getElementById('options-container'),
+            prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            markReviewBtn: document.getElementById('mark-review-btn'),
+            finishBtn: document.getElementById('finish-btn'),
+            navPalette: document.getElementById('nav-palette-container'),
+            resultModal: document.getElementById('result-modal'),
+            correctCount: document.getElementById('correct-count'),
+            incorrectCount: document.getElementById('incorrect-count'),
+            emptyCount: document.getElementById('empty-count'),
+            successRate: document.getElementById('success-rate'),
+            successRateBox: document.getElementById('success-rate-box'),
+            successText: document.getElementById('success-text'),
+            performanceSummary: document.getElementById('performance-summary'),
+            wrongAnswersContainer: document.getElementById('wrong-answers-container'),
+            markedQuestionsContainer: document.getElementById('marked-questions-container'),
+            wrongAnswersTab: document.getElementById('wrong-answers-tab'),
+            markedQuestionsTab: document.getElementById('marked-questions-tab'),
+            wrongAnswersPanel: document.getElementById('wrong-answers-panel'),
+            markedQuestionsPanel: document.getElementById('marked-questions-panel'),
+            startBtnFullText: document.getElementById('start-btn-full-text'),
+            totalQuestionCount: document.getElementById('total-question-count'),
+            totalDurationDisplay: document.getElementById('total-duration-display'),
+            alertModal: document.getElementById('alert-modal'),
+            alertModalTitle: document.getElementById('alert-modal-title'),
+            alertModalMessage: document.getElementById('alert-modal-message'),
+            alertModalOkBtn: document.getElementById('alert-modal-ok-btn'),
+            restartBtn: document.getElementById('restart-btn'),
+            closeResultModalBtn: document.getElementById('close-result-modal-btn'),
+            flagOutlineIcon: document.getElementById('flag-outline-icon'),
+            flagSolidIcon: document.getElementById('flag-solid-icon'),
+            warningBox: document.getElementById('warning-box'),
+            warningMessage: document.getElementById('warning-message'),
         };
     }
 
@@ -37,47 +80,53 @@ class JusticeExamApp {
     }
 
     showError(message) {
-        // ... (Bu fonksiyonun içeriği öncekiyle aynı)
+        const { startExamBtn, startBtnFullText, totalQuestionCount, warningBox, warningMessage } = this.domElements;
+        if (startExamBtn) startExamBtn.disabled = true;
+        if (startBtnFullText) startBtnFullText.textContent = "HATA OLUŞTU";
+        if (totalQuestionCount) totalQuestionCount.textContent = "0";
+        if (warningMessage) warningMessage.textContent = message;
+        if (warningBox) warningBox.classList.remove('hidden');
+        console.error("Uygulama Hatası:", message);
     }
 
     bindEventListeners() {
-        // ... (Bu fonksiyonun içeriği öncekiyle aynı)
+        const { startExamBtn, restartBtn, closeResultModalBtn, wrongAnswersTab, markedQuestionsTab } = this.domElements;
+        if (startExamBtn) startExamBtn.addEventListener('click', () => this.startExam());
+        if (restartBtn) restartBtn.addEventListener('click', () => window.location.reload());
+        if (closeResultModalBtn) closeResultModalBtn.addEventListener('click', () => window.location.reload());
+        if (wrongAnswersTab && markedQuestionsTab && this.uiManager) {
+            wrongAnswersTab.addEventListener('click', () => this.uiManager.switchResultTab('wrong'));
+            markedQuestionsTab.addEventListener('click', () => this.uiManager.switchResultTab('marked'));
+        }
     }
     
     startExam() {
-        // ... (Bu fonksiyonun içeriği öncekiyle aynı)
+        if (this.domElements.welcomeScreen) this.domElements.welcomeScreen.classList.add('hidden');
+        if (this.examManager) this.examManager.startExam();
     }
 
-    /**
-     * CSV metnini, tırnak içindeki virgül ve alt satırları doğru işleyerek
-     * bir diziler dizisine dönüştürür.
-     * @param {string} csvText - Google E-Tablosu'ndan gelen ham metin.
-     * @returns {string[][]} Her biri bir satırın sütunlarını içeren dizilerden oluşan dizi.
-     */
     robustCsvParse(csvText) {
         const rows = [];
         let fields = [];
         let currentField = '';
         let inQuotes = false;
         const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-
         for (let i = 0; i < normalizedText.length; i++) {
             const char = normalizedText[i];
             const nextChar = normalizedText[i + 1];
-
             if (char === '"') {
-                if (inQuotes && nextChar === '"') { // Çift tırnak ("") durumu
+                if (inQuotes && nextChar === '"') {
                     currentField += '"';
-                    i++; // Sonraki tırnağı atla
+                    i++;
                 } else {
-                    inQuotes = !inQuotes; // Tırnak durumunu değiştir
+                    inQuotes = !inQuotes;
                 }
-            } else if (char === ',' && !inQuotes) { // Tırnak dışında virgül = Sütun sonu
+            } else if (char === ',' && !inQuotes) {
                 fields.push(currentField);
                 currentField = '';
-            } else if (char === '\n' && !inQuotes) { // Tırnak dışında yeni satır = Satır sonu
+            } else if (char === '\n' && !inQuotes) {
                 fields.push(currentField);
-                if (fields.length > 1 || fields[0].trim() !== '') { // Tamamen boş satırları atla
+                if (fields.length > 1 || fields[0].trim() !== '') {
                     rows.push(fields);
                 }
                 fields = [];
@@ -86,13 +135,10 @@ class JusticeExamApp {
                 currentField += char;
             }
         }
-
-        // Dosya sonundaki son satırı da ekle
         if (currentField || fields.length > 0) {
             fields.push(currentField);
             rows.push(fields);
         }
-
         return rows;
     }
 
@@ -118,12 +164,8 @@ class JusticeExamApp {
             
             const questionPool = parsedRows.slice(1).map(rowArray => {
                 if (rowArray.every(field => field.trim() === '')) return null;
-
                 const data = {};
-                headers.forEach((header, i) => {
-                    data[header] = rowArray[i] || '';
-                });
-
+                headers.forEach((header, i) => { data[header] = rowArray[i] || ''; });
                 return {
                     questionText: data.questionText,
                     options: { A: data.optionA, B: data.optionB, C: data.optionC, D: data.optionD, E: data.optionE || '' },
@@ -133,7 +175,6 @@ class JusticeExamApp {
             }).filter(q => q && q.questionText && q.correctAnswer);
             
             if (questionPool.length === 0) throw new Error("Hiç geçerli soru bulunamadı.");
-
             this.initializeApp(questionPool);
         } catch (error) {
             console.error('Veri çekme hatası:', error);
@@ -142,8 +183,6 @@ class JusticeExamApp {
     }
 }
 
-
-// ExamManager, UIManager ve ModalManager Sınıfları (Bu sınıflar daha önce sağladığınız tam koddan alınmıştır ve eksiksizdir)
 class ExamManager {
     constructor(questions, durationMinutes, app) {
         this.questions = questions; this.durationMinutes = durationMinutes; this.app = app; this.currentQuestionIndex = 0; this.userAnswers = []; this.timerInterval = null; this.timeRemaining = 0;
@@ -173,7 +212,7 @@ class ExamManager {
     selectAnswer(optionKey) {
         this.userAnswers[this.currentQuestionIndex].userAnswer = optionKey;
         if (this.app.uiManager) this.app.uiManager.renderQuestion();
-        if (this.currentQuestionIndex < this.questions.length - 1) { setTimeout(() => this.goToNextQuestion(), 300); }
+        if (this.currentQuestionIndex < this.questions.length - 1) { setTimeout(() => this.goToNextQuestion(), 200); }
     }
     toggleMarkForReview() {
         this.userAnswers[this.currentQuestionIndex].isMarkedForReview = !this.userAnswers[this.currentQuestionIndex].isMarkedForReview;
@@ -194,7 +233,7 @@ class ExamManager {
             const userAnswerData = this.userAnswers[i];
             if (userAnswerData.isMarkedForReview) markedQuestions.push({ question: q, index: i, userAnswer: userAnswerData.userAnswer });
             if (!userAnswerData.userAnswer) empty++;
-            else if (userAnswerData.userAnswer === q.correctAnswer) correct++;
+            else if (userAnswerData.userAnswer.toUpperCase() === q.correctAnswer.toUpperCase()) correct++;
             else { incorrect++; incorrectQuestions.push({ question: q, index: i, userAnswer: userAnswerData.userAnswer }); }
         });
         const totalQuestions = this.questions.length; const successPercentage = totalQuestions > 0 ? (correct / totalQuestions * 100) : 0;
@@ -222,6 +261,7 @@ class ExamManager {
         }, 1000);
     }
 }
+
 class UIManager {
     constructor(domElements, examManager) { this.dom = domElements; this.examManager = examManager; }
     renderQuestion() {
@@ -268,8 +308,8 @@ class UIManager {
         let optionsHTML = '<div class="space-y-2 mt-4 text-sm">';
         for (const [key, text] of Object.entries(q.options)) {
             if (!text) continue; let classes = 'border-slate-200 bg-slate-50 text-slate-700'; let icon = `<span class="font-bold text-slate-500">${key})</span>`;
-            if (key === q.correctAnswer) { classes = 'border-green-400 bg-green-50 text-green-800 font-medium'; icon = `<svg class="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`; }
-            else if (key === userAnswer) { classes = 'border-red-400 bg-red-50 text-red-800 font-medium'; icon = `<svg class="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>`; }
+            if (key.toUpperCase() === q.correctAnswer.toUpperCase()) { classes = 'border-green-400 bg-green-50 text-green-800 font-medium'; icon = `<svg class="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`; }
+            else if (key.toUpperCase() === userAnswer?.toUpperCase()) { classes = 'border-red-400 bg-red-50 text-red-800 font-medium'; icon = `<svg class="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>`; }
             optionsHTML += `<div class="flex items-start p-3 rounded-lg border ${classes}"><div class="flex-shrink-0 w-5 h-5 mr-3">${icon}</div><p class="text-justify flex-1">${text}</p></div>`;
         }
         optionsHTML += '</div>'; return optionsHTML;
