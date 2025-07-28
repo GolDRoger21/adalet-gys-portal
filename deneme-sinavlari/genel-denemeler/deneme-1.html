@@ -22,10 +22,54 @@
                 <h1 class="text-3xl md:text-4xl font-bold text-slate-800 bg-teal-50 p-2 rounded">Adalet Bakanlığı Görevde Yükselme Sınavı</h1>
                 <p class="text-lg md:text-xl text-slate-500 mt-3">Yazı İşleri Müdürlüğü Deneme Sınavı</p>
             </div>
+            <div id="warning-box" class="hidden text-left mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-md">
+                <h3 class="font-bold text-yellow-800">Uyarı</h3>
+                <p class="text-yellow-700 mt-2" id="warning-message"></p>
+            </div>
+            <div class="text-left grid md:grid-cols-2 gap-8 mt-12 mb-10">
+                <div class="bg-slate-50 p-6 rounded-lg border">
+                    <h2 class="text-xl font-semibold text-slate-800 border-b pb-3 mb-4">Sınav Bilgileri</h2>
+                    <ul class="space-y-3 text-slate-700">
+                        <li><b>Toplam Süre:</b><span id="total-duration-display"> Hesaplanıyor...</span></li>
+                        <li><b>Toplam Soru Sayısı:</b> <span id="total-question-count">0</span> Soru</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-lg border">
+                    <h2 class="text-xl font-semibold text-slate-800 border-b pb-3 mb-4">Kullanım Kılavuzu</h2>
+                    <ul class="space-y-3 text-slate-700">
+                        <li>...Kullanım kılavuzu maddeleri buraya...</li>
+                    </ul>
+                </div>
+            </div>
             <button id="start-exam-btn" class="start-btn" disabled>
                 <span id="start-btn-full-text">Sorular Yükleniyor...</span>
             </button>
         </div>
+
+        <div id="quiz-screen" class="hidden">
+            <div class="card p-6 relative">
+                <div class="flex justify-between items-center mb-6 bg-slate-50 -m-6 p-6 pb-4 rounded-t-lg border-b">
+                    <span id="question-counter" class="text-lg font-bold text-teal-500"></span>
+                    <div class="flex items-center space-x-4">
+                        <div><span class="text-xs">GEÇEN SÜRE</span><div id="elapsed-time">00:00:00</div></div>
+                        <div><span class="text-xs">KALAN SÜRE</span><div id="remaining-time">00:00:00</div></div>
+                    </div>
+                    <button id="mark-review-btn" title="İncelemek için işaretle"><span id="flag-outline-icon">FLAG</span><span id="flag-solid-icon" class="hidden">SOLIDFLAG</span></button>
+                </div>
+                <div class="mt-8 mb-8"><pre id="question-text"></pre></div>
+                <div id="options-container" class="grid grid-cols-1 gap-4"></div>
+            </div>
+            <div class="flex justify-between items-center mt-6">
+                <button id="prev-btn">Önceki</button>
+                <button id="finish-btn" class="px-6 py-2 bg-red-600 text-white rounded-md">Sınavı Bitir</button>
+                <button id="next-btn">Sonraki</button>
+            </div>
+            <div class="card p-4 mt-6">
+                <h3 class="text-lg font-semibold mb-3">Soru Gezgini</h3>
+                <div id="nav-palette-container" class="grid grid-cols-10 gap-2"></div>
+            </div>
+        </div>
+
     </main>
 
 </body>
