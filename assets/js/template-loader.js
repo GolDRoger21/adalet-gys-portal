@@ -1,3 +1,4 @@
+// adalet-gys-portal/assets/js/template-loader.js
 document.addEventListener('DOMContentLoaded', () => {
     if (document.body.dataset.needsTemplate) {
         loadCommonTemplate();
