@@ -1,7 +1,15 @@
+/* ================================================================ */
+/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.0)              == */
+/* ================================================================ */
+/* Açıklama: Bu dosya, sitenin tamamı için geçerli olan genel      */
+/* renkleri, fontları, container yapısını ve ortak bileşenleri    */
+/* (navbar, footer, card, btn) tanımlar.                          */
+/* ================================================================ */
+
 /* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Değişkenler */
+/* Sitenin Ana Değişkenleri */
 :root {
     --primary-color: #0d9488;
     --secondary-color: #475569;
@@ -14,7 +22,7 @@
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-/* Genel Sıfırlama ve Body */
+/* Genel Sıfırlama ve Body Stili */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -28,10 +36,23 @@ body {
     line-height: 1.6;
 }
 
+/* --- ORTAK YAPI ve BİLEŞENLER --- */
+
 .container {
     max-width: var(--container-width);
     margin: 0 auto;
     padding: 0 1.5rem;
+}
+
+.page-content {
+    padding: 2rem 0;
+}
+
+/* Genel Kart Stili (Tüm sitede kullanılır) */
+.card {
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
 }
 
 /* Navigasyon Menüsü */
@@ -80,12 +101,45 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* Ana İçerik Alanı */
-.page-content {
-    padding: 2rem 0;
+/* Butonlar */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-align: center;
+    transition: background-color 0.2s, transform 0.2s;
+    background-color: var(--primary-color);
+    color: white;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
-/* Ana Sayfa Karşılama Alanı */
+.btn:hover {
+    background-color: #0f766e; /* primary-color'ın koyusu */
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #334155; /* secondary-color'ın koyusu */
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+    color: var(--secondary-color);
+    border-top: 1px solid var(--border-color);
+}
+
+/* --- ANA SAYFAYA ÖZEL STİLLER --- */
+
 .hero {
     text-align: center;
     background-color: var(--surface-color);
@@ -107,7 +161,6 @@ body {
     margin: 0 auto;
 }
 
-/* Kategori Kartları */
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -130,44 +183,6 @@ body {
 }
 
 .category-card p {
-    flex-grow: 1; /* Butonların altta hizalanmasını sağlar */
+    flex-grow: 1;
     margin-bottom: 1.5rem;
-}
-
-/* Butonlar */
-.btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-    text-align: center;
-    transition: background-color 0.2s, transform 0.2s;
-    background-color: var(--primary-color);
-    color: white;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem; /* Mobil için alt alta geldiğinde boşluk */
-}
-
-.btn:hover {
-    background-color: #0f766e; /* primary-color'ın koyusu */
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background-color: var(--secondary-color);
-    color: white;
-}
-.btn-secondary:hover {
-    background-color: #334155; /* secondary-color'ın koyusu */
-}
-
-
-/* Footer */
-.footer {
-    text-align: center;
-    padding: 2rem 0;
-    margin-top: 2rem;
-    color: var(--secondary-color);
-    border-top: 1px solid var(--border-color);
 }
