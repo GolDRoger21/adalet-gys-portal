@@ -1,7 +1,7 @@
 /**
  * @file Adalet GYS Portalı için ortak şablon yükleyici.
  * @description Header, footer ve modallar gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
- * @version 6.3 (Preserve App Container Classes and Load Modals)
+ * @version 6.4 (Final Exam Template Loader)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,32 +33,34 @@ async function loadCommonTemplate() {
         if (header) body.prepend(header.cloneNode(true));
         if (footer) body.appendChild(footer.cloneNode(true));
 
-        // SADECE sınav sayfalarına (data-needs-template="exam") özel pencereleri ekle
+        // SADECE sınav sayfalarına (data-needs-template="exam") özel elementleri ekle
         if (body.dataset.needsTemplate === 'exam') {
-            // === DÜZELTME: result-modal artık kullanılmıyor, ancak alert-modal hala gerekli ===
-            // const resultModal = tempContainer.querySelector('#result-modal'); // Artık kullanılmıyor
+            // Alert modal'ı body'e ekle (ModalManager.show için gerekli)
             const alertModal = tempContainer.querySelector('#alert-modal');
+            if (alertModal) {
+                document.body.appendChild(alertModal.cloneNode(true));
+            }
+
             // sinav-sablonu.html içindeki #app-container elementini ve içeriğini al
-            const templateAppContainer = tempContainer.querySelector('#app-container'); 
+            const templateAppContainer = tempContainer.querySelector('#app-container');
             
-            // if (resultModal) document.body.appendChild(resultModal.cloneNode(true)); // Artık kullanılmıyor
-            if (alertModal) document.body.appendChild(alertModal.cloneNode(true));
-            
-            // templateAppContainer'in içeriğini ve sınıflarını, gerçek app-container'a aktar
+            // templateAppContainer'in TÜMÜNÜ (sınıflar+id+içerik) gerçek app-container ile değiştir.
             const targetAppContainer = document.getElementById('app-container');
             if (templateAppContainer && targetAppContainer) {
-                // === DÜZELTME: Sınıfları da aktar ===
-                // 1. Hedef elementin sınıflarını temizle (sadece precaution)
-                targetAppContainer.className = '';
-                // 2. Şablon elementinin sınıflarını hedef elemente kopyala
-                targetAppContainer.className = templateAppContainer.className;
-                // 3. Şablon elementinin içeriğini hedef elemente kopyala
-                targetAppContainer.innerHTML = templateAppContainer.innerHTML;
-                // === DÜZELTME SON ===
+                // 1. Yeni bir element oluştur
+                const newAppContainer = document.createElement('main');
+                // 2. ID'sini aktar
+                newAppContainer.id = templateAppContainer.id;
+                // 3. Sınıflarını aktar
+                newAppContainer.className = templateAppContainer.className;
+                // 4. İçeriğini aktar
+                newAppContainer.innerHTML = templateAppContainer.innerHTML;
+                // 5. Eski elementi yeni elementle değiştir
+                targetAppContainer.parentNode.replaceChild(newAppContainer, targetAppContainer);
             } else if (!targetAppContainer) {
-                console.error('Hedef app-container elementi bulunamadı.');
+                console.error('Hedef app-container elementi (deneme-1.html\'deki) bulunamadı.');
             } else if (!templateAppContainer) {
-                console.error('Şablon içindeki app-container elementi bulunamadı.');
+                console.error('Şablon içindeki app-container elementi (sinav-sablonu.html\'deki) bulunamadı.');
             }
         }
 
