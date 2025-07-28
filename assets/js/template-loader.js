@@ -1,7 +1,7 @@
 /**
  * @file Adalet GYS Portalı için ortak şablon yükleyici.
  * @description Header, footer ve modallar gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
- * @version 6.1 (Fixed App Container Content Loading)
+ * @version 6.2 (Preserve App Container Classes)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,19 +37,26 @@ async function loadCommonTemplate() {
         if (body.dataset.needsTemplate === 'exam') {
             const resultModal = tempContainer.querySelector('#result-modal');
             const alertModal = tempContainer.querySelector('#alert-modal');
-            // sinav-sablonu.html içindeki #app-container'ın içeriğini al
-            const templateAppContent = tempContainer.querySelector('#app-container'); 
+            // sinav-sablonu.html içindeki #app-container elementini ve içeriğini al
+            const templateAppContainer = tempContainer.querySelector('#app-container'); 
             
             if (resultModal) document.body.appendChild(resultModal.cloneNode(true));
             if (alertModal) document.body.appendChild(alertModal.cloneNode(true));
             
-            // templateAppContent'in içeriğini, gerçek app-container'a aktar
+            // templateAppContainer'in içeriğini ve sınıflarını, gerçek app-container'a aktar
             const targetAppContainer = document.getElementById('app-container');
-            if (templateAppContent && targetAppContainer) {
-                targetAppContainer.innerHTML = templateAppContent.innerHTML;
+            if (templateAppContainer && targetAppContainer) {
+                // === DÜZELTME: Sınıfları da aktar ===
+                // 1. Hedef elementin sınıflarını temizle (sadece precaution)
+                targetAppContainer.className = '';
+                // 2. Şablon elementinin sınıflarını hedef elemente kopyala
+                targetAppContainer.className = templateAppContainer.className;
+                // 3. Şablon elementinin içeriğini hedef elemente kopyala
+                targetAppContainer.innerHTML = templateAppContainer.innerHTML;
+                // === DÜZELTME SON ===
             } else if (!targetAppContainer) {
                 console.error('Hedef app-container elementi bulunamadı.');
-            } else if (!templateAppContent) {
+            } else if (!templateAppContainer) {
                 console.error('Şablon içindeki app-container elementi bulunamadı.');
             }
         }
