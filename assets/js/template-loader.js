@@ -1,7 +1,7 @@
 /**
  * @file Adalet GYS Portalı için ortak şablon yükleyici.
  * @description Header, footer ve modallar gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
- * @version 6.2 (Preserve App Container Classes)
+ * @version 6.3 (Preserve App Container Classes and Load Modals)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,12 +35,13 @@ async function loadCommonTemplate() {
 
         // SADECE sınav sayfalarına (data-needs-template="exam") özel pencereleri ekle
         if (body.dataset.needsTemplate === 'exam') {
-            const resultModal = tempContainer.querySelector('#result-modal');
+            // === DÜZELTME: result-modal artık kullanılmıyor, ancak alert-modal hala gerekli ===
+            // const resultModal = tempContainer.querySelector('#result-modal'); // Artık kullanılmıyor
             const alertModal = tempContainer.querySelector('#alert-modal');
             // sinav-sablonu.html içindeki #app-container elementini ve içeriğini al
             const templateAppContainer = tempContainer.querySelector('#app-container'); 
             
-            if (resultModal) document.body.appendChild(resultModal.cloneNode(true));
+            // if (resultModal) document.body.appendChild(resultModal.cloneNode(true)); // Artık kullanılmıyor
             if (alertModal) document.body.appendChild(alertModal.cloneNode(true));
             
             // templateAppContainer'in içeriğini ve sınıflarını, gerçek app-container'a aktar
