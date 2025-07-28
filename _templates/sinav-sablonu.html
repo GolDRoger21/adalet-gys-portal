@@ -22,26 +22,26 @@
 
     <!-- Main Container (template-loader tarafından deneme-1.html'deki #app-container ile değiştirilecek) -->
     <!-- Bu elementin ID'si template-loader'da özel olarak aranıyor -->
-    <!-- DÜZELTME: Sınırlayıcı stiller eklendi -->
+    <!-- Tema ile uyumlu: Genel site stilini (container, page-content) miras alır -->
     <main id="app-container" class="container page-content">
         <!-- Zamanlayıcı duyurusu için gizli element -->
         <div id="timer-announcer" aria-live="polite" aria-atomic="true"></div>
 
         <!-- HOŞGELDİN EKRANI -->
-        <!-- DÜZELTME: max-w-4xl mx-auto sınıfları eklendi -->
-        <div id="welcome-screen" class="max-w-4xl mx-auto">
+        <!-- Tema ile uyumlu: İçerik .container içinde kalır, sınırlar .card'a bırakılır -->
+        <div id="welcome-screen" class="w-full">
             <div class="card p-8 md:p-12 text-center">
                 <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-10">
                     <h1 class="text-3xl md:text-4xl font-bold text-slate-800 bg-teal-50 p-2 rounded" id="exam-main-title">Adalet Bakanlığı Görevde Yükselme Sınavı</h1>
                     <p class="text-lg md:text-xl text-slate-500 mt-3" id="exam-subtitle">Deneme Sınavı</p>
                 </div>
-                
+
                 <!-- Uyarı kutusu (hata durumunda gösterilir) -->
                 <div id="warning-box" class="hidden text-left mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-md">
                     <h3 class="font-bold text-yellow-800">Uyarı</h3>
                     <p class="text-yellow-700 mt-2" id="warning-message"></p>
                 </div>
-                
+
                 <!-- Sınav Bilgileri ve Kullanım Kılavuzu -->
                 <div class="text-left grid md:grid-cols-2 gap-8 mt-12 mb-10">
                     <div class="bg-slate-50 p-6 rounded-lg border">
@@ -73,7 +73,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <!-- Sınavı Başlat Butonu -->
                 <button id="start-exam-btn" class="start-btn w-full md:w-auto inline-flex items-center justify-center text-white font-bold text-lg px-12 py-4 rounded-lg" disabled>
                     <!-- SVG İkon: Play -->
@@ -87,8 +87,8 @@
         </div>
 
         <!-- SORU EKRANI -->
-        <!-- DÜZELTME: max-w-4xl mx-auto sınıfları eklendi -->
-        <div id="quiz-screen" class="hidden max-w-4xl mx-auto">
+        <!-- Tema ile uyumlu: İçerik .container içinde kalır, sınırlar .card'a bırakılır -->
+        <div id="quiz-screen" class="hidden w-full">
             <div class="card p-6 relative">
                 <!-- Üst Bilgi Çubuğu (Soru numarası, zamanlayıcı, işaretleme) -->
                 <div class="flex justify-between items-center mb-6 bg-slate-50 -m-6 p-6 pb-4 rounded-t-lg border-b">
@@ -116,25 +116,25 @@
                         </svg>
                     </button>
                 </div>
-                
+
                 <!-- Soru Metni -->
                 <div class="mt-8 mb-8">
                     <div id="question-text-container">
                         <pre id="question-text"></pre>
                     </div>
                 </div>
-                
+
                 <!-- Seçenekler -->
                 <div id="options-container" class="grid grid-cols-1 gap-4"></div>
             </div>
-            
+
             <!-- Gezinti Butonları -->
             <div class="flex justify-between items-center mt-6">
                 <button id="prev-btn" class="px-6 py-2 bg-white rounded-md hover:bg-slate-50 shadow-sm disabled:opacity-50" aria-label="Önceki soru">Önceki</button>
                 <button id="finish-btn" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm" aria-label="Sınavı bitir">Sınavı Bitir</button>
                 <button id="next-btn" class="px-6 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 shadow-sm disabled:opacity-50" aria-label="Sonraki soru">Sonraki</button>
             </div>
-            
+
             <!-- Soru Gezgini -->
             <div class="card p-4 mt-6">
                 <h3 class="text-lg font-semibold mb-3">Soru Gezgini</h3>
@@ -160,6 +160,7 @@
         </div>
 
         <!-- SONUÇ MODALI -->
+        <!-- Tema ile uyumlu: max-w-* sınıflarıyla sınırlı, ancak yine de container içinde -->
         <div id="result-modal" class="hidden fixed inset-0 bg-slate-100 z-40 overflow-y-auto p-6 sm:p-12">
             <div class="max-w-4xl mx-auto relative">
                 <!-- Modal Kapatma Butonu -->
