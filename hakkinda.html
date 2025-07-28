@@ -3,18 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hakkımızda - Adalet GYS Portalı</title>
-    
+    <title>Hakkında - Adalet GYS Portalı</title>
+
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
+    <!-- Template Loader, header ve footer'ı yükleyecek -->
     <script src="/adalet-gys-portal/assets/js/template-loader.js" defer></script>
 </head>
 
 <body data-needs-template="page">
+    <!-- Template-loader, genel-sablon.html'deki header ve footer'ı yükleyecek -->
+    <!-- Ana içerik (bu <main> elementinin içi) template-loader tarafından genel-sablon.html'deki #app-container ile değiştirilecek -->
 
     <main class="container page-content">
-        <div class="card p-8 md:p-12">
-            <h1 class="text-3xl font-bold text-center mb-8">Projenin Amacı</h1>
-            <p>...</p>
+        <div class="card p-6 md:p-8">
+            <h1 class="text-3xl font-bold text-center mb-6">Hakkımızda</h1>
+            
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-teal-600">Misyonumuz</h2>
+                <p class="mb-4">
+                    Adalet GYS Portalı, Adalet Bakanlığı Görevde Yükselme Sınavı'na hazırlanan adaylar için kapsamlı, güncel ve etkili bir çalışma ortamı sunmayı amaçlamaktadır. 
+                    Amacımız, adayların sınavda başarılı olmalarına yardımcı olacak nitelikli kaynaklara, interaktif testlere ve deneme sınavlarına kolay erişim sağlamaktır.
+                </p>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-teal-600">Projemiz Hakkında</h2>
+                <p class="mb-4">
+                    Bu portal, yazılım geliştirme, web teknolojileri ve eğitim teknolojilerine olan tutkumuzun bir ürünüdür. 
+                    Modern web standartlarını ve kullanıcı dostu arayüz tasarımını bir araya getirerek, adaylara en iyi deneyimi sunmayı hedefliyoruz.
+                </p>
+                <p>
+                    Sınav içerikleri, Google E-Tablolar gibi dinamik veri kaynaklarından beslenerek, içerik güncelliğini korumaktadır. 
+                    Bu sayede, adaylar her zaman en güncel bilgilerle sınava hazırlanabilirler.
+                </p>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4 text-teal-600">Kullanılan Teknolojiler</h2>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>HTML5 & CSS3:</strong> Modern ve duyarlı arayüz tasarımı için.</li>
+                    <li><strong>JavaScript (ES6+):</strong> Dinamik sınav motoru ve etkileşimli kullanıcı deneyimi için.</li>
+                    <li><strong>Tailwind CSS:</strong> Hızlı ve tutarlı stil oluşturma.</li>
+                    <li><strong>Google E-Tablolar:</strong> Kolay içerik yönetimi ve dinamik veri kaynağı.</li>
+                    <li><strong>GitHub Pages:</strong> Barındırma ve sürekli dağıtım (CI/CD).</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-teal-600">Gelecek Planları</h2>
+                <p>
+                    Portalımız sürekli gelişmektedir. Gelecek planlarımız arasında branşlara özel içerikler, daha fazla deneme sınavı, performans analizi araçları ve mobil uyumlu uygulama geliştirmek yer almaktadır.
+                    Katkıda bulunmak veya geri bildirimde bulunmak isterseniz, lütfen "İletişim" sayfasını kullanın.
+                </p>
+            </section>
         </div>
     </main>
 
