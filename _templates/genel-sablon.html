@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genel Şablon</title>
+    <!-- Stil ve script bağlantıları ana sayfa dosyasında (örneğin hakkinda.html) zaten tanımlı -->
+    <!-- Bu dosya sadece body'nin ortak kısmını tanımlar -->
+</head>
+<body>
+    <!-- Header (template-loader tarafından body'nin başına eklenecek) -->
+    <header class="navbar">
+        <div class="container">
+            <a href="/adalet-gys-portal/index.html" class="navbar-brand">Adalet GYS Portalı</a>
+            <nav class="navbar-nav">
+                <a href="/adalet-gys-portal/index.html" class="nav-link">Ana Sayfa</a>
+                <a href="/adalet-gys-portal/hakkinda.html" class="nav-link">Hakkında</a>
+                <a href="/adalet-gys-portal/iletisim.html" class="nav-link">İletişim</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content (template-loader tarafından ana sayfa dosyasındaki <main> ile değiştirilecek) -->
+    <!-- Ana içerik, örneğin hakkinda.html'deki <main>...</main> olacaktır -->
+    <!-- Bu nedenle burada sadece placeholder yeterli -->
+    <main id="app-container">
+        <!-- Ana içerik template-loader tarafından doldurulacak -->
+    </main>
+
+    <!-- Footer (template-loader tarafından body'nin sonuna eklenecek) -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+</body>
+</html>
