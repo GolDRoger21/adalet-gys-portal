@@ -30,16 +30,24 @@ async function loadCommonTemplate() {
         const body = document.body;
 
         // Her sayfaya başlık (en üste) ve alt bilgiyi (en alta) ekle
-        if (header) body.prepend(header);
-        if (footer) body.appendChild(footer);
+        if (header) body.prepend(header.cloneNode(true)); // cloneNode kullanarak orijinali koru
+        if (footer) body.appendChild(footer.cloneNode(true));
 
         // SADECE sınav sayfalarına (data-needs-template="exam") özel pencereleri ekle
         if (body.dataset.needsTemplate === 'exam') {
             const resultModal = tempContainer.querySelector('#result-modal');
             const alertModal = tempContainer.querySelector('#alert-modal');
+            // sinav-sablonu.html içindeki #app-container'ın içeriğini al
+            const templateAppContent = tempContainer.querySelector('#app-container'); 
             
-            if (resultModal) document.body.appendChild(resultModal);
-            if (alertModal) document.body.appendChild(alertModal);
+            if (resultModal) document.body.appendChild(resultModal.cloneNode(true));
+            if (alertModal) document.body.appendChild(alertModal.cloneNode(true));
+            
+            // templateAppContent'in içeriğini, gerçek app-container'a aktar
+            const targetAppContainer = document.getElementById('app-container');
+            if (templateAppContent && targetAppContainer) {
+                targetAppContainer.innerHTML = templateAppContent.innerHTML;
+            }
         }
 
         // Her şeyin bittiğini ve diğer script'lerin başlayabileceğini bildiren sinyali gönder.
