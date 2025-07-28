@@ -1,7 +1,7 @@
 /**
  * @file Adalet GYS Portalı için ortak şablon yükleyici.
  * @description Header, footer ve modallar gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
- * @version 6.4 (Final Exam Template Loader)
+ * @version 6.5 (Preserve App Container Data Attributes)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -41,11 +41,11 @@ async function loadCommonTemplate() {
                 document.body.appendChild(alertModal.cloneNode(true));
             }
 
-            // sinav-sablonu.html içindeki #app-container elementini ve içeriğini al
+            // sinav-sablonu.html içindeki #app-container elementini al
             const templateAppContainer = tempContainer.querySelector('#app-container');
-            
-            // templateAppContainer'in TÜMÜNÜ (sınıflar+id+içerik) gerçek app-container ile değiştir.
+            // deneme-1.html'deki orijinal #app-container elementini al
             const targetAppContainer = document.getElementById('app-container');
+            
             if (templateAppContainer && targetAppContainer) {
                 // 1. Yeni bir element oluştur
                 const newAppContainer = document.createElement('main');
@@ -53,10 +53,18 @@ async function loadCommonTemplate() {
                 newAppContainer.id = templateAppContainer.id;
                 // 3. Sınıflarını aktar
                 newAppContainer.className = templateAppContainer.className;
+                // === DÜZELTME: data-* attribute'lerini de aktar ===
+                // deneme-1.html'deki data-* attribute'lerini yeni elemente kopyala
+                for (let attr of targetAppContainer.attributes) {
+                    if (attr.name.startsWith('data-')) {
+                        newAppContainer.setAttribute(attr.name, attr.value);
+                    }
+                }
                 // 4. İçeriğini aktar
                 newAppContainer.innerHTML = templateAppContainer.innerHTML;
                 // 5. Eski elementi yeni elementle değiştir
                 targetAppContainer.parentNode.replaceChild(newAppContainer, targetAppContainer);
+                // === DÜZELTME SON ===
             } else if (!targetAppContainer) {
                 console.error('Hedef app-container elementi (deneme-1.html\'deki) bulunamadı.');
             } else if (!templateAppContainer) {
