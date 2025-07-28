@@ -68,7 +68,7 @@
                             </li>
                             <li class="flex items-start">
                                 <span class="mr-3 text-teal-500">✓</span>
-                                <p class="text-justify"><b>Raporlama:</b> Sınav bitiminde, performans özetinizi, yanlış cevaplarınızı ve işaretlediğiniz soruları içeren tam ekran bir analiz sayfası sizi karşılayacaktır.</p>
+                                <p class="text-justify"><b>Raporlama:</b> Sınav bitiminde, performans özetinizi, yanlış cevaplarınızı ve işaretlediğiniz soruları içeren bir analiz sayfası sizi karşılayacaktır.</p> <!-- Açıklama metni güncellendi -->
                             </li>
                         </ul>
                     </div>
@@ -159,17 +159,11 @@
             </div>
         </div>
 
-        <!-- SONUÇ MODALI -->
-        <!-- Tema ile uyumlu: max-w-* sınıflarıyla sınırlı, ancak yine de container içinde -->
-        <div id="result-modal" class="hidden fixed inset-0 bg-slate-100 z-40 overflow-y-auto p-6 sm:p-12">
-            <div class="max-w-4xl mx-auto relative">
-                <!-- Modal Kapatma Butonu -->
-                <button id="close-result-modal-btn" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800" aria-label="Sonuçları kapat">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <h2 id="result-title" class="text-3xl font-bold text-center mb-4">Sınav Sonucu</h2>
+        <!-- SONUÇ EKRANI (Modal yerine normal ekran) -->
+        <!-- Tema ile uyumlu: İçerik .container içinde kalır, sınırlar .card'a bırakılır -->
+        <div id="result-screen" class="hidden w-full">
+            <div class="card p-6 md:p-8">
+                <h2 id="result-title" class="text-3xl font-bold text-center mb-6">Sınav Sonucu</h2>
                 <div id="performance-summary" class="text-center text-lg text-slate-700 mb-8"></div>
                 <!-- İstatistikler -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-10">
@@ -191,7 +185,7 @@
                     </div>
                 </div>
                 <!-- Sonuç Sekmeleri -->
-                <div class="flex items-center gap-4 mb-6">
+                <div class="flex flex-wrap items-center gap-4 mb-6">
                     <!-- Yanlış Cevaplar Sekmesi - Çarpı İkonu Eklendi -->
                     <button class="tab-btn flex-1 tab-active" id="wrong-answers-tab">
                         <!-- SVG İkon: Çarpı (Yuvarlak içine alınmış) -->
@@ -218,11 +212,11 @@
                 </div>
                 <!-- Tekrar Dene Butonu -->
                 <div class="text-center mt-12">
-                    <!-- DEĞİŞİKLİK: Buton metni isteğiniz üzerine güncellendi. -->
-                    <button id="restart-btn" class="start-btn text-white font-bold px-8 py-3 rounded-lg">Ana Sayfaya Dön</button>
+                    <button id="restart-btn" class="start-btn text-white font-bold px-8 py-3 rounded-lg">Yeni Sınav Başlat</button>
                 </div>
             </div>
         </div>
+
     </main>
 
     <!-- Footer (template-loader tarafından body'nin sonuna eklenecek) -->
@@ -232,19 +226,14 @@
         </div>
     </footer>
 
-    <!-- Modallar (template-loader tarafından body'nin sonuna eklenecek) -->
-    <!-- Uyarı Modalı (Alert) -->
-    <div id="alert-modal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
-        <div class="card p-8 max-w-sm mx-auto text-center">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 mb-4">
-                <svg class="h-6 w-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-            </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-4" id="alert-modal-title">UYARI</h3>
-            <p class="text-slate-600 mb-8" id="alert-modal-message"></p>
-            <button id="alert-modal-ok-btn" class="px-8 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">Tamam</button>
-        </div>
+    <!-- ESKİ MODAL (Artık kullanılmıyor, yorumlandı) -->
+    <!--
+    <div id="result-modal" class="hidden fixed inset-0 bg-slate-100 z-40 overflow-y-auto p-6 sm:p-12">
+        ...
     </div>
+    <div id="alert-modal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
+        ...
+    </div>
+    -->
 </body>
 </html>
