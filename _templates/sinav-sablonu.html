@@ -1,46 +1,49 @@
-// ==================================================================
-// /assets/js/template-loader.js - SİTE İNŞAATÇISI
-// ==================================================================
+/**
+ * @file Adalet GYS Portalı için ortak şablon yükleyici.
+ * @description Header, footer ve modallar gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
+ * @version 6.0 (Robust Container-Based Loading)
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Sadece body etiketinde 'data-needs-template' olan sayfalarda çalışır.
-    if (document.body.dataset.needsTemplate) {
-        loadCommonTemplate();
+    // Şablonun yükleneceği ana konteyneri bul
+    const container = document.getElementById('template-container');
+    
+    // Eğer sayfada bu konteyner varsa, yükleyiciyi çalıştır
+    if (container) {
+        loadCommonTemplate(container);
     }
 });
 
 /**
- * Şablon dosyasını çeker ve sayfanın ihtiyacına göre ('page' veya 'exam')
- * doğru bileşenleri sayfaya ekler. İşi bitince 'template-loaded' sinyali gönderir.
+ * Şablonu sunucudan çeker ve içeriğini belirlenen konteynerin içine enjekte eder.
+ * @param {HTMLElement} container - Şablon içeriğinin ekleneceği HTML elementi.
  */
-async function loadCommonTemplate() {
+async function loadCommonTemplate(container) {
     try {
         const response = await fetch('/adalet-gys-portal/_templates/sinav-sablonu.html');
-        if (!response.ok) throw new Error('Şablon dosyası yüklenemedi.');
-        const templateText = await response.text();
-        const tempContainer = document.createElement('div');
-        tempContainer.innerHTML = templateText;
-
-        const header = tempContainer.querySelector('.navbar');
-        const footer = tempContainer.querySelector('.footer');
-        const body = document.body;
-
-        // Her sayfaya başlık ve alt bilgiyi ekle
-        if (header) body.prepend(header);
-        if (footer) body.appendChild(footer);
-
-        // Sadece sınav sayfalarına özel pencereleri ekle
-        if (body.dataset.needsTemplate === 'exam') {
-            const resultModal = tempContainer.querySelector('#result-modal');
-            const alertModal = tempContainer.querySelector('#alert-modal');
-            if (alertModal) body.appendChild(alertModal);
-            if (resultModal) body.appendChild(resultModal);
+        if (!response.ok) {
+            throw new Error(`Şablon dosyası (/.../_templates/sinav-sablonu.html) yüklenemedi.`);
         }
+        const templateText = await response.text();
         
-        // Diğer script'lere "inşaat bitti" haberini ver
+        // Şablonun tüm içeriğini doğrudan konteynerin içine yaz
+        container.innerHTML = templateText;
+        
+        // Sınavla ilgili olan ve tam ekran olması gereken pencereleri (modalları),
+        // ana body etiketine taşı. Bu, sadece sınav sayfalarında gerekli olacak.
+        if (document.getElementById('app-container')) { // app-container sadece sınav sayfalarında var
+            const resultModal = container.querySelector('#result-modal');
+            const alertModal = container.querySelector('#alert-modal');
+            
+            if (resultModal) document.body.appendChild(resultModal);
+            if (alertModal) document.body.appendChild(alertModal);
+        }
+
+        // Her şeyin bittiğini ve diğer script'lerin başlayabileceğini bildiren sinyali gönder.
         document.dispatchEvent(new Event('template-loaded'));
-        
+
     } catch (error) {
         console.error('Şablon yükleme hatası:', error);
-        document.body.innerHTML = '<h1>Sayfa şablonu yüklenirken bir hata oluştu.</h1>';
+        container.innerHTML = '<div class="card p-8 text-center"><h1 class="text-xl font-bold text-red-600">Tema yüklenirken bir hata oluştu.</h1></div>';
     }
 }
