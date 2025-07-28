@@ -1,7 +1,6 @@
 <header class="navbar">
     <div class="container">
-        <!-- YENİ KÖK-GÖRECELİ YOLLAR -->
-        <a href="/adalet-gys-portal/index.html" class="navbar-brand">Adalet GYS Portalı</a>
+        [cite_start]<a href="/adalet-gys-portal/index.html" class="navbar-brand">Adalet GYS Portalı</a> [cite: 1]
         <nav class="navbar-nav">
             <a href="/adalet-gys-portal/index.html" class="nav-link">Ana Sayfa</a>
             <a href="/adalet-gys-portal/hakkinda.html" class="nav-link">Hakkında</a>
@@ -9,6 +8,41 @@
         </nav>
     </div>
 </header>
-<div id="result-modal" class="hidden fixed inset-0 bg-slate-100 z-40 overflow-y-auto p-6 sm:p-12"><div class="max-w-4xl mx-auto relative"><button id="close-result-modal-btn" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800" aria-label="Sonuçları kapat"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button><h2 id="result-title" class="text-3xl font-bold text-center mb-4">Sınav Sonucu</h2><div id="performance-summary" class="text-center text-lg text-slate-700 mb-8"></div><div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-10"><div class="p-4 bg-green-100 rounded-lg"><p class="text-2xl font-bold" id="correct-count">0</p><p>Doğru</p></div><div class="p-4 bg-red-100 rounded-lg"><p class="text-2xl font-bold" id="incorrect-count">0</p><p>Yanlış</p></div><div class="p-4 bg-slate-200 rounded-lg"><p class="text-2xl font-bold" id="empty-count">0</p><p>Boş</p></div><div id="success-rate-box" class="p-4 bg-blue-100 rounded-lg"><p class="text-2xl font-bold" id="success-rate">0%</p><p id="success-text">Başarı</p></div></div><div class="flex items-center gap-4 mb-6"><button class="tab-btn flex-1 tab-active" id="wrong-answers-tab"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg><span>Yanlış Cevaplar</span></button><button class="tab-btn flex-1" id="marked-questions-tab"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"></path></svg><span>İşaretlenen Sorular</span></button></div><div id="wrong-answers-panel"><div id="wrong-answers-container" aria-live="polite"></div></div><div id="marked-questions-panel" class="hidden"><div id="marked-questions-container" aria-live="polite"></div></div><div class="text-center mt-12"><button id="restart-btn" class="start-btn text-white font-bold px-8 py-3 rounded-lg">Ana Sayfaya Dön</button></div></div></div>
-<div id="alert-modal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden items-center justify-center p-4 z-50"><div class="card p-8 max-w-sm mx-auto text-center"><div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 mb-4"><svg class="h-6 w-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg></div><h3 class="text-xl font-bold text-slate-900 mb-4" id="alert-modal-title">UYARI</h3><p class="text-slate-600 mb-8" id="alert-modal-message"></p><button id="alert-modal-ok-btn" class="px-8 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">Tamam</button></div></div>
-<footer class="footer"><div class="container"><p>© 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p></div></footer>
+
+<div id="alert-modal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
+    <div class="card p-8 max-w-sm mx-auto text-center">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 mb-4">
+            <svg class="h-6 w-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        </div>
+        [cite_start]<h3 class="text-xl font-bold text-slate-900 mb-4" id="alert-modal-title">UYARI</h3> [cite: 4, 18]
+        <p class="text-slate-600 mb-8" id="alert-modal-message"></p>
+        <button id="alert-modal-ok-btn" class="px-8 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">Tamam</button>
+    </div>
+</div>
+
+<div id="result-modal" class="hidden fixed inset-0 bg-slate-100 z-40 overflow-y-auto p-6 sm:p-12">
+    <div class="max-w-4xl mx-auto relative">
+        <button id="close-result-modal-btn" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800" aria-label="Sonuçları kapat"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+        [cite_start]<h2 class="text-3xl font-bold text-center mb-4">Sınav Sonucu</h2> [cite: 19]
+        <div id="performance-summary" class="text-center text-lg text-slate-700 mb-8"></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-10">
+            [cite_start]<div class="p-4 bg-green-100 rounded-lg"><p class="text-2xl font-bold" id="correct-count">0</p><p>Doğru</p></div> [cite: 20, 21]
+            [cite_start]<div class="p-4 bg-red-100 rounded-lg"><p class="text-2xl font-bold" id="incorrect-count">0</p><p>Yanlış</p></div> [cite: 22, 23]
+            [cite_start]<div class="p-4 bg-slate-200 rounded-lg"><p class="text-2xl font-bold" id="empty-count">0</p><p>Boş</p></div> [cite: 24]
+            [cite_start]<div id="success-rate-box" class="p-4 bg-blue-100 rounded-lg"><p class="text-2xl font-bold" id="success-rate">0%</p><p id="success-text">Başarı</p></div> [cite: 25]
+        </div>
+        <div class="flex items-center gap-4 mb-6">
+            [cite_start]<button class="tab-btn flex-1 tab-active" id="wrong-answers-tab"><span>Yanlış Cevaplar</span></button> [cite: 26]
+            [cite_start]<button class="tab-btn flex-1" id="marked-questions-tab"><span>İşaretlenen Sorular</span></button> [cite: 27]
+        </div>
+        <div id="wrong-answers-panel"><div id="wrong-answers-container"></div></div>
+        <div id="marked-questions-panel" class="hidden"><div id="marked-questions-container"></div></div>
+        [cite_start]<div class="text-center mt-12"><button id="restart-btn" class="start-btn text-white font-bold px-8 py-3 rounded-lg">Ana Sayfaya Dön</button></div> [cite: 28]
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2025 Adalet GYS Portalı. [cite_start]Tüm hakları saklıdır.</p> [cite: 29]
+    </div>
+</footer>
