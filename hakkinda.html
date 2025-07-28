@@ -15,48 +15,108 @@
     <!-- Ana içerik (bu <main> elementinin içi) template-loader tarafından genel-sablon.html'deki #app-container ile değiştirilecek -->
 
     <main class="container page-content">
-        <div class="card p-6 md:p-8">
-            <h1 class="text-3xl font-bold text-center mb-6">Hakkımızda</h1>
-            
-            <section class="mb-8">
-                <h2 class="text-2xl font-semibold mb-4 text-teal-600">Misyonumuz</h2>
-                <p class="mb-4">
-                    Adalet GYS Portalı, Adalet Bakanlığı Görevde Yükselme Sınavı'na hazırlanan adaylar için kapsamlı, güncel ve etkili bir çalışma ortamı sunmayı amaçlamaktadır. 
-                    Amacımız, adayların sınavda başarılı olmalarına yardımcı olacak nitelikli kaynaklara, interaktif testlere ve deneme sınavlarına kolay erişim sağlamaktır.
-                </p>
-            </section>
-
-            <section class="mb-8">
-                <h2 class="text-2xl font-semibold mb-4 text-teal-600">Projemiz Hakkında</h2>
-                <p class="mb-4">
-                    Bu portal, yazılım geliştirme, web teknolojileri ve eğitim teknolojilerine olan tutkumuzun bir ürünüdür. 
-                    Modern web standartlarını ve kullanıcı dostu arayüz tasarımını bir araya getirerek, adaylara en iyi deneyimi sunmayı hedefliyoruz.
-                </p>
-                <p>
-                    Sınav içerikleri, Google E-Tablolar gibi dinamik veri kaynaklarından beslenerek, içerik güncelliğini korumaktadır. 
-                    Bu sayede, adaylar her zaman en güncel bilgilerle sınava hazırlanabilirler.
-                </p>
-            </section>
-
-            <section class="mb-8">
-                <h2 class="text-2xl font-semibold mb-4 text-teal-600">Kullanılan Teknolojiler</h2>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li><strong>HTML5 & CSS3:</strong> Modern ve duyarlı arayüz tasarımı için.</li>
-                    <li><strong>JavaScript (ES6+):</strong> Dinamik sınav motoru ve etkileşimli kullanıcı deneyimi için.</li>
-                    <li><strong>Tailwind CSS:</strong> Hızlı ve tutarlı stil oluşturma.</li>
-                    <li><strong>Google E-Tablolar:</strong> Kolay içerik yönetimi ve dinamik veri kaynağı.</li>
-                    <li><strong>GitHub Pages:</strong> Barındırma ve sürekli dağıtım (CI/CD).</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2 class="text-2xl font-semibold mb-4 text-teal-600">Gelecek Planları</h2>
-                <p>
-                    Portalımız sürekli gelişmektedir. Gelecek planlarımız arasında branşlara özel içerikler, daha fazla deneme sınavı, performans analizi araçları ve mobil uyumlu uygulama geliştirmek yer almaktadır.
-                    Katkıda bulunmak veya geri bildirimde bulunmak isterseniz, lütfen "İletişim" sayfasını kullanın.
-                </p>
-            </section>
+        <!-- Ana Başlık Kartı -->
+        <div class="card p-8 mb-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-800">Hakkımızda</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
+                Adalet GYS Portalı, adaylara en iyi hazırlık deneyimini sunmak amacıyla geliştirilmiş, modern web teknolojileriyle inşa edilmiş bir platformdur.
+            </p>
         </div>
+
+        <!-- Misyon & Vizyon Kartları -->
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div class="card p-6">
+                <div class="flex items-center mb-4">
+                    <div class="bg-teal-100 p-3 rounded-full mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Misyonumuz</h2>
+                </div>
+                <p class="text-slate-600">
+                    Adalet Bakanlığı Görevde Yükselme Sınavı'na hazırlanan adaylar için kapsamlı, güncel ve etkili bir çalışma ortamı sunmak. Amacımız, adayların sınavda başarılı olmalarına yardımcı olacak nitelikli kaynaklara, interaktif testlere ve deneme sınavlarına kolay erişim sağlamaktır.
+                </p>
+            </div>
+
+            <div class="card p-6">
+                <div class="flex items-center mb-4">
+                    <div class="bg-amber-100 p-3 rounded-full mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Vizyonumuz</h2>
+                </div>
+                <p class="text-slate-600">
+                    Türkiye'de kamu personeli sınavlarına hazırlanan bireyler için en güvenilir ve etkili dijital öğrenme ortamını oluşturmak. Eğitimde eşitlik ve erişilebilirliği artırmak.
+                </p>
+            </div>
+        </div>
+
+        <!-- Teknoloji & Geliştirme Kartı -->
+        <div class="card p-6 mb-8">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">Teknoloji & Geliştirme</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-teal-600 mb-3">Kullanılan Teknolojiler</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <span class="text-teal-500 mr-2">•</span>
+                            <span><strong>HTML5 & CSS3:</strong> Modern ve duyarlı arayüz tasarımı.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-teal-500 mr-2">•</span>
+                            <span><strong>JavaScript (ES6+):</strong> Dinamik sınav motoru ve etkileşim.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-teal-500 mr-2">•</span>
+                            <span><strong>Tailwind CSS:</strong> Hızlı ve tutarlı stil oluşturma.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-teal-500 mr-2">•</span>
+                            <span><strong>Google E-Tablolar:</strong> Kolay içerik yönetimi.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-teal-500 mr-2">•</span>
+                            <span><strong>GitHub Pages:</strong> Barındırma ve sürekli dağıtım.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-teal-600 mb-3">Sürekli Gelişim</h3>
+                    <p class="text-slate-600 mb-4">
+                        Portalımız sürekli gelişmektedir. Kullanıcı geri bildirimlerini dikkate alarak yeni özellikler ekliyor, mevcut içerikleri güncelliyoruz.
+                    </p>
+                    <h3 class="text-xl font-semibold text-teal-600 mb-3">Gelecek Planları</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <span class="text-amber-500 mr-2">•</span>
+                            <span>Branşlara özel içerikler.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-500 mr-2">•</span>
+                            <span>Daha fazla deneme sınavı.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-500 mr-2">•</span>
+                            <span>Performans analizi araçları.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Takım veya İletişim Çağrısı Kartı -->
+        <div class="card p-8 text-center bg-teal-50 border border-teal-100">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Katkıda Bulunun!</h2>
+            <p class="text-slate-600 mb-6 max-w-2xl mx-auto">
+                Bu projenin gelişmesine yardımcı olmak ister misiniz? Hataları bildirin, yeni özellikler önerin veya doğrudan katkıda bulunun. 
+                Görüşleriniz bizim için çok değerli!
+            </p>
+            <a href="/adalet-gys-portal/iletisim.html" class="btn inline-block">Bizimle İletişime Geçin</a>
+        </div>
+
     </main>
 
 </body>
