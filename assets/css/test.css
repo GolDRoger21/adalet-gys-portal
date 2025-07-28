@@ -1,31 +1,43 @@
-/* ================================================= */
-/* == GELİŞMİŞ SINAV SİSTEMİ İÇİN STİLLER == */
-/* ================================================= */
+/* ================================================================ */
+/* == Adalet GYS Portalı - Sınav Motoru İçin Ortak Stiller (v1.0) == */
+/* ================================================================ */
+/* Açıklama: Bu dosya, template-loader.js tarafından yüklenen       */
+/* sinav-sablonu.html'deki sınavla ilgili tüm UI elementleri için   */
+/* gerekli CSS kurallarını içerir.                                  */
+/* ================================================================= */
 
 :root {
-    --primary-color: #0d9488;
-    --secondary-color: #087f5b;
-    --accent-color: #f59e0b;
-    --danger-color: #dc2626;
-    --light-bg: #f0f4f8;
+    --primary-color: #0d9488; /* Tailwind teal-500 */
+    --secondary-color: #087f5b; /* Tailwind teal-600 */
+    --accent-color: #f59e0b; /* Tailwind amber-500 - Bayrak rengi */
+    --danger-color: #dc2626; /* Tailwind red-600 */
+    --light-bg: #f0f4f8; /* Tailwind slate-100 + biraz */
     --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
+    --text-primary: #1e293b; /* Tailwind slate-800 */
+    --text-secondary: #64748b; /* Tailwind slate-500 */
+    --border-color: #e2e8f0; /* Tailwind slate-200 */
 }
+
+/* --- Temel Sınav Sayfası Stilleri --- */
 
 body.exam-body {
     font-family: 'Inter', sans-serif;
     background-color: var(--light-bg);
     color: var(--text-primary);
+    /* Sayfanın tüm ekranı kaplamaması için max-width eklenebilir */
+    /* Ancak bu genellikle HTML'deki container sınıflarıyla yönetilir */
 }
 
+/* Genel Kart Stili (Hoşgeldin ekranı, soru kutusu, sonuç modalı) */
 .card {
     background-color: var(--card-bg);
     border-radius: 0.75rem; /* 12px */
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+/* --- HOŞGELDİN EKRANI Stilleri --- */
+
+/* Soru metni alanı (pre etiketi) */
 pre {
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -33,9 +45,10 @@ pre {
     font-size: 1.125rem; /* 18px */
     line-height: 1.8;
     text-align: justify;
-    user-select: none;
+    user-select: none; /* Kullanıcının metni seçmesini engelle */
 }
 
+/* Sınavı Başlat Butonu */
 .start-btn {
     display: inline-flex;
     align-items: center;
@@ -52,6 +65,9 @@ pre {
     background-image: linear-gradient(to right, var(--secondary-color), #065f46);
 }
 
+/* --- SORU EKRANI Stilleri --- */
+
+/* Soru üzerindeki bayrak ikonu */
 .flag-icon {
     cursor: pointer;
     transition: color 0.2s ease;
@@ -61,19 +77,30 @@ pre {
     color: var(--accent-color) !important;
 }
 
-.flag-icon.marked #flag-solid-icon {
-    color: var(--accent-color);
+/* === DÜZELTME: Bayrak ikonu işaretlendiğinde rengini değiştir === */
+/* Açıklama: test-engine.js, #mark-review-btn elementine 'marked' sınıfı ekler. */
+/* Bu kural, o elementin içindeki bayrak ikonlarının rengini değiştirir. */
+#mark-review-btn.marked #flag-solid-icon {
+    color: var(--accent-color); /* Sarı */
 }
 
-/* İSTEĞİNİZ ÜZERİNE EKLENEN MODERN SORU/ŞIK AYRIMI */
+/* Opsiyonel: İşaretli durumda çizgili bayrak da sarı olsun */
+#mark-review-btn.marked #flag-outline-icon {
+    color: var(--accent-color);
+}
+/* === DÜZELTME SON === */
+
+
+/* Modern soru metni çerçevesi */
 #question-text-container {
-    background-color: #f0fdfa;
+    background-color: #f0fdfa; /* Tailwind bg-teal-50 */
     padding: 1.5rem 2rem;
     border-left: 4px solid var(--primary-color);
     border-radius: 0.5rem;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
 }
 
+/* Seçenek butonu */
 .option-btn {
     transition: all 0.2s ease-in-out;
     border: 1px solid var(--border-color);
@@ -88,17 +115,19 @@ pre {
 }
 
 .option-btn:hover {
-    border-color: #38bdf8;
-    background-color: rgba(56, 189, 248, 0.1);
+    border-color: #38bdf8; /* Tailwind sky-400 */
+    background-color: rgba(56, 189, 248, 0.1); /* Tailwind sky-400 + opacity */
 }
 
+/* Seçilen seçenek */
 .option-selected {
     border-color: var(--primary-color);
-    background-color: rgba(13, 148, 136, 0.1);
+    background-color: rgba(13, 148, 136, 0.1); /* Tailwind teal-500 + opacity */
     color: var(--primary-color);
     font-weight: 600;
 }
 
+/* Seçenek tuşu (A, B, C, D, E) */
 .option-key {
     flex-shrink: 0;
     display: flex;
@@ -118,6 +147,7 @@ pre {
     border-color: var(--primary-color);
 }
 
+/* Zamanlayıcı uyarı efekti */
 .timer-warning {
     color: var(--danger-color);
     animation: pulse 1s infinite;
@@ -129,9 +159,10 @@ pre {
     100% { opacity: 1; }
 }
 
+/* Soru açıklamaları kutusu */
 .explanation-box {
-    background-color: #f0f9ff;
-    border-left: 4px solid #38bdf8;
+    background-color: #f0f9ff; /* Tailwind sky-50 */
+    border-left: 4px solid #38bdf8; /* Tailwind sky-400 */
     padding: 1.25rem; /* 20px */
     margin-top: 1.25rem; /* 20px */
     border-radius: 0.5rem; /* 8px */
@@ -143,7 +174,7 @@ pre {
 
 .explanation-section h5 {
     font-weight: 600;
-    color: #0c4a6e;
+    color: #0c4a6e; /* Tailwind sky-900 */
     display: flex;
     align-items: center;
 }
@@ -151,7 +182,7 @@ pre {
 .explanation-section p {
     font-size: 0.95rem;
     line-height: 1.7;
-    color: #0c4a6e;
+    color: #0c4a6e; /* Tailwind sky-900 */
     text-align: justify;
 }
 
@@ -159,18 +190,24 @@ pre {
     margin-bottom: 1rem;
 }
 
+/* --- SORU GEZGİNİ Stilleri --- */
+
+/* Soru kutucuğu */
 .nav-box {
     transition: all 0.2s ease-in-out;
     cursor: pointer;
 }
 
+/* --- SONUÇ MODALI Stilleri --- */
+
+/* Sekme butonları (Yanlışlar, İşaretlenenler) */
 .tab-btn {
     transition: all 0.2s ease-in-out;
     border-radius: 0.5rem; /* 8px */
     padding: 0.75rem 1rem; /* 12px 16px */
     font-weight: 600;
-    background-color: #e2e8f0;
-    color: #475569;
+    background-color: #e2e8f0; /* Tailwind slate-200 */
+    color: #475569; /* Tailwind slate-600 */
     border: 2px solid transparent;
     display: inline-flex;
     align-items: center;
@@ -179,36 +216,40 @@ pre {
 }
 
 .tab-btn:hover {
-    background-color: #cbd5e1;
+    background-color: #cbd5e1; /* Tailwind slate-300 */
     transform: translateY(-1px);
 }
 
+/* Aktif sekme */
 .tab-active {
-    background-color: #f0fdfa;
+    background-color: #f0fdfa; /* Tailwind teal-50 */
     color: var(--primary-color) !important;
     border-color: var(--primary-color);
 }
+
+/* --- ESKİ / YENİ AYIRICI Stilleri --- */
+/* Bu kısımlar muhtemelen test.css'e daha önce eklenmişti. */
+
 /* --- YENİ: Soru Metni ve Şeçeneklerin Ayrılması --- */
+/* Bu kurallar zaten yukarıda mevcut (#question-text-container, .option-btn vs.) */
 
 /* Soru metnini çevreleyen modern çerçeve */
-#question-text-container {
-    background-color: #f0fdfa; /* Tailwind bg-teal-50 */
-    padding: 1.5rem; /* p-6 */
-    border-left: 4px solid var(--primary-color); /* Sol tarafta vurgu */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); /* İç gölge */
-    margin-bottom: 1.5rem; /* mb-6 - Seçeneklerle arasında boşluk */
-    /* Yazı tipi ve hizalama */
-    font-family: 'Inter', sans-serif;
-    font-size: 1.125rem; /* text-lg */
-    line-height: 1.7; /* Okunabilirlik için satır yüksekliği */
-    text-align: justify; /* İki yana yasla */
-    color: #0f172a; /* Tailwind text-slate-900 - Daha koyu metin */
-}
+/* (Yukarıdaki #question-text-container kuralı bu işi görür) */
 
 /* Seçeneklerin genel kapsayıcısı için üst boşluk */
 #options-container {
     margin-top: 1rem; /* mt-4 */
 }
-
 /* --- YENİ: Bitiş --- */
+
+
+/* --- GİZLİ ELEMENTLER --- */
+/* Zamanlayıcı duyurusu için erişilebilir gizli element */
+#timer-announcer {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
