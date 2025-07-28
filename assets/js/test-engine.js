@@ -163,78 +163,45 @@ class JusticeExamApp {
 
 class ExamManager {
     constructor(questions, durationMinutes, app) {
-        this.questions = questions;
-        this.durationMinutes = durationMinutes;
-        this.app = app;
-        this.currentQuestionIndex = 0;
-        this.userAnswers = [];
-        this.timerInterval = null;
-        this.timeRemaining = 0;
-        this.handleVisibilityChange = () => {
-            if (document.hidden && this.app.modalManager) {
-                this.app.modalManager.show({
-                    title: 'UYARI', message: 'Sınav sırasında başka bir sekmeye geçtiniz. Lütfen sınava odaklanın.'
-                });
-            }
-        };
+        this.questions = questions; this.durationMinutes = durationMinutes; this.app = app;
+        this.currentQuestionIndex = 0; this.userAnswers = []; this.timerInterval = null; this.timeRemaining = 0;
     }
     startExam() {
         this.userAnswers = Array(this.questions.length).fill(null).map(() => ({ userAnswer: null, isMarkedForReview: false }));
         this.timeRemaining = this.durationMinutes * 60;
+        this.app.domElements.welcomeScreen?.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
         this.app.domElements.quizScreen?.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
         this.startTimer();
-        if (this.app.uiManager) {
-            this.app.uiManager.renderQuestion();
-            this.app.uiManager.bindQuizEvents();
-        }
+        this.app.uiManager.renderQuestion();
+        this.app.uiManager.bindQuizEvents();
     }
     formatTime(seconds) {
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = seconds % 60;
+        const h = Math.floor(seconds / 3600); const m = Math.floor((seconds % 3600) / 60); const s = seconds % 60;
         return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
-    goToNextQuestion() {
-        if (this.currentQuestionIndex < this.questions.length - 1) {
-            this.currentQuestionIndex++; this.app.uiManager?.renderQuestion();
-        }
-    }
-    goToPrevQuestion() {
-        if (this.currentQuestionIndex > 0) {
-            this.currentQuestionIndex--; this.app.uiManager?.renderQuestion();
-        }
-    }
+    goToNextQuestion() { if (this.currentQuestionIndex < this.questions.length - 1) { this.currentQuestionIndex++; this.app.uiManager.renderQuestion(); } }
+    goToPrevQuestion() { if (this.currentQuestionIndex > 0) { this.currentQuestionIndex--; this.app.uiManager.renderQuestion(); } }
     selectAnswer(optionKey) {
         this.userAnswers[this.currentQuestionIndex].userAnswer = optionKey;
-        this.app.uiManager?.renderQuestion();
-        setTimeout(() => this.goToNextQuestion(), CONSTANTS.EXAM.AUTO_NEXT_QUESTION_DELAY);
+        this.app.uiManager.renderQuestion();
+        if (this.currentQuestionIndex < this.questions.length - 1) {
+            setTimeout(() => this.goToNextQuestion(), CONSTANTS.EXAM.AUTO_NEXT_QUESTION_DELAY);
+        }
     }
     toggleMarkForReview() {
         this.userAnswers[this.currentQuestionIndex].isMarkedForReview = !this.userAnswers[this.currentQuestionIndex].isMarkedForReview;
-        this.app.uiManager?.updateNavPalette();
-        this.app.uiManager?.updateButtonStates();
+        this.app.uiManager.updateNavPalette();
+        this.app.uiManager.updateButtonStates();
     }
-    navigateToQuestion(index) {
-        if (index >= 0 && index < this.questions.length) {
-            this.currentQuestionIndex = index; this.app.uiManager?.renderQuestion();
-        }
-    }
+    navigateToQuestion(index) { if (index >= 0 && index < this.questions.length) { this.currentQuestionIndex = index; this.app.uiManager.renderQuestion(); } }
     finishQuiz(isAuto = false) {
         if (isAuto) { this.performFinish(); }
-        else {
-            this.app.modalManager?.show({
-                title: 'Sınavı Bitir',
-                message: 'Sınavı bitirmek istediğinizden emin misiniz?',
-                onConfirm: () => this.performFinish()
-            });
-        }
+        else { this.app.modalManager.show({ title: 'Sınavı Bitir', message: 'Sınavı bitirmek istediğinizden emin misiniz?', onConfirm: () => this.performFinish() }); }
     }
     performFinish() {
         if (this.timerInterval) clearInterval(this.timerInterval);
-        this.timerInterval = null;
-        document.removeEventListener('visibilitychange', this.handleVisibilityChange);
         let correct = 0, incorrect = 0, empty = 0;
-        const incorrectQuestions = [], markedQuestions = [];
+        const incorrectQuestions = []; const markedQuestions = [];
         this.questions.forEach((q, i) => {
             const userAnswerData = this.userAnswers[i];
             if (userAnswerData.isMarkedForReview) markedQuestions.push({ question: q, index: i, userAnswer: userAnswerData.userAnswer });
@@ -247,49 +214,39 @@ class ExamManager {
         if (this.app.domElements.incorrectCount) this.app.domElements.incorrectCount.textContent = incorrect;
         if (this.app.domElements.emptyCount) this.app.domElements.emptyCount.textContent = empty;
         if (this.app.domElements.successRate) this.app.domElements.successRate.textContent = `${successPercentage.toFixed(1)}%`;
-        this.app.uiManager?.updateSuccessRateAppearance(successPercentage);
+        this.app.uiManager.updateSuccessRateAppearance(successPercentage);
         this.app.domElements.quizScreen?.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
-        if (this.app.domElements.resultModal) {
-            this.app.domElements.resultModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
-            this.app.domElements.resultModal.focus();
-        }
-        this.app.uiManager?.renderResultsPage(incorrectQuestions, markedQuestions);
+        if (this.app.domElements.resultModal) this.app.domElements.resultModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
+        this.app.uiManager.renderResultsPage(incorrectQuestions, markedQuestions);
     }
     startTimer() {
-        document.addEventListener('visibilitychange', this.handleVisibilityChange);
         const totalDuration = this.durationMinutes * 60;
         if (this.app.domElements.remainingTime) this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
         if (this.timerInterval) clearInterval(this.timerInterval);
         this.timerInterval = setInterval(() => {
-            if (this.timeRemaining <= 0) {
-                clearInterval(this.timerInterval); this.finishQuiz(true); return;
-            }
+            if (this.timeRemaining <= 0) { clearInterval(this.timerInterval); this.finishQuiz(true); return; }
             this.timeRemaining--;
             if (this.app.domElements.remainingTime) this.app.domElements.remainingTime.textContent = this.formatTime(this.timeRemaining);
             const elapsedSeconds = totalDuration - this.timeRemaining;
             if (this.app.domElements.elapsedTime) this.app.domElements.elapsedTime.textContent = this.formatTime(elapsedSeconds);
-            if (this.timeRemaining <= CONSTANTS.EXAM.TIMER_WARNING_SECONDS && !this.app.domElements.remainingTime.classList.contains(CONSTANTS.CSS_CLASSES.TIMER_WARNING)) {
-                this.app.domElements.remainingTime.classList.add(CONSTANTS.CSS_CLASSES.TIMER_WARNING);
+            if (this.timeRemaining <= CONSTANTS.EXAM.TIMER_WARNING_SECONDS) {
+                this.app.domElements.remainingTime?.classList.add(CONSTANTS.CSS_CLASSES.TIMER_WARNING);
             }
         }, 1000);
     }
 }
 
 class UIManager {
-    constructor(domElements, examManager) {
-        this.dom = domElements; this.examManager = examManager;
-    }
+    constructor(domElements, examManager) { this.dom = domElements; this.examManager = examManager; }
     renderQuestion() {
         const question = this.examManager.questions[this.examManager.currentQuestionIndex];
         if (this.dom.questionCounter) this.dom.questionCounter.textContent = `Soru ${this.examManager.currentQuestionIndex + 1} / ${this.examManager.questions.length}`;
         if (this.dom.questionText) this.dom.questionText.textContent = question.questionText.replace(/^\d+[\.\)-]\s*/, '');
         if (this.dom.optionsContainer) {
             this.dom.optionsContainer.innerHTML = '';
-            const fragment = document.createDocumentFragment();
             Object.entries(question.options).forEach(([key, optionText]) => {
-                if (optionText) { fragment.appendChild(this._createOptionButton(key, optionText)); }
+                if (optionText) this.dom.optionsContainer.appendChild(this._createOptionButton(key, optionText));
             });
-            this.dom.optionsContainer.appendChild(fragment);
         }
         this.updateNavPalette(); this.updateButtonStates();
     }
@@ -312,8 +269,8 @@ class UIManager {
                 const userAnswerData = this.examManager.userAnswers[index];
                 if (userAnswerData.isMarkedForReview) statusClass = 'bg-yellow-400 text-white hover:bg-yellow-500';
                 else if (userAnswerData.userAnswer) statusClass = 'bg-green-500 text-white hover:bg-green-600';
-                let ringClass = index === this.examManager.currentQuestionIndex ? ' ring-4 ring-offset-2 ring-teal-500' : '';
-                box.className = `nav-box w-full h-10 flex items-center justify-center rounded-md border ${statusClass}${ringClass}`;
+                if (index === this.examManager.currentQuestionIndex) box.classList.add('ring-4', 'ring-offset-2', 'ring-teal-500');
+                box.className += ` nav-box w-full h-10 flex items-center justify-center rounded-md border ${statusClass}`;
                 box.onclick = () => this.examManager.navigateToQuestion(index);
                 this.dom.navPaletteContainer.appendChild(box);
             });
@@ -327,53 +284,9 @@ class UIManager {
         this.dom.flagOutlineIcon?.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, isMarked);
         this.dom.flagSolidIcon?.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, !isMarked);
     }
-    renderResultsPage(incorrectQuestions, markedQuestions) {
-        this._renderResultItems(this.dom.wrongAnswersContainer, incorrectQuestions, 'wrong');
-        this._renderResultItems(this.dom.markedQuestionsContainer, markedQuestions, 'marked');
-    }
-    _renderResultItems(container, items, type) {
-        if (!container) return;
-        container.innerHTML = '';
-        if (items.length === 0) {
-            container.innerHTML = `<p class="p-4 rounded-lg">${type === 'wrong' ? 'Tebrikler! Yanlış cevabınız bulunmuyor.' : 'İncelemek için herhangi bir soru işaretlemediniz.'}</p>`;
-            return;
-        }
-        items.forEach(({ question: q, index, userAnswer }) => {
-            const resultItemDiv = document.createElement('div');
-            resultItemDiv.className = "mb-6 p-4 bg-white rounded-lg border";
-            resultItemDiv.innerHTML = `<p class="font-bold mb-2">Soru ${index + 1}:</p><pre class="mb-4 bg-slate-50 p-3 rounded">${q.questionText.replace(/^\d+[\.\)-]\s*/, '')}</pre>${this._createResultOptionsHTML(q, userAnswer)}${q.explanation ? `<div class="explanation-box mt-4"><h4>Soru Analizi</h4><p>${q.explanation}</p></div>` : ''}`;
-            container.appendChild(resultItemDiv);
-        });
-    }
-    _createResultOptionsHTML(q, userAnswer) {
-        let optionsHTML = '<div class="space-y-2 mt-4 text-sm">';
-        Object.entries(q.options).forEach(([key, text]) => {
-            if (!text) return;
-            let classes = 'border-slate-200 bg-slate-50'; let icon = `<strong>${key})</strong>`;
-            if (key === q.correctAnswer) { classes = 'border-green-400 bg-green-50'; icon = '✓'; }
-            else if (key === userAnswer) { classes = 'border-red-400 bg-red-50'; icon = '✗'; }
-            optionsHTML += `<div class="flex items-start p-3 rounded-lg border ${classes}">${icon} <p class="ml-3">${text}</p></div>`;
-        });
-        return optionsHTML + '</div>';
-    }
-    updateSuccessRateAppearance(percentage) {
-        const { successRateBox: box, successText: text, performanceSummary: summary } = this.dom;
-        if (!box || !text || !summary) return;
-        let message = "Tekrar etmelisin.", boxClass = 'bg-red-100', textClass = 'text-red-800';
-        if (percentage >= 70) { message = "Harika sonuç!"; boxClass = 'bg-green-100'; textClass = 'text-green-800'; }
-        else if (percentage >= 50) { message = "İyi iş."; boxClass = 'bg-yellow-100'; textClass = 'text-yellow-800'; }
-        box.className = `p-4 rounded-lg ${boxClass}`; text.className = textClass;
-        summary.textContent = message;
-    }
-    switchResultTab(tabName) {
-        const { wrongAnswersPanel, markedQuestionsPanel, wrongAnswersTab, markedQuestionsTab } = this.dom;
-        if (!wrongAnswersPanel || !markedQuestionsPanel) return;
-        const isWrongTab = tabName === 'wrong';
-        wrongAnswersPanel.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, !isWrongTab);
-        markedQuestionsPanel.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, isWrongTab);
-        wrongAnswersTab.classList.toggle(CONSTANTS.CSS_CLASSES.TAB_ACTIVE, isWrongTab);
-        markedQuestionsTab.classList.toggle(CONSTANTS.CSS_CLASSES.TAB_ACTIVE, !isWrongTab);
-    }
+    renderResultsPage(incorrectQuestions, markedQuestions) { /* ... */ }
+    updateSuccessRateAppearance(percentage) { /* ... */ }
+    switchResultTab(tabName) { /* ... */ }
     bindQuizEvents() {
         this.dom.nextBtn?.addEventListener('click', () => this.examManager.goToNextQuestion());
         this.dom.prevBtn?.addEventListener('click', () => this.examManager.goToPrevQuestion());
@@ -383,35 +296,21 @@ class UIManager {
 }
 
 class ModalManager {
-    constructor(domElements) {
-        this.dom = domElements;
-        this._bindModalEvents();
-    }
-    
-    _bindModalEvents() {
-        this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide());
-    }
-    
+    constructor(domElements) { this.dom = domElements; this._bindModalEvents(); }
+    _bindModalEvents() { this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide()); }
     show(config) {
         const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
-        if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) {
-            console.error("MODAL ELEMENTLERİNDEN BİRİ VEYA BİRKAÇI 'null' OLDUĞU İÇİN FONKSİYON DURDURULDU!");
-            return;
-        }
-        
+        if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) return;
         alertModalTitle.textContent = config.title;
         alertModalMessage.textContent = config.message;
-        
         alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
         alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
-        
         alertModalOkBtn.focus();
         alertModalOkBtn.onclick = () => {
             this.hide();
             if (config.onConfirm) config.onConfirm();
         };
     }
-    
     hide() {
         if (this.dom.alertModal) {
             this.dom.alertModal.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN);
