@@ -1,49 +1,66 @@
-/**
- * @file Adalet GYS Portalı için ortak şablon yükleyici.
- * @description Header, footer ve modallar gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
- * @version 6.0 (Robust Container-Based Loading)
- */
+<header class="navbar">
+    <div class="container">
+        <a href="/adalet-gys-portal/index.html" class="navbar-brand">Adalet GYS Portalı</a>
+        <nav class="navbar-nav">
+            <a href="/adalet-gys-portal/index.html" class="nav-link">Ana Sayfa</a>
+            <a href="/adalet-gys-portal/hakkinda.html" class="nav-link">Hakkında</a>
+            <a href="/adalet-gys-portal/iletisim.html" class="nav-link">İletişim</a>
+        </nav>
+    </div>
+</header>
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Şablonun yükleneceği ana konteyneri bul
-    const container = document.getElementById('template-container');
-    
-    // Eğer sayfada bu konteyner varsa, yükleyiciyi çalıştır
-    if (container) {
-        loadCommonTemplate(container);
-    }
-});
-
-/**
- * Şablonu sunucudan çeker ve içeriğini belirlenen konteynerin içine enjekte eder.
- * @param {HTMLElement} container - Şablon içeriğinin ekleneceği HTML elementi.
- */
-async function loadCommonTemplate(container) {
-    try {
-        const response = await fetch('/adalet-gys-portal/_templates/sinav-sablonu.html');
-        if (!response.ok) {
-            throw new Error(`Şablon dosyası (/.../_templates/sinav-sablonu.html) yüklenemedi.`);
-        }
-        const templateText = await response.text();
+<main id="app-container">
+    <div id="welcome-screen" class="card p-8 md:p-12 text-center">
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-10">
+            <h1 class="text-3xl font-bold" id="exam-main-title">Adalet Bakanlığı Görevde Yükselme Sınavı</h1>
+            <p class="text-lg mt-3" id="exam-subtitle">Deneme Sınavı</p>
+        </div>
         
-        // Şablonun tüm içeriğini doğrudan konteynerin içine yaz
-        container.innerHTML = templateText;
+        <div id="warning-box" class="hidden text-left mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-md">
+            <h3 class="font-bold">Uyarı</h3>
+            <p id="warning-message"></p>
+        </div>
         
-        // Sınavla ilgili olan ve tam ekran olması gereken pencereleri (modalları),
-        // ana body etiketine taşı. Bu, sadece sınav sayfalarında gerekli olacak.
-        if (document.getElementById('app-container')) { // app-container sadece sınav sayfalarında var
-            const resultModal = container.querySelector('#result-modal');
-            const alertModal = container.querySelector('#alert-modal');
-            
-            if (resultModal) document.body.appendChild(resultModal);
-            if (alertModal) document.body.appendChild(alertModal);
-        }
+        <div class="text-left grid md:grid-cols-2 gap-8 mt-12 mb-10">
+            <div class="bg-slate-50 p-6 rounded-lg border">
+                <h2 class="text-xl font-semibold border-b pb-3 mb-4">Sınav Bilgileri</h2>
+                <ul class="space-y-3">
+                    <li><b>Toplam Süre:</b><span id="total-duration-display"></span></li>
+                    <li><b>Toplam Soru Sayısı:</b> <span id="total-question-count"></span></li>
+                </ul>
+            </div>
+            <div class="bg-slate-50 p-6 rounded-lg border">
+                <h2 class="text-xl font-semibold border-b pb-3 mb-4">Kullanım Kılavuzu</h2>
+                <ul class="space-y-3">
+                    <li><b>Cevaplama:</b> Bir seçeneği işaretlemek için doğrudan üzerine tıklayın.</li>
+                    <li><b>İşaretleme:</b> Sağ üstteki bayrak simgesine tıklayarak soruyu daha sonra gözden geçirmek için işaretleyebilirsiniz.</li>
+                    <li><b>Gezinme:</b> "Önceki" ve "Sonraki" butonlarını veya Soru Gezgini'ni kullanabilirsiniz.</li>
+                    <li><b>Raporlama:</b> Sınav bitiminde, performans özetinizi ve yanlış cevaplarınızı içeren bir analiz sayfası sunulacaktır.</li>
+                </ul>
+            </div>
+        </div>
+        <button id="start-exam-btn" class="start-btn" disabled>
+            <span id="start-btn-full-text"></span>
+        </button>
+    </div>
 
-        // Her şeyin bittiğini ve diğer script'lerin başlayabileceğini bildiren sinyali gönder.
-        document.dispatchEvent(new Event('template-loaded'));
+    <div id="quiz-screen" class="hidden">
+        </div>
+</main>
 
-    } catch (error) {
-        console.error('Şablon yükleme hatası:', error);
-        container.innerHTML = '<div class="card p-8 text-center"><h1 class="text-xl font-bold text-red-600">Tema yüklenirken bir hata oluştu.</h1></div>';
-    }
-}
+<footer class="footer">
+    <div class="container">
+        <p>© 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
+    </div>
+</footer>
+
+<div id="alert-modal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
+    <div class="card p-8 max-w-sm mx-auto text-center">
+        <h3 class="text-xl font-bold text-slate-900 mb-4" id="alert-modal-title"></h3>
+        <p class="text-slate-600 mb-8" id="alert-modal-message"></p>
+        <button id="alert-modal-ok-btn" class="px-8 py-2 bg-yellow-500 text-white rounded-md">Tamam</button>
+    </div>
+</div>
+
+<div id="result-modal" class="hidden fixed inset-0 bg-slate-100 z-40 overflow-y-auto p-6">
+    </div>
