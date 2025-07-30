@@ -1,7 +1,7 @@
 /**
  * @file Adalet GYS Portalı için ortak şablon yükleyici.
  * @description Header, footer gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
- * @version 7.0 (Robust Page and Exam Template Handling)
+ * @version 7.1 (Fixed typo in exam template path)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,7 +15,8 @@ async function loadCommonTemplate() {
     let templatePath;
 
     if (templateType === 'exam') {
-        templatePath = '/adalet-gys-portal/_templates/sinav-sablon.html';
+        // === DÜZELTME: Dosya adındaki yazım hatası giderildi ===
+        templatePath = '/adalet-gys-portal/_templates/sinav-sablonu.html'; // "sablonu" olarak düzeltildi.
     } else { // 'page' veya diğer tüm türler için
         templatePath = '/adalet-gys-portal/_templates/genel-sablon.html';
     }
@@ -44,12 +45,10 @@ async function loadCommonTemplate() {
             const targetAppContainer = document.getElementById('app-container');
             
             if (templateAppContainer && targetAppContainer) {
-                // Şablonun içeriğini ve sınıflarını hedef konteynere aktar, ancak hedefteki data özniteliklerini koru
                 const newAppContainer = document.createElement('main');
                 newAppContainer.id = templateAppContainer.id;
                 newAppContainer.className = templateAppContainer.className;
 
-                // Orijinal (hedef) konteynerdeki data özniteliklerini yenisine taşı
                 for (let attr of targetAppContainer.attributes) {
                     if (attr.name.startsWith('data-')) {
                         newAppContainer.setAttribute(attr.name, attr.value);
@@ -59,7 +58,7 @@ async function loadCommonTemplate() {
                 targetAppContainer.parentNode.replaceChild(newAppContainer, targetAppContainer);
             }
         }
-        // 'page' türü için ekstra bir işlem yapmaya gerek yok, çünkü içerik zaten sayfada mevcut ve dokunulmuyor.
+        // 'page' türü için ekstra bir işlem yapmaya gerek yok, çünkü içerik zaten sayfada mevcut.
 
         document.dispatchEvent(new Event('template-loaded'));
 
