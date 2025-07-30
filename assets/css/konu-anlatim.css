@@ -1,21 +1,18 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.0)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.1)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
-/* konu anlatımı sayfalarındaki metin içeriklerinin okunabilir     */
-/* ve profesyonel görünmesi için gerekli özel stilleri içerir.     */
+/* konu anlatımı ve yasal metin sayfalarındaki içeriklerin         */
+/* okunabilir ve profesyonel görünmesi için gerekli stilleri içerir. */
 /* ================================================================= */
 
-/* Ana içerik konteynerine uygulanacak genel stiller */
 .konu-icerik {
-    /* Okunabilirlik için metin genişliğini sınırlar */
     max-width: 800px;
     margin: 0 auto;
 }
 
-/* Sayfa Ana Başlığı */
 .konu-icerik h1 {
-    font-size: 2.5rem; /* 40px */
+    font-size: 2.5rem;
     font-weight: 700;
     color: var(--text-color);
     margin-bottom: 1rem;
@@ -23,51 +20,48 @@
     padding-bottom: 1rem;
 }
 
-/* Alt Başlıklar */
 .konu-icerik h2 {
-    font-size: 1.75rem; /* 28px */
+    font-size: 1.75rem;
     font-weight: 600;
     color: var(--primary-color);
     margin-top: 2.5rem;
     margin-bottom: 1rem;
 }
 
-/* Daha Alt Başlıklar */
 .konu-icerik h3 {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--secondary-color);
     margin-top: 2rem;
     margin-bottom: 0.75rem;
 }
 
-/* Paragraflar */
+/* === DÜZELTME: Paragraflar iki yana yaslandı === */
 .konu-icerik p {
-    font-size: 1.1rem; /* 17.6px */
+    font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 1rem;
+    text-align: justify; /* Metni iki yana yaslar */
 }
 
-/* Listeler */
 .konu-icerik ul,
 .konu-icerik ol {
     padding-left: 1.5rem;
     margin-bottom: 1rem;
     font-size: 1.1rem;
+    text-align: justify; /* Listeleri de iki yana yaslar */
 }
 
 .konu-icerik li {
     margin-bottom: 0.5rem;
 }
 
-/* Kalın (strong) metinler */
 .konu-icerik strong {
     color: var(--text-color);
 }
 
-/* Önemli Bilgi / Özet Kutusu */
 .ozet-kutusu {
-    background-color: #f0fdfa; /* Açık yeşil */
+    background-color: #f0fdfa;
     border-left: 4px solid var(--primary-color);
     padding: 1.5rem;
     margin: 2rem 0;
@@ -78,10 +72,9 @@
     margin-bottom: 0;
 }
 
-/* Uyarı / Dikkat Kutusu */
 .uyari-kutusu {
-    background-color: #fffbeb; /* Açık sarı */
-    border-left: 4px solid #f59e0b; /* Amber */
+    background-color: #fffbeb;
+    border-left: 4px solid #f59e0b;
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
