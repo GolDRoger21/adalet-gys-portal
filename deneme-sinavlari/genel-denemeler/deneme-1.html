@@ -3,49 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adalet Bakanlığı GYS - Deneme Sınavı</title>
-    
-    <!-- Tailwind CSS CDN -->
+    <title>Genel Deneme Sınavı 1 - Adalet GYS Portalı</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Proje Genel Stil Dosyaları -->
+
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
+    
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/test.css">
     
-    <!-- Sayfaya Özel Stiller (Timer announcer için) -->
-    <style>
-        #timer-announcer {
-            position: absolute;
-            left: -10000px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-    </style>
-
-    <!-- Template Loader -->
     <script src="/adalet-gys-portal/assets/js/template-loader.js" defer></script>
-    
-    <!-- Test Engine (Template yüklendikten sonra çalışacak) -->
     <script src="/adalet-gys-portal/assets/js/test-engine.js" defer></script>
-    
 </head>
 
 <body data-needs-template="exam">
-    <!-- Template-loader, sinav-sablonu.html'deki header, #app-container içeriği ve footer'ı yükleyecek -->
-    <!-- Template-loader ayrıca sinav-sablonu.html'deki #result-modal ve #alert-modal'ı da body'e ekleyecek -->
-    <!-- Bu nedenle burada sadece app-container için placeholder yeterli -->
-    
+
     <main id="app-container" 
         data-sheet-url="https://docs.google.com/spreadsheets/d/1TLyIqpuCQTkp2JkEUybY4Xc1Ty9rWSBqJ3aQF4j7OOE/export?format=csv&gid=0" 
         data-exam-duration="120">
-        <!-- İçerik template-loader tarafından doldurulacak -->
-    </main>
+        </main>
+
 </body>
 </html>
