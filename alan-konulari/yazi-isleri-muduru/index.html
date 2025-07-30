@@ -4,76 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yazı İşleri Müdürlüğü Konu Listesi - Adalet GYS Portalı</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
+    
+    <script src="/adalet-gys-portal/assets/js/template-loader.js" defer></script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="../../index.html" class="navbar-brand">Adalet GYS Portalı</a>
-            <nav class="navbar-nav">
-                <a href="../../index.html" class="nav-link">Ana Sayfa</a>
-                <a href="../../hakkinda.html" class="nav-link">Hakkında</a>
-                <a href="../../iletisim.html" class="nav-link">İletişim</a>
-            </nav>
-        </div>
-    </header>
 
+<body data-needs-template="page">
     <main class="container page-content">
-        <section class="page-header">
-            <h1>Yazı İşleri Müdürlüğü - Konu Listesi</h1>
-            <p>Aşağıdaki listeden çalışmak istediğiniz konuyu seçebilirsiniz.</p>
-        </section>
-        
-        <section class="content-list">
-            <div class="list-item">
-                <h3><a href="01-cb-teskilati-kararnamesi.html">1. CB Teşkilatı Kararnamesi ve Bakanlık Genelgeleri</a></h3>
-                <p>1 Sayılı Cumhurbaşkanlığı Kararnamesi'nin ilgili bölümleri ve güncel Bakanlık genelgeleri.</p>
+        <div class="card p-8 md:p-12">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Yazı İşleri Müdürlüğü Konuları</h1>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                    Aşağıdaki listeden çalışmak istediğiniz konuyu seçerek ilgili konu anlatımına ulaşabilirsiniz.
+                </p>
             </div>
-            <div class="list-item">
-                <h3><a href="03-yargi-orgutu.html">2. Adli ve İdari Yargı Adalet Komisyonları ve Yargı Örgütü</a></h3>
-                <p>Komisyonların yapısı, görevleri ve Türk Yargı Sistemi.</p>
-            </div>
-            <div class="list-item">
-                <h3><a href="04-uyap.html">3. Bilgisayar ve Ulusal Yargı Ağı Bilişim Sistemi (UYAP)</a></h3>
-                <p>Elektronik imza, SEGBİS ve ilgili mevzuatlar.</p>
-            </div>
-            <div class="list-item">
-                <h3><a href="05-resmi-yazisma.html">4. Resmi Yazışma Kuralları</a></h3>
-                <p>Resmi Yazışmalarda Uygulanacak Usul ve Esaslar Hakkında Yönetmelik.</p>
-            </div>
-            <div class="list-item">
-                <h3><a href="06-tebligat-hukuku.html">5. Tebligat Hukuku</a></h3>
-                <p>7201 Sayılı Tebligat Kanunu ve ilgili yönetmelikler.</p>
-            </div>
-            <div class="list-item">
-                <h3><a href="07-genel-hukuk.html">6. Genel Hukuk Bilgisi</a></h3>
-                <p>Medeni Kanun, Ceza Kanunu ve İdari Yargılama Usulü Kanunu'nun ilgili bölümleri.</p>
-            </div>
-            <div class="list-item">
-                <h3><a href="08-cmk.html">7. 5271 Sayılı Ceza Muhakemesi Kanunu</a></h3>
-                <p>Sınav müfredatında belirtilen ilgili kısımlar.</p>
-            </div>
-            <div class="list-item">
-                <h3><a href="09-kalem-mevzuati-ve-harclar.html">8. Kalem Mevzuatı ve Yargı Harçları</a></h3>
-                <p>492 Sayılı Harçlar Kanunu ve ilgili yazı işleri yönetmelikleri.</p>
-            </div>
-            <div class="list-item">
-                <h3><a href="09-kalem-mevzuati-ve-harclar.html">9. 6100 Sayılı Hukuk Muhakemeleri Kanunu</a></h3>
-                <p>Sınav müfredatında belirtilen ilgili kısımlar.</p>
-            </div>
-            <div class="list-item">
-                <h3><a href="10-infaz-hukuku.html">10. İnfaz Hukuku</a></h3>
-                <p>5275 Sayılı Kanun'un ilgili bölümleri.</p>
-            </div>
-        </section>
-    </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
+            <div class="space-y-4">
+                <a href="01-cb-teskilati-kararnamesi.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">1. CB Teşkilatı Kararnamesi</h3>
+                    <p class="text-slate-600">1 Sayılı Cumhurbaşkanlığı Kararnamesi'nin Adalet Bakanlığı'na ilişkin ilgili bölümleri.</p>
+                </a>
+                <a href="02-bakanlik-genelgeleri.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">2. Bakanlık Genelgeleri</h3>
+                    <p class="text-slate-600">Yazı işleri ve idari işlere ilişkin güncel ve önemli Bakanlık genelgeleri.</p>
+                </a>
+                <a href="03-yargi-orgutu.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">3. Yargı Örgütü</h3>
+                    <p class="text-slate-600">Adli ve idari yargı ilk derece mahkemeleri ile adalet komisyonlarının yapısı.</p>
+                </a>
+                <a href="04-uyap.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">4. Ulusal Yargı Ağı Bilişim Sistemi (UYAP)</h3>
+                    <p class="text-slate-600">Elektronik imza, SEGBİS ve UYAP ile ilgili temel mevzuatlar.</p>
+                </a>
+                <a href="05-resmi-yazisma.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">5. Resmi Yazışma Kuralları</h3>
+                    <p class="text-slate-600">Resmi Yazışmalarda Uygulanacak Usul ve Esaslar Hakkında Yönetmelik.</p>
+                </a>
+                <a href="06-tebligat-hukuku.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">6. Tebligat Hukuku</h3>
+                    <p class="text-slate-600">7201 Sayılı Tebligat Kanunu ve ilgili yönetmelikler.</p>
+                </a>
+                 <a href="07-genel-hukuk.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">7. Genel Hukuk Bilgisi</h3>
+                    <p class="text-slate-600">Medeni Kanun, Ceza Kanunu, HMK ve İYUK'un ilgili bölümleri.</p>
+                </a>
+                 <a href="08-cmk.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">8. 5271 Sayılı Ceza Muhakemesi Kanunu (CMK)</h3>
+                    <p class="text-slate-600">Sınav müfredatında belirtilen ilgili kısımlar.</p>
+                </a>
+                <a href="09-kalem-mevzuati-ve-harclar.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">9. Kalem Mevzuatı ve Yargı Harçları</h3>
+                    <p class="text-slate-600">492 Sayılı Harçlar Kanunu ve ilgili yazı işleri yönetmelikleri.</p>
+                </a>
+                <a href="10-infaz-hukuku.html" class="block p-4 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <h3 class="font-semibold text-lg text-slate-800">10. İnfaz Hukuku</h3>
+                    <p class="text-slate-600">5275 Sayılı Ceza ve Güvenlik Tedbirlerinin İnfazı Hakkında Kanun'un ilgili bölümleri.</p>
+                </a>
+            </div>
         </div>
-    </footer>
-
-    <script src="../../assets/js/main.js"></script>
+    </main>
 </body>
 </html>
