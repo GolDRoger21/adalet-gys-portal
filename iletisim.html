@@ -4,31 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İletişim - Adalet GYS Portalı</title>
-    
-    <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
+    
     <script src="/adalet-gys-portal/assets/js/template-loader.js" defer></script>
 </head>
 
-<body data-needs-template="page">    
+<body data-needs-template="page">
     <main class="container page-content">
-        <div class="card p-8 md:p-12 text-center">
-            <h1 class="text-3xl font-bold mb-4">Görüş ve Önerileriniz</h1>
-            <p class="text-lg text-slate-600 max-w-2xl mx-auto">Platformumuzu daha iyi hale getirmemize yardımcı olduğunuz için teşekkür ederiz. Her türlü geri bildirim, soru veya öneri bizim için değerlidir.</p>
-            <div class="mt-12 grid md:grid-cols-2 gap-8 text-left">
-                <div class="bg-slate-50 p-6 rounded-lg border">
-                    <h3 class="text-xl font-semibold text-slate-800 mb-3">Geri Bildirim ve Destek</h3>
-                    <p class="text-slate-600 mb-4">İçeriklerle ilgili sorularınız, önerileriniz veya platformla ilgili genel geri bildirimleriniz için bize e-posta yoluyla ulaşabilirsiniz.</p>
-                    <a href="mailto:destek@adalet-gys-portal.com?subject=GYS Portalı Geri Bildirim" class="font-medium text-teal-600 hover:text-teal-700">destek@adalet-gys-portal.com</a>
+        <div class="card p-8 md:p-12">
+            <div class="text-center mb-12">
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">İletişim ve Geri Bildirim</h1>
+                <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
+                    Görüşleriniz, projemizin daha iyi bir hale gelmesi için en önemli yol göstericimizdir. Lütfen öneri, hata bildirimi veya sorularınız için bizimle iletişime geçmekten çekinmeyin.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-slate-50 p-6 rounded-lg border text-center flex flex-col items-center">
+                    <div class="bg-teal-100 p-3 rounded-full inline-flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-slate-800 mb-3">Geri Bildirim ve Öneriler</h2>
+                    <p class="text-slate-600 mb-4 flex-grow">
+                        Sitede olmasını istediğiniz yeni özellikler, içerik önerileri veya genel görüşleriniz için bize e-posta gönderebilirsiniz.
+                    </p>
+                    <a href="mailto:örnekmail@adres.com?subject=Adalet GYS Portalı Geri Bildirim" class="btn">E-posta Gönder</a>
                 </div>
-                <div class="bg-slate-50 p-6 rounded-lg border">
-                    <h3 class="text-xl font-semibold text-slate-800 mb-3">Teknik Hata Bildirimi</h3>
-                    <p class="text-slate-600 mb-4">Platformda karşılaştığınız teknik bir hatayı (örneğin bozuk bir link, çalışmayan bir buton) bildirmek isterseniz, projenin GitHub sayfasına bir "Issue" açabilirsiniz.</p>
-                    <a href="https://github.com/GoldRoger21/adalet-gys-portal/issues" target="_blank" class="font-medium text-teal-600 hover:text-teal-700">GitHub'da Hata Bildir →</a>
+
+                <div class="bg-slate-50 p-6 rounded-lg border text-center flex flex-col items-center">
+                    <div class="bg-amber-100 p-3 rounded-full inline-flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-slate-800 mb-3">Teknik Katkı ve Hata Bildirimi</h2>
+                    <p class="text-slate-600 mb-4 flex-grow">
+                        Proje açık kaynak kodludur. Bir hata tespit ettiyseniz veya kod geliştirerek katkıda bulunmak isterseniz GitHub sayfamızı ziyaret edebilirsiniz.
+                    </p>
+                    <a href="https://github.com/GoldRoger21/adalet-gys-portal" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">GitHub Projesine Git</a>
                 </div>
             </div>
         </div>
     </main>
-
 </body>
 </html>
