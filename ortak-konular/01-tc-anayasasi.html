@@ -3,60 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T.C. Anayasası - Adalet GYS Portalı</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/konu-anlatim.css">
+    <title>T.C. Anayasası (Ortak Konu) - Adalet GYS Portalı</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
+    
+    <link rel="stylesheet" href="/adalet-gys-portal/assets/css/konu-anlatim.css">
+    
+    <script src="/adalet-gys-portal/assets/js/template-loader.js" defer></script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="../index.html" class="navbar-brand">Adalet GYS Portalı</a>
-            <nav class="navbar-nav">
-                <a href="../index.html" class="nav-link">Ana Sayfa</a>
-                <a href="../hakkinda.html" class="nav-link">Hakkında</a>
-                <a href="../iletisim.html" class="nav-link">İletişim</a>
-            </nav>
-        </div>
-    </header>
 
+<body data-needs-template="page">
     <main class="container page-content">
-        <article class="article-content">
-            <h1>T.C. Anayasası (Genel Esaslar, Temel Hak ve Ödevler)</h1>
-            <p class="article-meta">Ortak Konular - Ders Notları</p>
-            
-            <hr>
+        <div class="card p-8 md:p-12">
+            <article class="konu-icerik">
+                <h1>T.C. Anayasası</h1>
+                
+                <div class="ozet-kutusu">
+                    <p>
+                        <strong>Önemli Not:</strong> Bu bölüm, 1982 Anayasası'nın temel ilkeleri, devletin temel organları ve vatandaşların temel hak ve hürriyetleri gibi Görevde Yükselme Sınavı'nda sıkça sorulan konuları kapsamaktadır.
+                    </p>
+                </div>
 
-            <h2>1. Genel Esaslar</h2>
-            <p>
-                Türkiye Cumhuriyeti Anayasası'nın ilk maddeleri, devletin şekli, temel nitelikleri, bütünlüğü, resmi dili, bayrağı, milli marşı ve başkenti gibi temel konuları düzenler. Bu maddeler, Anayasa'nın değiştirilemez hükümlerini içerir ve devletin temel felsefesini ortaya koyar.
-            </p>
-            <blockquote>
-                <strong>Madde 2:</strong> Türkiye Cumhuriyeti, toplumun huzuru, millî dayanışma ve adalet anlayışı içinde, insan haklarına saygılı, Atatürk milliyetçiliğine bağlı, başlangıçta belirtilen temel ilkelere dayanan, demokratik, lâik ve sosyal bir hukuk Devletidir.
-            </blockquote>
+                <h2>I. Genel Esaslar</h2>
+                <p>
+                    Anayasa'nın ilk maddeleri devletin şekli, Cumhuriyetin nitelikleri ve devletin bütünlüğü gibi temel prensipleri ortaya koyar. Bu bölüm, Anayasa'nın değiştirilemez ve değiştirilmesi teklif dahi edilemez maddelerini içerir.
+                </p>
+                
+                <h3>Devletin Şekli</h3>
+                <p>
+                    Madde 1'e göre, "Türkiye Devleti bir Cumhuriyettir." Bu hüküm, devletin yönetim biçimini kesin olarak belirler.
+                </p>
 
-            <h2>2. Temel Hak ve Ödevler</h2>
-            <p>
-                Anayasa'nın ikinci kısmı, "Temel Haklar ve Ödevler" başlığını taşır. Bu bölümde kişilerin hak ve ödevleri, sosyal ve ekonomik haklar, siyasi haklar gibi kategoriler altında güvence altına alınmıştır. Temel hak ve hürriyetlerin ancak kanunla ve Anayasa'nın belirlediği özel sebeplere dayanarak sınırlanabileceği ilkesi esastır.
-            </p>
-            <ul>
-                <li><strong>Kişinin Hakları ve Ödevleri:</strong> Yaşama hakkı, konut dokunulmazlığı, özel hayatın gizliliği vb.</li>
-                <li><strong>Sosyal ve Ekonomik Haklar:</strong> Eğitim ve öğrenim hakkı, çalışma hakkı, sendika kurma hakkı vb.</li>
-                <li><strong>Siyasi Haklar ve Ödevler:</strong> Türk vatandaşlığı, seçme ve seçilme hakkı, dilekçe hakkı vb.</li>
-            </ul>
+                <h2>II. Temel Haklar ve Ödevler</h2>
+                <p>
+                    Bu kısım, kişilerin hak ve hürriyetleri, sosyal ve ekonomik haklar ile siyasi hakları düzenler. Sınavlarda özellikle "Sosyal ve Ekonomik Haklar ve Ödevler" bölümünden sorular gelmektedir.
+                </p>
+                <ul>
+                    <li><strong>Kişinin Hakları ve Ödevleri:</strong> Yaşama hakkı, konut dokunulmazlığı, düşünce ve ifade hürriyeti.</li>
+                    <li><strong>Sosyal ve Ekonomik Haklar:</strong> Eğitim ve öğrenim hakkı, çalışma ve sözleşme hürriyeti, sendika kurma hakkı.</li>
+                    <li><strong>Siyasi Haklar ve Ödevler:</strong> Türk vatandaşlığı, seçme, seçilme ve siyasi faaliyette bulunma hakları.</li>
+                </ul>
 
-            <h2>3. Devletin Temel Organları</h2>
-            <p>
-                Anayasa, devletin temel organları olan Yasama, Yürütme ve Yargı'yı ve bu organlar arasındaki güçler ayrılığı ilkesini düzenler. Yasama yetkisi TBMM'ye, yürütme yetkisi ve görevi Cumhurbaşkanı'na, yargı yetkisi ise bağımsız ve tarafsız mahkemelere aittir.
-            </p>
-        </article>
+                <div class="uyari-kutusu">
+                    <p>
+                        <strong>Dikkat:</strong> Temel hak ve hürriyetlerin hangi durumlarda ve nasıl sınırlandırılabileceği, Anayasa'nın 13. maddesinde belirtilen ölçülülük ilkesi çerçevesinde değerlendirilmelidir.
+                    </p>
+                </div>
+
+                <h2>III. Devletin Temel Organları</h2>
+                <p>
+                    Yasama, Yürütme ve Yargı organlarının yapısı, görev ve yetkileri bu bölümde detaylandırılır.
+                </p>
+                <ol>
+                    <li><strong>Yasama:</strong> Türkiye Büyük Millet Meclisi (TBMM) tarafından kullanılır. Kanun koymak, değiştirmek ve kaldırmak en temel görevidir.</li>
+                    <li><strong>Yürütme:</strong> Cumhurbaşkanı tarafından kullanılır. Devletin başıdır ve yürütme yetkisi Cumhurbaşkanına aittir.</li>
+                    <li><strong>Yargı:</strong> Bağımsız ve tarafsız mahkemelerce kullanılır. Yargı yetkisi, Türk Milleti adına kullanılır.</li>
+                </ol>
+
+            </article>
+            </div>
     </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
-        </div>
-    </footer>
-
-    <script src="../assets/js/main.js"></script>
 </body>
 </html>
