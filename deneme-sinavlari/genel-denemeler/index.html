@@ -4,43 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Genel Denemeler - Adalet GYS Portalı</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
+    
+    <script src="/adalet-gys-portal/assets/js/template-loader.js" defer></script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container">
-            <a href="../../index.html" class="navbar-brand">Adalet GYS Portalı</a>
-            <nav class="navbar-nav">
-                <a href="../../index.html" class="nav-link">Ana Sayfa</a>
-                <a href="../../hakkinda.html" class="nav-link">Hakkında</a>
-                <a href="../../iletisim.html" class="nav-link">İletişim</a>
-            </nav>
-        </div>
-    </header>
 
+<body data-needs-template="page">
     <main class="container page-content">
-        <section class="page-header">
-            <h1>Genel Deneme Sınavları</h1>
-            <p>Alan ve Ortak konulardan oluşan tam deneme sınavları listesi.</p>
-        </section>
-        
-        <section class="content-list">
-            <div class="list-item">
-                <h3><a href="deneme-1.html">Genel Deneme Sınavı - 1</a></h3>
-                <p>Google Sheet üzerinden yüklenen dinamik sorularla kendinizi test edin.</p>
+        <div class="card p-8 md:p-12">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Genel Denemeler</h1>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                    Tüm ortak ve alan konularını içeren, tam kapsamlı deneme sınavları ile kendinizi deneyin.
+                </p>
             </div>
-            <div class="alert-info">
-                <p>Yeni genel deneme sınavları yakında eklenecektir...</p>
-            </div>
-        </section>
-    </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
+            <div class="space-y-4 max-w-3xl mx-auto">
+                <a href="deneme-1.html" class="block p-6 bg-slate-50 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition-colors">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-semibold text-xl text-slate-800">Genel Deneme Sınavı - 1</h3>
+                            <p class="text-slate-600">Toplam 100 Soru / 120 Dakika</p>
+                        </div>
+                        <div class="text-teal-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="block p-6 bg-slate-100 border rounded-lg cursor-not-allowed opacity-70">
+                     <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-semibold text-xl text-slate-500">Genel Deneme Sınavı - 2 (Yakında)</h3>
+                            <p class="text-slate-500">Yeni denemeler hazırlık aşamasındadır.</p>
+                        </div>
+                        <div class="text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </footer>
-
-    <script src="../../assets/js/main.js"></script>
+    </main>
 </body>
 </html>
