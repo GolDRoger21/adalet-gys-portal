@@ -1,5 +1,5 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.2)              == */
+/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.4 - Final)      == */
 /* ================================================================ */
 /* Açıklama: Bu dosya, sitenin tamamı için geçerli olan genel      */
 /* renkleri, fontları, container yapısını ve ortak bileşenleri    */
@@ -79,7 +79,7 @@ body {
 
 .navbar-nav {
     display: flex;
-    align-items: center; /* === DÜZELTME: Menü elemanlarını dikeyde hizala === */
+    align-items: center;
     gap: 1.5rem;
 }
 
@@ -87,7 +87,7 @@ body {
     text-decoration: none;
     color: var(--secondary-color);
     font-weight: 500;
-    padding: 0.5rem 0; /* Dikey padding eklendi */
+    padding: 0.5rem 0;
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
     white-space: nowrap;
@@ -102,13 +102,13 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* === YENİ: AÇILIR MENÜ (DROPDOWN) STİLLERİ === */
+/* Açılır Menü (Dropdown) Stilleri */
 .nav-item.dropdown {
     position: relative;
 }
 
 .dropdown-menu {
-    display: none; /* Normalde gizli */
+    display: none;
     position: absolute;
     top: 100%;
     left: 0;
@@ -116,14 +116,14 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     padding: 0.5rem 0;
-    margin-top: 0.5rem; /* Menü ile arasında küçük bir boşluk */
-    min-width: 220px; /* Açılır menü genişliği */
+    margin-top: 0.5rem;
+    min-width: 220px;
     z-index: 20;
     border: 1px solid var(--border-color);
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
-    display: block; /* Üzerine gelince görünür yap */
+    display: block;
 }
 
 .dropdown-menu a {
@@ -138,7 +138,6 @@ body {
     background-color: var(--background-color);
     color: var(--primary-color);
 }
-/* === YENİ STİLLERİN SONU === */
 
 /* Butonlar */
 .btn {
@@ -148,7 +147,7 @@ body {
     border-radius: var(--border-radius);
     font-weight: 600;
     text-align: center;
-    transition: background-color 0.2s, transform 0.2s;
+    transition: all 0.2s;
     background-color: var(--primary-color);
     color: white;
     margin-right: 0.5rem;
@@ -168,7 +167,7 @@ body {
     background-color: #334155;
 }
 
-/* Footer */
+/* --- FOOTER BÖLÜMÜ --- */
 .footer {
     text-align: center;
     padding: 2rem 0;
@@ -177,51 +176,58 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
-/* --- ANA SAYFAYA ÖZEL STİLLER --- */
-
-.hero {
-    text-align: center;
-    background-color: var(--surface-color);
-    padding: 3rem 1.5rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 2.5rem;
-    box-shadow: var(--shadow);
-}
-
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.subtitle {
-    font-size: 1.2rem;
-    color: var(--secondary-color);
-    max-width: 650px;
-    margin: 0 auto;
-}
-
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.category-card {
-    background-color: var(--surface-color);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    box-shadow: var(--shadow);
+/* Sosyal Medya İkonları */
+.social-links {
     display: flex;
-    flex-direction: column;
-}
-
-.category-card h2 {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    margin-bottom: 0.75rem;
-}
-
-.category-card p {
-    flex-grow: 1;
+    justify-content: center;
+    gap: 1rem;
     margin-bottom: 1.5rem;
 }
+.social-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--border-color);
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+.social-link svg {
+    color: var(--secondary-color);
+    transition: color 0.2s;
+}
+.social-link:hover {
+    background-color: var(--primary-color);
+}
+.social-link:hover svg {
+    color: white;
+}
+
+/* Yasal Bilgi Linkleri */
+.legal-links {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+.legal-links a {
+    color: var(--secondary-color);
+    margin: 0 0.5rem;
+    text-decoration: none;
+}
+.legal-links a:hover {
+    text-decoration: underline;
+    color: var(--primary-color);
+}
+.legal-links span {
+    color: var(--border-color);
+}
+
+/* --- ANA SAYFAYA ÖZEL STİLLER --- */
+.hero { text-align: center; padding: 3rem 1.5rem; border-radius: var(--border-radius); margin-bottom: 2.5rem; }
+.hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.subtitle { font-size: 1.2rem; color: var(--secondary-color); max-width: 650px; margin: 0 auto; }
+.category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.category-card { background-color: var(--surface-color); border-radius: var(--border-radius); padding: 2rem; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+.category-card h2 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 0.75rem; }
+.category-card p { flex-grow: 1; margin-bottom: 1.5rem; }
+.new-badge { position: absolute; top: 1rem; right: 1rem; background-color: #dc2626; color: white; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; border-radius: 9999px; }
