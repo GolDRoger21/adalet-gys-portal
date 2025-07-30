@@ -1,5 +1,5 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.1)              == */
+/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.2)              == */
 /* ================================================================ */
 /* Açıklama: Bu dosya, sitenin tamamı için geçerli olan genel      */
 /* renkleri, fontları, container yapısını ve ortak bileşenleri    */
@@ -48,7 +48,6 @@ body {
     padding: 2rem 0;
 }
 
-/* Genel Kart Stili (Tüm sitede kullanılır) */
 .card {
     background-color: var(--surface-color);
     border-radius: var(--border-radius);
@@ -80,7 +79,7 @@ body {
 
 .navbar-nav {
     display: flex;
-    align-items: center; /* Dikeyde hizalama için eklendi */
+    align-items: center; /* === DÜZELTME: Menü elemanlarını dikeyde hizala === */
     gap: 1.5rem;
 }
 
@@ -88,10 +87,10 @@ body {
     text-decoration: none;
     color: var(--secondary-color);
     font-weight: 500;
-    padding-bottom: 5px;
+    padding: 0.5rem 0; /* Dikey padding eklendi */
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap; /* Menü elemanlarının alt satıra kaymasını engelle */
+    white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -103,13 +102,13 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* === YENİ: AÇILIR MENÜ (DROPDOWN) STİLLERİ === */
+/* Açılır Menü (Dropdown) Stilleri */
 .nav-item.dropdown {
     position: relative;
 }
 
 .dropdown-menu {
-    display: none; /* Normalde gizli */
+    display: none;
     position: absolute;
     top: 100%;
     left: 0;
@@ -117,14 +116,14 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     padding: 0.5rem 0;
-    margin-top: 0.5rem; /* Menü ile arasında küçük bir boşluk */
-    min-width: 220px; /* Açılır menü genişliği */
+    margin-top: 0.5rem;
+    min-width: 220px;
     z-index: 20;
     border: 1px solid var(--border-color);
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
-    display: block; /* Üzerine gelince görünür yap */
+    display: block;
 }
 
 .dropdown-menu a {
@@ -139,7 +138,6 @@ body {
     background-color: var(--background-color);
     color: var(--primary-color);
 }
-/* === YENİ STİLLERİN SONU === */
 
 /* Butonlar */
 .btn {
@@ -157,7 +155,7 @@ body {
 }
 
 .btn:hover {
-    background-color: #0f766e; /* primary-color'ın koyusu */
+    background-color: #0f766e;
     transform: translateY(-2px);
 }
 
@@ -166,7 +164,7 @@ body {
     color: white;
 }
 .btn-secondary:hover {
-    background-color: #334155; /* secondary-color'ın koyusu */
+    background-color: #334155;
 }
 
 /* Footer */
