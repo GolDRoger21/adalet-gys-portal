@@ -1,81 +1,88 @@
-/* ============================================= */
-/* == KONU ANLATIM SAYFALARI İÇİN ÖZEL STİLLER == */
-/* ============================================= */
+/* ================================================================= */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.0)  == */
+/* ================================================================= */
+/* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
+/* konu anlatımı sayfalarındaki metin içeriklerinin okunabilir     */
+/* ve profesyonel görünmesi için gerekli özel stilleri içerir.     */
+/* ================================================================= */
 
-/* Makale içeriğini saran ana konteyner */
-.article-content {
-    background-color: var(--surface-color);
-    padding: 2rem 2.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
+/* Ana içerik konteynerine uygulanacak genel stiller */
+.konu-icerik {
+    /* Okunabilirlik için metin genişliğini sınırlar */
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-/* Ana Konu Başlığı */
-.article-content h1 {
-    font-size: 2.25rem;
+/* Sayfa Ana Başlığı */
+.konu-icerik h1 {
+    font-size: 2.5rem; /* 40px */
+    font-weight: 700;
     color: var(--text-color);
-    margin-bottom: 0.5rem;
-    line-height: 1.2;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1rem;
 }
 
-/* Konu Alt Başlıkları */
-.article-content h2 {
-    font-size: 1.75rem;
+/* Alt Başlıklar */
+.konu-icerik h2 {
+    font-size: 1.75rem; /* 28px */
+    font-weight: 600;
     color: var(--primary-color);
     margin-top: 2.5rem;
     margin-bottom: 1rem;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 0.5rem;
 }
 
-.article-content h3 {
-    font-size: 1.25rem;
+/* Daha Alt Başlıklar */
+.konu-icerik h3 {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 600;
     color: var(--secondary-color);
     margin-top: 2rem;
     margin-bottom: 0.75rem;
 }
 
-/* Paragraf Metinleri */
-.article-content p {
-    font-size: 1.1rem;
+/* Paragraflar */
+.konu-icerik p {
+    font-size: 1.1rem; /* 17.6px */
     line-height: 1.8;
     margin-bottom: 1rem;
 }
 
-/* Liste Elemanları */
-.article-content ul,
-.article-content ol {
-    padding-left: 2rem;
+/* Listeler */
+.konu-icerik ul,
+.konu-icerik ol {
+    padding-left: 1.5rem;
     margin-bottom: 1rem;
+    font-size: 1.1rem;
 }
 
-.article-content li {
-    font-size: 1.1rem;
-    line-height: 1.8;
+.konu-icerik li {
     margin-bottom: 0.5rem;
 }
 
-/* Önemli Notlar ve Alıntılar İçin */
-.article-content blockquote {
-    background-color: var(--background-color);
-    border-left: 5px solid var(--primary-color);
-    padding: 1rem 1.5rem;
-    margin: 1.5rem 0;
-    font-style: italic;
-    color: var(--secondary-color);
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+/* Kalın (strong) metinler */
+.konu-icerik strong {
+    color: var(--text-color);
 }
 
-/* Makale hakkında kısa bilgi (başlığın altında) */
-.article-meta {
-    color: var(--secondary-color);
-    font-size: 1rem;
-    margin-bottom: 2rem;
-}
-
-/* Yatay Çizgi */
-.article-content hr {
-    border: none;
-    border-top: 1px solid var(--border-color);
+/* Önemli Bilgi / Özet Kutusu */
+.ozet-kutusu {
+    background-color: #f0fdfa; /* Açık yeşil */
+    border-left: 4px solid var(--primary-color);
+    padding: 1.5rem;
     margin: 2rem 0;
+    border-radius: var(--border-radius);
+}
+
+.ozet-kutusu p {
+    margin-bottom: 0;
+}
+
+/* Uyarı / Dikkat Kutusu */
+.uyari-kutusu {
+    background-color: #fffbeb; /* Açık sarı */
+    border-left: 4px solid #f59e0b; /* Amber */
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: var(--border-radius);
 }
