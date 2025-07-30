@@ -102,13 +102,13 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* Açılır Menü (Dropdown) Stilleri */
+/* === YENİ: AÇILIR MENÜ (DROPDOWN) STİLLERİ === */
 .nav-item.dropdown {
     position: relative;
 }
 
 .dropdown-menu {
-    display: none;
+    display: none; /* Normalde gizli */
     position: absolute;
     top: 100%;
     left: 0;
@@ -116,14 +116,14 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     padding: 0.5rem 0;
-    margin-top: 0.5rem;
-    min-width: 220px;
+    margin-top: 0.5rem; /* Menü ile arasında küçük bir boşluk */
+    min-width: 220px; /* Açılır menü genişliği */
     z-index: 20;
     border: 1px solid var(--border-color);
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
-    display: block;
+    display: block; /* Üzerine gelince görünür yap */
 }
 
 .dropdown-menu a {
@@ -138,6 +138,7 @@ body {
     background-color: var(--background-color);
     color: var(--primary-color);
 }
+/* === YENİ STİLLERİN SONU === */
 
 /* Butonlar */
 .btn {
