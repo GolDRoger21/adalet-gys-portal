@@ -1,5 +1,5 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.0)              == */
+/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.1)              == */
 /* ================================================================ */
 /* Açıklama: Bu dosya, sitenin tamamı için geçerli olan genel      */
 /* renkleri, fontları, container yapısını ve ortak bileşenleri    */
@@ -80,6 +80,7 @@ body {
 
 .navbar-nav {
     display: flex;
+    align-items: center; /* Dikeyde hizalama için eklendi */
     gap: 1.5rem;
 }
 
@@ -90,6 +91,7 @@ body {
     padding-bottom: 5px;
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap; /* Menü elemanlarının alt satıra kaymasını engelle */
 }
 
 .nav-link:hover {
@@ -100,6 +102,44 @@ body {
     color: var(--primary-color);
     border-bottom-color: var(--primary-color);
 }
+
+/* === YENİ: AÇILIR MENÜ (DROPDOWN) STİLLERİ === */
+.nav-item.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none; /* Normalde gizli */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 0.5rem 0;
+    margin-top: 0.5rem; /* Menü ile arasında küçük bir boşluk */
+    min-width: 220px; /* Açılır menü genişliği */
+    z-index: 20;
+    border: 1px solid var(--border-color);
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block; /* Üzerine gelince görünür yap */
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}
+/* === YENİ STİLLERİN SONU === */
 
 /* Butonlar */
 .btn {
