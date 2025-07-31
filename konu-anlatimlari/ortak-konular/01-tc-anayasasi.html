@@ -6,23 +6,24 @@
     <title>T.C. Anayasası Konu Anlatımı - Adalet GYS Portalı</title>
     <meta name="description" content="Adalet Bakanlığı Görevde Yükselme Sınavı (GYS) için T.C. Anayasası ders notları. Genel Esaslar, Temel Haklar ve Devletin Organları konularını kapsayan profesyonel ve sınav odaklı konu anlatımı.">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <!-- Sadece projenin kendi CSS'leri -->
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/style.css">
     <link rel="stylesheet" href="/adalet-gys-portal/assets/css/konu-anlatim.css">
+
     <script src="/adalet-gys-portal/assets/js/template-loader.js" defer></script>
 
+    <!-- Erişilebilirlik -->
     <style>
-        *:focus-visible {
-            outline: 2px solid #0d9488;
-            outline-offset: 2px;
-        }
+        *:focus { outline: 2px solid #0d9488; outline-offset: 2px; }
     </style>
 </head>
 <body data-needs-template="page" class="leading-relaxed bg-white text-slate-800">
-    <main class="container page-content max-w-4xl mx-auto px-4 py-8">
-        <div class="card p-8 md:p-12 bg-white rounded-xl shadow-lg border border-slate-200">
+    
+    <!-- ✅ DOĞRU YAPI: Tailwind sınıfları YOK -->
+    <main class="container page-content">
+        <div class="card">
             <article class="konu-icerik" role="article">
+                
                 <div class="text-center mb-10 pb-6 border-b border-slate-200">
                     <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800">T.C. Anayasası</h1>
                     <p class="mt-4 text-lg text-slate-500">Görevde Yükselme Sınavı Odaklı Konu Anlatımı ve Stratejiler</p>
