@@ -1,7 +1,7 @@
 /**
  * @file Adalet GYS Portalı için Merkezi Sınav Motoru
  * @description Google E-Tablolar'dan veri çeken, sınavı yöneten ve modern UI özelliklerini (ilerleme çubuğu, zamanlayıcı uyarısı) destekleyen ana mantık.
- * @version 1.8 (Final Stable Version with UI Redesign)
+ * @version 1.9 (Feature Complete: Progress Bar and Timer Warning)
  */
 
 const CONSTANTS = {
@@ -46,7 +46,7 @@ class JusticeExamApp {
             'total-question-count', 'total-duration-display', 'alert-modal', 'alert-modal-title',
             'alert-modal-message', 'alert-modal-ok-btn', 'restart-btn',
             'flag-outline-icon', 'flag-solid-icon',
-            'progress-bar' // YENİ: İlerleme çubuğu eklendi
+            'progress-bar' // İlerleme çubuğu DOM'a dahil edildi.
         ];
         const elements = {};
         elementIds.forEach(id => {
@@ -180,7 +180,7 @@ class ExamManager {
             if (remainingTimeEl) remainingTimeEl.textContent = this.formatTime(this.timeRemaining);
             if (this.app.domElements.elapsedTime) this.app.domElements.elapsedTime.textContent = this.formatTime(elapsedSeconds);
 
-            // === YENİ: Son 5 dakika uyarısı ===
+            // === GÜNCELLENDİ: Son 5 dakika uyarısı aktif edildi. ===
             if (this.timeRemaining === 300) { // 5 dakika = 300 saniye
                 remainingTimeEl?.classList.add(CONSTANTS.CSS_CLASSES.TIMER_WARNING);
             }
@@ -237,7 +237,7 @@ class UIManager {
         this.updateNavPalette();
         this.updateButtonStates();
 
-        // === YENİ: İlerleme çubuğunu güncelle ===
+        // === GÜNCELLENDİ: İlerleme çubuğu mantığı aktif edildi. ===
         if (this.dom.progressBar) {
             const progressPercentage = ((this.examManager.currentQuestionIndex + 1) / this.examManager.questions.length) * 100;
             this.dom.progressBar.style.width = `${progressPercentage}%`;
