@@ -1,9 +1,8 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Sınav Arayüzü Eklenti Stilleri (v2.1) == */
+/* == Adalet GYS Portalı - Sınav Arayüzü Eklenti Stilleri (v2.2) == */
 /* ================================================================ */
-/* Açıklama: Bu dosya, ana tema dosyası olan style.css'e ek        */
-/* olarak, sadece sınav arayüzünde kullanılan özel stilleri       */
-/* içerir. Renkler ve temel yapı style.css'ten miras alınır.       */
+/* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
+/* sınav arayüzünde kullanılan özel stilleri içerir.              */
 /* ================================================================ */
 
 /* Sınava özel renk değişkenleri */
@@ -17,6 +16,8 @@
     background-color: var(--border-color);
     border-radius: 9999px;
     overflow: hidden;
+    padding: 4px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .progress-bar {
@@ -26,10 +27,8 @@
     border-radius: 9999px;
     transition: width 0.3s ease-in-out;
 }
-/* === YENİ STİLLERİN SONU === */
 
-
-/* Soru metni alanı (pre etiketi) için özel stil */
+/* Soru metni alanı (pre etiketi) */
 pre {
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -52,7 +51,7 @@ pre {
 }
 
 .start-btn:hover {
-    transform: translateY(-px);
+    transform: translateY(-2px);
     box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
     background-image: linear-gradient(to right, #087f5b, #065f46);
 }
@@ -100,7 +99,6 @@ pre {
     background-color: rgba(56, 189, 248, 0.1);
 }
 
-/* Seçilen seçenek */
 .option-selected {
     border-color: var(--primary-color);
     background-color: rgba(13, 148, 136, 0.1);
@@ -108,7 +106,6 @@ pre {
     font-weight: 600;
 }
 
-/* Seçenek tuşu (A, B, C, D, E) */
 .option-key {
     flex-shrink: 0;
     display: flex;
@@ -130,14 +127,15 @@ pre {
 
 /* Zamanlayıcı uyarı efekti */
 .timer-warning {
-    color: var(--danger-color);
-    animation: pulse 1s infinite;
+    color: var(--danger-color) !important;
+    animation: pulse 1.2s infinite;
+    font-weight: 700 !important;
 }
 
 @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 /* Soru açıklamaları kutusu */
@@ -153,11 +151,7 @@ pre {
 .explanation-section h5 { font-weight: 600; color: #0c4a6e; display: flex; align-items: center; }
 .explanation-section p { font-size: 0.95rem; line-height: 1.7; color: #0c4a6e; text-align: justify; }
 
-/* Soru Gezgini Kutucuğu */
-.nav-box {
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-}
+.nav-box { transition: all 0.2s ease-in-out; cursor: pointer; }
 
 /* Sonuç Ekranı Sekme Butonları */
 .tab-btn {
@@ -174,23 +168,7 @@ pre {
     gap: 0.5rem;
 }
 
-.tab-btn:hover {
-    background-color: #cbd5e1;
-    transform: translateY(-1px);
-}
+.tab-btn:hover { background-color: #cbd5e1; transform: translateY(-1px); }
+.tab-active { background-color: #f0fdfa; color: var(--primary-color) !important; border-color: var(--primary-color); }
 
-.tab-active {
-    background-color: #f0fdfa;
-    color: var(--primary-color) !important;
-    border-color: var(--primary-color);
-}
-
-/* Erişilebilirlik için Gizli Element */
-#timer-announcer {
-    position: absolute;
-    left: -10000px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-}
+#timer-announcer { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
