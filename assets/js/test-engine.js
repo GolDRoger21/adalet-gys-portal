@@ -1,7 +1,7 @@
 /**
  * @file Adalet GYS Portalı için Merkezi Sınav Motoru
- * @description Google E-Tablolar'dan veri çeken, sınavı yöneten ve modern UI özelliklerini destekleyen ana mantık.
- * @version 1.7 (Final Stable Version with All Features)
+ * @description Google E-Tablolar'dan veri çeken, sınavı yöneten ve modern UI özelliklerini (ilerleme çubuğu, zamanlayıcı uyarısı) destekleyen ana mantık.
+ * @version 1.8 (Final Stable Version with UI Redesign)
  */
 
 const CONSTANTS = {
@@ -46,7 +46,7 @@ class JusticeExamApp {
             'total-question-count', 'total-duration-display', 'alert-modal', 'alert-modal-title',
             'alert-modal-message', 'alert-modal-ok-btn', 'restart-btn',
             'flag-outline-icon', 'flag-solid-icon',
-            'progress-bar' // YENİ: İlerleme çubuğu
+            'progress-bar' // YENİ: İlerleme çubuğu eklendi
         ];
         const elements = {};
         elementIds.forEach(id => {
@@ -67,7 +67,6 @@ class JusticeExamApp {
         this.uiManager = new UIManager(this.domElements, this.examManager);
         this.modalManager = new ModalManager(this.domElements);
 
-        // Yöneticileri birbirine bağlayalım
         this.examManager.uiManager = this.uiManager;
         this.examManager.modalManager = this.modalManager;
 
@@ -169,6 +168,11 @@ class ExamManager {
     startTimer() {
         const totalDuration = this.durationMinutes * 60;
         this.timerInterval = setInterval(() => {
+            if (this.timeRemaining <= 0) {
+                clearInterval(this.timerInterval);
+                this.finishQuiz(true);
+                return;
+            }
             this.timeRemaining--;
             const remainingTimeEl = this.app.domElements.remainingTime;
             const elapsedSeconds = totalDuration - this.timeRemaining;
@@ -179,11 +183,6 @@ class ExamManager {
             // === YENİ: Son 5 dakika uyarısı ===
             if (this.timeRemaining === 300) { // 5 dakika = 300 saniye
                 remainingTimeEl?.classList.add(CONSTANTS.CSS_CLASSES.TIMER_WARNING);
-            }
-
-            if (this.timeRemaining <= 0) {
-                clearInterval(this.timerInterval);
-                this.finishQuiz(true);
             }
         }, 1000);
     }
@@ -237,6 +236,7 @@ class UIManager {
         }
         this.updateNavPalette();
         this.updateButtonStates();
+
         // === YENİ: İlerleme çubuğunu güncelle ===
         if (this.dom.progressBar) {
             const progressPercentage = ((this.examManager.currentQuestionIndex + 1) / this.examManager.questions.length) * 100;
@@ -275,8 +275,8 @@ class UIManager {
         if (this.dom.prevBtn) this.dom.prevBtn.disabled = this.examManager.currentQuestionIndex === 0;
         if (this.dom.nextBtn) this.dom.nextBtn.disabled = this.examManager.currentQuestionIndex === this.examManager.questions.length - 1;
         const isMarked = this.examManager.userAnswers[this.examManager.currentQuestionIndex]?.isMarkedForReview;
-        if (this.dom.markReviewBtn) this.dom.markReviewBtn.classList.toggle(CONSTANTS.CSS_CLASSES.MARKED, isMarked);
-        if (this.dom.flagOutlineIcon) this.dom.flagOutlineIcon.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, isMarked);
+        if (this.dom.markReviewBtn) this.dom.markReviewBtn.classList.toggle(CONSTANTS.CSS_CLASSES.MARKED, !!isMarked);
+        if (this.dom.flagOutlineIcon) this.dom.flagOutlineIcon.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, !!isMarked);
         if (this.dom.flagSolidIcon) this.dom.flagSolidIcon.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, !isMarked);
     }
 
@@ -300,18 +300,18 @@ class UIManager {
             return;
         }
         questions.forEach(item => {
-            const q = item.question;
             const itemDiv = document.createElement('div');
             itemDiv.className = "mb-6 p-4 bg-white rounded-lg border border-slate-200";
-            itemDiv.innerHTML = this._createResultItemHTML(item, q);
+            itemDiv.innerHTML = this._createResultItemHTML(item);
             container.appendChild(itemDiv);
         });
     }
 
-    _createResultItemHTML(item, q) {
+    _createResultItemHTML(item) {
+        const q = item.question;
         const cleanQuestionText = q.questionText.replace(/^\d+[\.\)-]\s*/, '');
-        let statusHTML = '';
         const userAnswer = item.userAnswer;
+        let statusHTML = '';
         if(userAnswer) {
             const isCorrect = userAnswer === q.correctAnswer;
             statusHTML = `<span class="text-sm font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}">${isCorrect ? 'Doğru Cevaplandı' : 'Yanlış Cevaplandı'}</span>`;
@@ -388,12 +388,12 @@ class ModalManager {
         }
         alertModalTitle.textContent = config.title;
         alertModalMessage.textContent = config.message;
-        alertModal.classList.remove('hidden');
-        alertModal.classList.add('flex');
+        alertModal.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN);
+        alertModal.classList.add(CONSTANTS.CSS_CLASSES.FLEX);
         alertModalOkBtn.focus();
         alertModalOkBtn.onclick = () => { this.hide(); config.onConfirm?.(); };
     }
-    hide() { if (this.dom.alertModal) { this.dom.alertModal.classList.add('hidden'); this.dom.alertModal.classList.remove('flex'); } }
+    hide() { if (this.dom.alertModal) { this.dom.alertModal.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN); this.dom.alertModal.classList.remove(CONSTANTS.CSS_CLASSES.FLEX); } }
 }
 
 document.addEventListener('template-loaded', () => {
