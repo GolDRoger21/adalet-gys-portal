@@ -1,392 +1,199 @@
-/**
- * @file Adalet GYS Portalı için Merkezi Sınav Motoru
- * @description Google E-Tablolar'dan veri çeken, sınavı yöneten ve modern UI özelliklerini destekleyen ana mantık.
- * @version 1.6 (Final Clean Version with Timer Warning)
- */
+/* ================================================================ */
+/* == Adalet GYS Portalı - Sınav Arayüzü Eklenti Stilleri (v2.1) == */
+/* ================================================================ */
+/* Açıklama: Bu dosya, ana tema dosyası olan style.css'e ek        */
+/* olarak, sadece sınav arayüzünde kullanılan özel stilleri       */
+/* içerir. Renkler ve temel yapı style.css'ten miras alınır.       */
+/* ================================================================ */
 
-const CONSTANTS = {
-    CSS_CLASSES: {
-        HIDDEN: 'hidden',
-        MARKED: 'marked',
-        OPTION_SELECTED: 'option-selected',
-        TIMER_WARNING: 'timer-warning',
-        TAB_ACTIVE: 'tab-active',
-        FLEX: 'flex',
-    },
-    DOM: {
-        APP_CONTAINER_ID: 'app-container'
-    }
-};
-
-class JusticeExamApp {
-    constructor() {
-        this.domElements = this._initializeDOMElements();
-        if (!this.domElements.appContainer) {
-            console.error(`Ana uygulama konteyneri (#${CONSTANTS.DOM.APP_CONTAINER_ID}) bulunamadı.`);
-            return;
-        }
-        this.config = {
-            sheetUrl: this.domElements.appContainer.dataset.sheetUrl,
-            duration: this.domElements.appContainer.dataset.examDuration || null
-        };
-        this._fetchAndParseSheetData();
-    }
-
-    _initializeDOMElements() {
-        const elementIds = [
-            'app-container', 'welcome-screen', 'quiz-screen', 'start-exam-btn', 'elapsed-time', 'remaining-time',  
-            'question-counter', 'question-text', 'options-container', 'prev-btn', 'next-btn',  
-            'mark-review-btn', 'finish-btn', 'nav-palette-container', 'result-screen', 'correct-count',  
-            'incorrect-count', 'empty-count', 'success-rate', 'performance-summary', 'wrong-answers-container', 
-            'marked-questions-container', 'wrong-answers-tab', 'marked-questions-tab', 'wrong-answers-panel', 
-            'marked-questions-panel', 'start-btn-full-text', 'total-question-count', 'total-duration-display', 
-            'alert-modal', 'alert-modal-title', 'alert-modal-message', 'alert-modal-ok-btn', 'restart-btn',  
-            'flag-outline-icon', 'flag-solid-icon', 'progress-bar'
-        ];
-        const elements = {};
-        elementIds.forEach(id => {
-            if (id) {
-                const camelCaseId = id.replace(/-(\w)/g, (_, letter) => letter.toUpperCase());
-                elements[camelCaseId] = document.getElementById(id);
-            }
-        });
-        return elements;
-    }
-
-    _initializeApp(questionPool) {
-        const examDuration = this.config.duration ? parseInt(this.config.duration, 10) : Math.ceil(questionPool.length * 1.2);
-        this.domElements.totalQuestionCount.textContent = questionPool.length;
-        this.domElements.totalDurationDisplay.innerHTML = ` ${examDuration} Dakika`;
-        this.domElements.startBtnFullText.textContent = `SINAVA BAŞLA (${questionPool.length} Soru)`;
-        this.domElements.startExamBtn.disabled = false;
-        
-        const examManager = new ExamManager(questionPool, examDuration, this);
-        const uiManager = new UIManager(this.domElements, examManager);
-        const modalManager = new ModalManager(this.domElements);
-        
-        examManager.uiManager = uiManager;
-        examManager.modalManager = modalManager;
-        
-        this._bindEventListeners(examManager, uiManager);
-    }
-
-    _bindEventListeners(examManager, uiManager) {
-        this.domElements.startExamBtn?.addEventListener('click', () => examManager.startExam());
-        this.domElements.restartBtn?.addEventListener('click', () => window.location.reload());
-        this.domElements.wrongAnswersTab?.addEventListener('click', () => uiManager.switchResultTab('wrong'));
-        this.domElements.markedQuestionsTab?.addEventListener('click', () => uiManager.switchResultTab('marked'));
-    }
-
-    async _fetchAndParseSheetData() {
-        try {
-            if (!this.config.sheetUrl) throw new Error("Google Sheet linki bulunamadı.");
-            const response = await fetch(this.config.sheetUrl);
-            if (!response.ok) throw new Error(`Sorular Google Sheet'ten çekilemedi. Durum kodu: ${response.status}`);
-            const csvText = await response.text();
-            if (!csvText) throw new Error("CSV verisi boş.");
-            
-            const parsedRows = this._robustCsvParse(csvText);
-            if (parsedRows.length < 2) throw new Error("CSV dosyasında yeterli veri yok.");
-
-            const headers = parsedRows[0].map(h => h.trim());
-            const questionPool = parsedRows.slice(1).map(rowArray => {
-                const data = headers.reduce((obj, header, i) => ({ ...obj, [header]: (rowArray[i] || '').trim() }), {});
-                return {
-                    questionText: data.questionText,
-                    options: { A: data.optionA, B: data.optionB, C: data.optionC, D: data.optionD, E: data.optionE || '' },
-                    correctAnswer: (data.correctAnswer || '').trim().toUpperCase(),
-                    explanation: data.explanation || ''
-                };
-            }).filter(q => q && q.questionText && q.correctAnswer);
-
-            if (questionPool.length === 0) throw new Error("Google Sheet'te geçerli soru bulunamadı.");
-            this._initializeApp(questionPool);
-        } catch (error) {
-            console.error('Veri çekme hatası:', error);
-            if(this.domElements.welcomeScreen) {
-                const errorContainer = this.domElements.welcomeScreen.querySelector('.card') || this.domElements.welcomeScreen;
-                errorContainer.innerHTML = `<div class="p-8 text-center"><h1 class="text-xl font-bold text-red-600">Sınav Başlatılamadı</h1><p class="mt-4 text-slate-600">${error.message}</p><button onclick="window.location.reload()" class="btn mt-6">Tekrar Dene</button></div>`;
-            }
-        }
-    }
-
-    _robustCsvParse(csvText) {
-        const rows = []; let currentRow = []; let currentField = ''; let inQuotes = false;
-        const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-        for (let i = 0; i < normalizedText.length; i++) {
-            const char = normalizedText[i]; const nextChar = normalizedText[i + 1];
-            if (char === '"') {
-                if (inQuotes && nextChar === '"') { currentField += '"'; i++; } else { inQuotes = !inQuotes; }
-            } else if (char === ',' && !inQuotes) {
-                currentRow.push(currentField); currentField = '';
-            } else if (char === '\n' && !inQuotes) {
-                currentRow.push(currentField);
-                if (currentRow.some(field => field.trim() !== '')) rows.push(currentRow);
-                currentRow = []; currentField = '';
-            } else { currentField += char; }
-        }
-        if (currentField !== '' || currentRow.length > 0) {
-            currentRow.push(currentField);
-            if (currentRow.some(field => field.trim() !== '')) rows.push(currentRow);
-        }
-        return rows;
-    }
+/* Sınava özel renk değişkenleri */
+:root {
+    --accent-color: #f59e0b; /* Bayrak rengi */
+    --danger-color: #dc2626;
 }
 
-class ExamManager {
-    constructor(questions, durationMinutes, app) { 
-        this.questions = questions; 
-        this.durationMinutes = durationMinutes; 
-        this.app = app; 
-        this.currentQuestionIndex = 0; 
-        this.userAnswers = []; 
-        this.timerInterval = null; 
-        this.timeRemaining = 0; 
-        this.uiManager = null;
-        this.modalManager = null;
-    }
-    
-    startExam() { 
-        this.userAnswers = Array(this.questions.length).fill(null).map(() => ({ userAnswer: null, isMarkedForReview: false })); 
-        this.timeRemaining = this.durationMinutes * 60; 
-        this.app.domElements.welcomeScreen?.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN); 
-        this.app.domElements.quizScreen?.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN); 
-        this.startTimer(); 
-        this.uiManager.renderQuestion(); 
-        this.uiManager.bindQuizEvents(); 
-    }
-    
-    formatTime(seconds) { 
-        const h = Math.floor(seconds / 3600); 
-        const m = Math.floor((seconds % 3600) / 60); 
-        const s = seconds % 60; 
-        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; 
-    }
-    
-    goToNextQuestion() { if (this.currentQuestionIndex < this.questions.length - 1) { this.currentQuestionIndex++; this.uiManager.renderQuestion(); } }
-    goToPrevQuestion() { if (this.currentQuestionIndex > 0) { this.currentQuestionIndex--; this.uiManager.renderQuestion(); } }
-    selectAnswer(optionKey) { this.userAnswers[this.currentQuestionIndex].userAnswer = optionKey; this.uiManager.renderQuestion(); if (this.currentQuestionIndex < this.questions.length - 1) { setTimeout(() => this.goToNextQuestion(), 300); } }
-    toggleMarkForReview() { this.userAnswers[this.currentQuestionIndex].isMarkedForReview = !this.userAnswers[this.currentQuestionIndex].isMarkedForReview; this.uiManager.updateNavPalette(); this.uiManager.updateButtonStates(); }
-    navigateToQuestion(index) { if (index >= 0 && index < this.questions.length) { this.currentQuestionIndex = index; this.uiManager.renderQuestion(); } }
-    
-    finishQuiz(isAuto = false) { 
-        if (!isAuto) { 
-            this.modalManager.show({ title: 'Sınavı Bitir', message: 'Sınavı bitirmek istediğinizden emin misiniz?', onConfirm: () => this.performFinish() }); 
-        } else { 
-            this.performFinish(); 
-        } 
-    }
-    
-    performFinish() { 
-        if (this.timerInterval) clearInterval(this.timerInterval); 
-        let correct = 0, incorrect = 0, empty = 0; 
-        const incorrectQuestions = [], markedQuestions = [];
-        this.questions.forEach((q, i) => { 
-            const userAnswerData = this.userAnswers[i]; 
-            if (userAnswerData.isMarkedForReview) { markedQuestions.push({ question: q, index: i, userAnswer: userAnswerData.userAnswer }); } 
-            if (!userAnswerData.userAnswer) empty++; 
-            else if (userAnswerData.userAnswer === q.correctAnswer) correct++; 
-            else { incorrect++; incorrectQuestions.push({ question: q, index: i, userAnswer: userAnswerData.userAnswer }); } 
-        }); 
-        this.uiManager.renderResultsPage(correct, incorrect, empty, incorrectQuestions, markedQuestions); 
-        this.app.domElements.quizScreen.classList.add(CONSTANTS.CSS_CLASSES.HIDDEN); 
-        this.app.domElements.resultScreen.classList.remove(CONSTANTS.CSS_CLASSES.HIDDEN); 
-    }
-    
-    startTimer() {
-        const totalDuration = this.durationMinutes * 60;
-        this.timerInterval = setInterval(() => {
-            this.timeRemaining--;
-            const remainingTimeEl = this.app.domElements.remainingTime;
-            const elapsedSeconds = totalDuration - this.timeRemaining;
-
-            if (remainingTimeEl) remainingTimeEl.textContent = this.formatTime(this.timeRemaining);
-            if (this.app.domElements.elapsedTime) this.app.domElements.elapsedTime.textContent = this.formatTime(elapsedSeconds);
-
-            // === YENİ: Son 5 dakika uyarısı ===
-            if (this.timeRemaining === 300) { // 5 dakika = 300 saniye
-                remainingTimeEl?.classList.add(CONSTANTS.CSS_CLASSES.TIMER_WARNING);
-            }
-
-            if (this.timeRemaining <= 0) { 
-                clearInterval(this.timerInterval); 
-                this.finishQuiz(true); 
-            }
-        }, 1000);
-    }
+/* --- YENİ: İLERLEME ÇUBUĞU (PROGRESS BAR) STİLLERİ --- */
+.progress-bar-container {
+    background-color: var(--border-color);
+    border-radius: 9999px;
+    overflow: hidden;
+    padding: 4px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 
-class UIManager {
-    constructor(domElements, examManager) { this.dom = domElements; this.examManager = examManager; }
-    
-    renderQuestion() { 
-        const question = this.examManager.questions[this.examManager.currentQuestionIndex]; 
-        if (this.dom.questionCounter) this.dom.questionCounter.textContent = `Soru ${this.examManager.currentQuestionIndex + 1} / ${this.examManager.questions.length}`; 
-        if (this.dom.questionText) this.dom.questionText.textContent = question.questionText.replace(/^\d+[\.\)-]\s*/, ''); 
-        if (this.dom.optionsContainer) { 
-            this.dom.optionsContainer.innerHTML = ''; 
-            Object.entries(question.options).forEach(([key, optionText]) => { 
-                if (optionText) this.dom.optionsContainer.appendChild(this._createOptionButton(key, optionText)); 
-            }); 
-        } 
-        this.updateNavPalette(); 
-        this.updateButtonStates();
-        if (this.dom.progressBar) {
-            const progressPercentage = ((this.examManager.currentQuestionIndex + 1) / this.examManager.questions.length) * 100;
-            this.dom.progressBar.style.width = `${progressPercentage}%`;
-        }
-    }
-    
-    _createOptionButton(key, optionText) { 
-        const button = document.createElement('button'); 
-        const isSelected = this.examManager.userAnswers[this.examManager.currentQuestionIndex].userAnswer === key; 
-        button.className = 'option-btn flex items-center w-full text-left p-4 rounded-lg'; 
-        button.innerHTML = `<span class="option-key flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full border font-bold mr-4">${key}</span><span class="text-justify w-full">${optionText}</span>`; 
-        if (isSelected) button.classList.add(CONSTANTS.CSS_CLASSES.OPTION_SELECTED); 
-        button.onclick = () => this.examManager.selectAnswer(key); 
-        return button; 
-    }
-    
-    updateNavPalette() { 
-        if (this.dom.navPaletteContainer) { 
-            this.dom.navPaletteContainer.innerHTML = ''; 
-            this.examManager.questions.forEach((_, index) => { 
-                const box = document.createElement('button'); box.textContent = index + 1; 
-                let statusClass = 'bg-slate-300'; 
-                const userAnswerData = this.examManager.userAnswers[index]; 
-                if (userAnswerData.isMarkedForReview) { statusClass = 'bg-yellow-400 text-white'; } 
-                else if (userAnswerData.userAnswer) { statusClass = 'bg-green-500 text-white'; } 
-                if (index === this.examManager.currentQuestionIndex) { box.classList.add('ring-4', 'ring-teal-500'); } 
-                box.className += ` nav-box w-full h-10 flex items-center justify-center rounded-md ${statusClass}`; 
-                box.onclick = () => this.examManager.navigateToQuestion(index); 
-                this.dom.navPaletteContainer.appendChild(box); 
-            }); 
-        } 
-    }
-    
-    updateButtonStates() { 
-        if (this.dom.prevBtn) this.dom.prevBtn.disabled = this.examManager.currentQuestionIndex === 0; 
-        if (this.dom.nextBtn) this.dom.nextBtn.disabled = this.examManager.currentQuestionIndex === this.examManager.questions.length - 1; 
-        const isMarked = this.examManager.userAnswers[this.examManager.currentQuestionIndex].isMarkedForReview;
-        if (this.dom.markReviewBtn) this.dom.markReviewBtn.classList.toggle(CONSTANTS.CSS_CLASSES.MARKED, isMarked);
-        if (this.dom.flagOutlineIcon) this.dom.flagOutlineIcon.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, isMarked);
-        if (this.dom.flagSolidIcon) this.dom.flagSolidIcon.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, !isMarked);
-    }
-    
-    renderResultsPage(correct, incorrect, empty, incorrectQuestions, markedQuestions) { 
-        if (this.dom.correctCount) this.dom.correctCount.textContent = correct; 
-        if (this.dom.incorrectCount) this.dom.incorrectCount.textContent = incorrect; 
-        if (this.dom.emptyCount) this.dom.emptyCount.textContent = empty; 
-        const total = this.examManager.questions.length; 
-        if (this.dom.successRate) this.dom.successRate.textContent = `${(total > 0 ? (correct / total * 100) : 0).toFixed(1)}%`; 
-        this._renderAnswerDetails(this.dom.wrongAnswersContainer, incorrectQuestions, 'wrong');
-        this._renderAnswerDetails(this.dom.markedQuestionsContainer, markedQuestions, 'marked');
-    }
+.progress-bar {
+    height: 10px;
+    background-color: var(--primary-color);
+    width: 0%; /* JavaScript ile güncellenecek */
+    border-radius: 9999px;
+    transition: width 0.3s ease-in-out;
+}
+/* === YENİ STİLLERİN SONU === */
 
-    _renderAnswerDetails(container, questions, type) {
-        if (!container) return;
-        container.innerHTML = '';
-        if (questions.length === 0) {
-            const message = type === 'wrong' ? 'Tebrikler! Yanlış cevabınız bulunmuyor.' : 'İncelemek için herhangi bir soru işaretlemediniz.';
-            container.innerHTML = `<p class="text-slate-600 p-4 bg-slate-50 rounded-lg">${message}</p>`;
-            return;
-        }
-        questions.forEach(item => {
-            const q = item.question;
-            const itemDiv = document.createElement('div');
-            itemDiv.className = "mb-6 p-4 bg-white rounded-lg border border-slate-200";
-            
-            const cleanQuestionText = q.questionText.replace(/^\d+[\.\)-]\s*/, '');
-            let statusHTML = '';
-            const userAnswer = item.userAnswer;
-            if(userAnswer) {
-                const isCorrect = userAnswer === q.correctAnswer;
-                statusHTML = `<span class="text-sm font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}">${isCorrect ? 'Doğru Cevaplandı' : 'Yanlış Cevaplandı'}</span>`;
-            } else {
-                statusHTML = `<span class="text-sm font-semibold text-slate-600">Boş Bırakıldı</span>`;
-            }
 
-            itemDiv.innerHTML = `
-                <div class="flex justify-between items-center mb-2"><p class="font-bold">Soru ${item.index + 1}:</p>${statusHTML}</div>
-                <pre class="mb-4 bg-slate-50 p-3 rounded">${cleanQuestionText}</pre>
-                ${this._createResultOptionsHTML(q, userAnswer)}
-                ${q.explanation ? this._createExplanationHTML(q.explanation) : ''}
-            `;
-            container.appendChild(itemDiv);
-        });
-    }
-
-    _createResultOptionsHTML(q, userAnswer) {
-        let optionsHTML = '<div class="space-y-2 mt-4 text-sm">';
-        Object.entries(q.options).forEach(([key, text]) => {
-            if (!text) return;
-            let classes = 'border-slate-200 bg-slate-50 text-slate-700';
-            let icon = `<span class="font-bold text-slate-500">${key})</span>`;
-            if (key === q.correctAnswer) {
-                classes = 'border-green-400 bg-green-50 text-green-800 font-medium';
-                icon = `<svg class="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`;
-            } else if (key === userAnswer) {
-                classes = 'border-red-400 bg-red-50 text-red-800 font-medium';
-                icon = `<svg class="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>`;
-            }
-            optionsHTML += `<div class="flex items-start p-3 rounded-lg border ${classes}"><div class="flex-shrink-0 w-5 h-5 mr-3">${icon}</div><p class="text-justify flex-1">${text}</p></div>`;
-        });
-        return optionsHTML + '</div>';
-    }
-
-    _createExplanationHTML(explanation) {
-        const separator = "Hafıza Tekniği:";
-        const [summary, memoryTrick] = explanation.includes(separator) ? explanation.split(separator) : [explanation, ''];
-        let html = '<div class="explanation-box"><h4>Soru Analizi</h4>';
-        if (summary.replace("Konu Özeti:", "").trim()) {
-            html += `<div class="explanation-section"><h5><span class="mr-2">📖</span><span>Konu Özeti</span></h5><p>${summary.replace("Konu Özeti:", "").trim()}</p></div>`;
-        }
-        if (memoryTrick.trim()) {
-            html += `<div class="explanation-section"><h5><span class="mr-2">💡</span><span>Hafıza Tekniği</span></h5><p>${memoryTrick.trim()}</p></div>`;
-        }
-        return html + '</div>';
-    }
-    
-    switchResultTab(tabName) { 
-        if (!this.dom.wrongAnswersPanel || !this.dom.markedQuestionsPanel) return; 
-        const isWrongTab = tabName === 'wrong'; 
-        this.dom.wrongAnswersPanel.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, !isWrongTab); 
-        this.dom.markedQuestionsPanel.classList.toggle(CONSTANTS.CSS_CLASSES.HIDDEN, isWrongTab); 
-        this.dom.wrongAnswersTab.classList.toggle(CONSTANTS.CSS_CLASSES.TAB_ACTIVE, isWrongTab); 
-        this.dom.markedQuestionsTab.classList.toggle(CONSTANTS.CSS_CLASSES.TAB_ACTIVE, !isWrongTab); 
-    }
-    
-    bindQuizEvents() { 
-        this.dom.nextBtn?.addEventListener('click', () => this.examManager.goToNextQuestion()); 
-        this.dom.prevBtn?.addEventListener('click', () => this.examManager.goToPrevQuestion()); 
-        this.dom.markReviewBtn?.addEventListener('click', () => this.examManager.toggleMarkForReview()); 
-        this.dom.finishBtn?.addEventListener('click', () => this.examManager.finishQuiz(false)); 
-    }
+/* Soru metni alanı (pre etiketi) için özel stil */
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    text-align: justify;
+    user-select: none;
 }
 
-class ModalManager {
-    constructor(domElements) { this.dom = domElements; this._bindModalEvents(); }
-    _bindModalEvents() { this.dom.alertModalOkBtn?.addEventListener('click', () => this.hide()); }
-    show(config) {
-        const { alertModal, alertModalTitle, alertModalMessage, alertModalOkBtn } = this.dom;
-        if (!alertModal || !alertModalTitle || !alertModalMessage || !alertModalOkBtn) {
-            if (confirm(config.message || 'Emin misiniz?')) {
-                config.onConfirm?.();
-            }
-            return;
-        }
-        alertModalTitle.textContent = config.title;
-        alertModalMessage.textContent = config.message;
-        alertModal.classList.remove('hidden');
-        alertModal.classList.add('flex');
-        alertModalOkBtn.focus();
-        alertModalOkBtn.onclick = () => { this.hide(); config.onConfirm?.(); };
-    }
-    hide() { if (this.dom.alertModal) { this.dom.alertModal.classList.add('hidden'); this.dom.alertModal.classList.remove('flex'); } }
+/* Sınavı Başlat Butonu */
+.start-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+    background-image: linear-gradient(to right, var(--primary-color), #087f5b);
 }
 
-document.addEventListener('template-loaded', () => {
-    if (document.getElementById(CONSTANTS.DOM.APP_CONTAINER_ID)) {
-        setTimeout(() => { new JusticeExamApp(); }, 0);
-    }
-});
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    background-image: linear-gradient(to right, #087f5b, #065f46);
+}
+
+/* Soru üzerindeki bayrak ikonu */
+.flag-icon {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.flag-icon:hover {
+    color: var(--accent-color) !important;
+}
+
+#mark-review-btn.marked #flag-solid-icon,
+#mark-review-btn.marked #flag-outline-icon {
+    color: var(--accent-color);
+}
+
+/* Modern soru metni çerçevesi */
+#question-text-container {
+    background-color: #f0fdfa;
+    padding: 1.5rem 2rem;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0.5rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Seçenek butonu */
+.option-btn {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    width: 100%;
+    text-align: left;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.option-btn:hover {
+    border-color: #38bdf8;
+    background-color: rgba(56, 189, 248, 0.1);
+}
+
+/* Seçilen seçenek */
+.option-selected {
+    border-color: var(--primary-color);
+    background-color: rgba(13, 148, 136, 0.1);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Seçenek tuşu (A, B, C, D, E) */
+.option-key {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 9999px;
+    border: 1px solid var(--border-color);
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.option-selected .option-key {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Zamanlayıcı uyarı efekti */
+.timer-warning {
+    color: var(--danger-color);
+    animation: pulse 1.2s infinite;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Soru açıklamaları kutusu */
+.explanation-box {
+    background-color: #f0f9ff;
+    border-left: 4px solid #38bdf8;
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    border-radius: 0.5rem;
+}
+
+.explanation-section { margin-top: 1rem; }
+.explanation-section h5 { font-weight: 600; color: #0c4a6e; display: flex; align-items: center; }
+.explanation-section p { font-size: 0.95rem; line-height: 1.7; color: #0c4a6e; text-align: justify; }
+
+/* Soru Gezgini Kutucuğu */
+.nav-box {
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* Sonuç Ekranı Sekme Butonları */
+.tab-btn {
+    transition: all 0.2s ease-in-out;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    background-color: #e2e8f0;
+    color: #475569;
+    border: 2px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tab-btn:hover {
+    background-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+
+.tab-active {
+    background-color: #f0fdfa;
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color);
+}
+
+/* Erişilebilirlik için Gizli Element */
+#timer-announcer {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
