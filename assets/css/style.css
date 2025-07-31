@@ -1,9 +1,8 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.4 - Final)      == */
+/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.5 - GÜNCEL)      == */
 /* ================================================================ */
-/* Açıklama: Bu dosya, sitenin tamamı için geçerli olan genel      */
-/* renkleri, fontları, container yapısını ve ortak bileşenleri    */
-/* (navbar, footer, card, btn) tanımlar.                          */
+/* Açıklama: Sitenin tamamı için geçerli olan genel stilleri içerir. */
+/* Renkler, fontlar, container yapısı, ortak bileşenler.            */
 /* ================================================================ */
 
 /* Google Fonts */
@@ -20,6 +19,8 @@
     --container-width: 1200px;
     --border-radius: 8px;
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --focus-outline-color: #0d9488;
+    --focus-outline-offset: 2px;
 }
 
 /* Genel Sıfırlama ve Body Stili */
@@ -52,6 +53,12 @@ body {
     background-color: var(--surface-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+}
+
+/* Erişilebilirlik: Klavye ile gezinme desteği */
+*:focus {
+    outline: 2px solid var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
 }
 
 /* Navigasyon Menüsü */
@@ -93,7 +100,8 @@ body {
     white-space: nowrap;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link:focus {
     color: var(--primary-color);
 }
 
@@ -134,7 +142,8 @@ body {
     transition: background-color 0.2s, color 0.2s;
 }
 
-.dropdown-menu a:hover {
+.dropdown-menu a:hover,
+.dropdown-menu a:focus {
     background-color: var(--background-color);
     color: var(--primary-color);
 }
@@ -154,7 +163,8 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.btn:hover {
+.btn:hover,
+.btn:focus {
     background-color: #0f766e;
     transform: translateY(-2px);
 }
@@ -163,7 +173,8 @@ body {
     background-color: var(--secondary-color);
     color: white;
 }
-.btn-secondary:hover {
+.btn-secondary:hover,
+.btn-secondary:focus {
     background-color: #334155;
 }
 
@@ -196,6 +207,8 @@ body {
 .social-link svg {
     color: var(--secondary-color);
     transition: color 0.2s;
+    width: 20px;
+    height: 20px;
 }
 .social-link:hover {
     background-color: var(--primary-color);
@@ -214,7 +227,8 @@ body {
     margin: 0 0.5rem;
     text-decoration: none;
 }
-.legal-links a:hover {
+.legal-links a:hover,
+.legal-links a:focus {
     text-decoration: underline;
     color: var(--primary-color);
 }
