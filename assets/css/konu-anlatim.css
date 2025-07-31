@@ -1,5 +1,5 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.3)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.4)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
 /* konu anlatımı ve yasal metin sayfalarındaki içeriklerin         */
@@ -10,10 +10,13 @@
 .konu-icerik {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 2rem 1.5rem; /* Üst ve alt boşluk eklendi */
 }
 
 /* === Başlık Stilleri === */
+/* Not: HTML'de h1, h2 gibi başlıklar Tailwind sınıfları kullandığı için */
+/* bu CSS kuralları doğrudan uygulanmayabilir. Ancak, gelecekteki      */
+/* tutarlılık için burada bırakılmıştır.                               */
 .konu-icerik h1 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -52,7 +55,7 @@
     font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 1rem;
-    text-align: justify; 
+    text-align: justify;
 }
 
 .konu-icerik ul,
@@ -81,7 +84,7 @@
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
-/* Özet Kutusu */
+/* HTML'deki aside ve section'larda kullanılan özel kutu stilleri */
 .ozet-kutusu {
     background-color: #f0fdfa; /* teal-50 */
     border-left: 4px solid var(--primary-color);
@@ -94,7 +97,6 @@
     margin-bottom: 0;
 }
 
-/* Uyarı Kutusu */
 .uyari-kutusu {
     background-color: #fffbeb; /* amber-50 */
     border-left: 4px solid #f59e0b; /* amber-500 */
@@ -103,32 +105,52 @@
     border-radius: var(--border-radius);
 }
 
-/* === İkon Boyutları (SVG) === */
-/* Test Merkezi, Giriş Uyarısı gibi bölümlerdeki ikonlar */
-.ozet-kutusu svg,
-.uyari-kutusu svg,
-.test-merkezi svg,
-.giris-uyarisi svg {
-    width: 24px;
-    height: 24px;
+/* === DÜZELTME: İkon Boyutları (SVG) === */
+/* İkonların yanlış boyutlanmasını önlemek için daha spesifik seçiciler kullanıldı. */
+aside[aria-label="Test Merkezi"] .flex-shrink-0 svg {
+    height: 3rem; /* 48px */
+    width: 3rem;  /* 48px */
 }
+
+.ozet-kutusu[aria-label="Öğrenciye Mesaj"] .flex-shrink-0 svg {
+    height: 2rem; /* 32px */
+    width: 2rem;  /* 32px */
+}
+
+[role="region"] h3 svg {
+    height: 1.5rem; /* 24px */
+    width: 1.5rem;  /* 24px */
+}
+
 
 /* === Interaktif Detaylar (<details>) === */
 details {
     margin: 1rem 0;
+    transition: background-color 0.2s;
 }
 
 details summary {
     cursor: pointer;
     font-weight: 600;
     color: var(--text-color);
-    padding: 0.5rem 0;
-    transition: color 0.2s;
+    padding: 0.5rem;
+    list-style: none; /* Varsayılan üçgeni kaldır */
+    display: flex;
+    align-items: center;
+}
+
+details summary::-webkit-details-marker {
+    display: none; /* Chrome/Safari için varsayılan üçgeni kaldır */
 }
 
 details summary:hover,
 details summary:focus {
     color: var(--primary-color);
+    background-color: #f8fafc;
+}
+
+details[open] {
+    background-color: #f8fafc; /* Açıkken arka plan rengi */
 }
 
 details[open] summary {
@@ -136,27 +158,29 @@ details[open] summary {
     margin-bottom: 0.75rem;
 }
 
-/* === Hızlı Tekrar Testi ve Diğer Bileşenler === */
-.hizli-test {
-    background-color: #f0f9ff; /* sky-50 */
-    border-top: 4px solid #0284c7; /* sky-500 */
+/* === DÜZELTME: Hızlı Tekrar Testi ve Diğer Bileşenler === */
+/* HTML'deki sınıf adları (bg-sky-50, border-sky-500 vb.) kullanılarak seçiciler güncellendi. */
+div[class*="bg-sky-50"] {
+    border-top-width: 4px;
+    border-color: #0ea5e9; /* sky-500 */
     border-radius: var(--border-radius);
     padding: 1.5rem;
     margin: 2rem 0;
 }
 
-.hizli-test h3 {
+div[class*="bg-sky-50"] h3 {
     font-size: 1.25rem;
-    font-weight: 600;
-    color: #0891b2; /* sky-900 */
+    font-weight: 700;
+    color: #0c4a6e; /* sky-900 */
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
+    margin-top: 0; /* Üst boşluğu sıfırla */
 }
 
-.hizli-test .soru {
-    background-color: #ffffff;
+div[class*="bg-sky-50"] > div > div { /* Test sorularını içeren div'ler hedeflendi */
+    background-color: rgba(255, 255, 255, 0.6);
     border: 1px solid var(--border-color);
     padding: 0.75rem 1rem;
     margin-bottom: 0.75rem;
@@ -164,19 +188,19 @@ details[open] summary {
     font-size: 1rem;
 }
 
-.hizli-test details summary {
+div[class*="bg-sky-50"] details summary {
     font-weight: 600;
-    color: #0891b2;
+    color: #0369a1; /* sky-700 */
     cursor: pointer;
     padding: 0.5rem 0;
 }
 
-.hizli-test details[open] summary {
-    border-bottom: 1px dashed #0284c7;
+div[class*="bg-sky-50"] details[open] summary {
+    border-bottom: none; /* Hızlı test içindeki summary'de çizgi olmasın */
     margin-bottom: 0.5rem;
 }
 
-.hizli-test .cevap {
+div[class*="bg-sky-50"] details > div { /* Cevapları içeren div */
     background-color: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: 6px;
@@ -185,25 +209,27 @@ details[open] summary {
     line-height: 1.6;
 }
 
-/* === Bölüm Sonu Özet Kutusu === */
-.bolum-ozeti {
-    background-color: #f0fdf4; /* green-50 */
-    border-left: 4px solid #059669; /* green-600 */
+
+/* === DÜZELTME: Bölüm Sonu Özet Kutusu === */
+/* HTML'deki sınıf adları (bg-green-100, border-green-600 vb.) kullanılarak seçiciler güncellendi. */
+div[class*="bg-green-100"] {
+    border-left-width: 4px;
+    border-color: #16a34a; /* green-600 */
     border-radius: var(--border-radius);
     padding: 1.5rem;
     margin: 2rem 0;
 }
 
-.bolum-ozeti strong {
-    color: #059669; /* green-800 */
+div[class*="bg-green-100"] strong {
+    color: #15803d; /* green-800 */
 }
 
-.bolum-ozeti ul {
+div[class*="bg-green-100"] ul {
     margin-top: 0.5rem;
     padding-left: 1.5rem;
 }
 
-.bolum-ozeti li {
-    color: #047857; /* green-900 */
+div[class*="bg-green-100"] li {
+    color: #14532d; /* green-900 */
     margin-bottom: 0.25rem;
 }
