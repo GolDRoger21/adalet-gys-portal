@@ -1,5 +1,5 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.1)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.2)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
 /* konu anlatımı ve yasal metin sayfalarındaki içeriklerin         */
@@ -7,7 +7,8 @@
 /* ================================================================= */
 
 .konu-icerik {
-    max-width: 800px;
+    /* === GÜNCELLENDİ: Geniş ekranlarda daha iyi okunabilirlik için genişlik artırıldı === */
+    max-width: 900px; 
     margin: 0 auto;
 }
 
@@ -36,12 +37,19 @@
     margin-bottom: 0.75rem;
 }
 
-/* === DÜZELTME: Paragraflar iki yana yaslandı === */
+.konu-icerik h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .konu-icerik p {
     font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 1rem;
-    text-align: justify; /* Metni iki yana yaslar */
+    text-align: justify; 
 }
 
 .konu-icerik ul,
@@ -49,7 +57,7 @@
     padding-left: 1.5rem;
     margin-bottom: 1rem;
     font-size: 1.1rem;
-    text-align: justify; /* Listeleri de iki yana yaslar */
+    text-align: justify;
 }
 
 .konu-icerik li {
@@ -60,8 +68,17 @@
     color: var(--text-color);
 }
 
+.konu-icerik blockquote {
+    font-style: italic;
+    background-color: #f8fafc; /* slate-50 */
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--border-color);
+    margin: 1.5rem 0;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
 .ozet-kutusu {
-    background-color: #f0fdfa;
+    background-color: #f0fdfa; /* teal-50 */
     border-left: 4px solid var(--primary-color);
     padding: 1.5rem;
     margin: 2rem 0;
@@ -73,8 +90,8 @@
 }
 
 .uyari-kutusu {
-    background-color: #fffbeb;
-    border-left: 4px solid #f59e0b;
+    background-color: #fffbeb; /* amber-50 */
+    border-left: 4px solid #f59e0b; /* amber-500 */
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
