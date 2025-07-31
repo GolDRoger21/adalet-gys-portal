@@ -1,17 +1,19 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.2)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.3)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
 /* konu anlatımı ve yasal metin sayfalarındaki içeriklerin         */
 /* okunabilir ve profesyonel görünmesi için gerekli stilleri içerir. */
 /* ================================================================= */
 
+/* === İçerik Genişliği: style.css'deki container ile uyumlu === */
 .konu-icerik {
-    /* === GÜNCELLENDİ: Geniş ekranlarda daha iyi okunabilirlik için genişlik artırıldı === */
-    max-width: 900px; 
+    max-width: var(--container-width);
     margin: 0 auto;
+    padding: 0 1.5rem;
 }
 
+/* === Başlık Stilleri === */
 .konu-icerik h1 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -45,6 +47,7 @@
     margin-bottom: 0.5rem;
 }
 
+/* === Paragraf ve Liste Stilleri === */
 .konu-icerik p {
     font-size: 1.1rem;
     line-height: 1.8;
@@ -68,6 +71,7 @@
     color: var(--text-color);
 }
 
+/* === Alıntı ve Özel Kutular === */
 .konu-icerik blockquote {
     font-style: italic;
     background-color: #f8fafc; /* slate-50 */
@@ -77,6 +81,7 @@
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
+/* Özet Kutusu */
 .ozet-kutusu {
     background-color: #f0fdfa; /* teal-50 */
     border-left: 4px solid var(--primary-color);
@@ -89,10 +94,116 @@
     margin-bottom: 0;
 }
 
+/* Uyarı Kutusu */
 .uyari-kutusu {
     background-color: #fffbeb; /* amber-50 */
     border-left: 4px solid #f59e0b; /* amber-500 */
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
+}
+
+/* === İkon Boyutları (SVG) === */
+/* Test Merkezi, Giriş Uyarısı gibi bölümlerdeki ikonlar */
+.ozet-kutusu svg,
+.uyari-kutusu svg,
+.test-merkezi svg,
+.giris-uyarisi svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* === Interaktif Detaylar (<details>) === */
+details {
+    margin: 1rem 0;
+}
+
+details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-color);
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+}
+
+details summary:hover,
+details summary:focus {
+    color: var(--primary-color);
+}
+
+details[open] summary {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 0.75rem;
+}
+
+/* === Hızlı Tekrar Testi ve Diğer Bileşenler === */
+.hizli-test {
+    background-color: #f0f9ff; /* sky-50 */
+    border-top: 4px solid #0284c7; /* sky-500 */
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.hizli-test h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0891b2; /* sky-900 */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.hizli-test .soru {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.hizli-test details summary {
+    font-weight: 600;
+    color: #0891b2;
+    cursor: pointer;
+    padding: 0.5rem 0;
+}
+
+.hizli-test details[open] summary {
+    border-bottom: 1px dashed #0284c7;
+    margin-bottom: 0.5rem;
+}
+
+.hizli-test .cevap {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* === Bölüm Sonu Özet Kutusu === */
+.bolum-ozeti {
+    background-color: #f0fdf4; /* green-50 */
+    border-left: 4px solid #059669; /* green-600 */
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.bolum-ozeti strong {
+    color: #059669; /* green-800 */
+}
+
+.bolum-ozeti ul {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.bolum-ozeti li {
+    color: #047857; /* green-900 */
+    margin-bottom: 0.25rem;
 }
