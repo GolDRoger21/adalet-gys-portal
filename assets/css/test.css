@@ -1,16 +1,33 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Sınav Arayüzü Eklenti Stilleri (v2.0) == */
+/* == Adalet GYS Portalı - Sınav Arayüzü Eklenti Stilleri (v2.1) == */
 /* ================================================================ */
 /* Açıklama: Bu dosya, ana tema dosyası olan style.css'e ek        */
 /* olarak, sadece sınav arayüzünde kullanılan özel stilleri       */
 /* içerir. Renkler ve temel yapı style.css'ten miras alınır.       */
 /* ================================================================ */
 
-/* Sınava özel renk değişkenleri (ana temadan farklı olanlar) */
+/* Sınava özel renk değişkenleri */
 :root {
     --accent-color: #f59e0b; /* Bayrak rengi */
     --danger-color: #dc2626;
 }
+
+/* --- YENİ: İLERLEME ÇUBUĞU (PROGRESS BAR) STİLLERİ --- */
+.progress-bar-container {
+    background-color: var(--border-color);
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 10px;
+    background-color: var(--primary-color);
+    width: 0%; /* JavaScript ile güncellenecek */
+    border-radius: 9999px;
+    transition: width 0.3s ease-in-out;
+}
+/* === YENİ STİLLERİN SONU === */
+
 
 /* Soru metni alanı (pre etiketi) için özel stil */
 pre {
@@ -31,11 +48,11 @@ pre {
     color: white;
     transition: all 0.2s ease;
     box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-    background-image: linear-gradient(to right, var(--primary-color), #087f5b); /* Koyu yeşil tonu */
+    background-image: linear-gradient(to right, var(--primary-color), #087f5b);
 }
 
 .start-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-px);
     box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
     background-image: linear-gradient(to right, #087f5b, #065f46);
 }
@@ -132,23 +149,9 @@ pre {
     border-radius: 0.5rem;
 }
 
-.explanation-section {
-    margin-top: 1rem;
-}
-
-.explanation-section h5 {
-    font-weight: 600;
-    color: #0c4a6e;
-    display: flex;
-    align-items: center;
-}
-
-.explanation-section p {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: #0c4a6e;
-    text-align: justify;
-}
+.explanation-section { margin-top: 1rem; }
+.explanation-section h5 { font-weight: 600; color: #0c4a6e; display: flex; align-items: center; }
+.explanation-section p { font-size: 0.95rem; line-height: 1.7; color: #0c4a6e; text-align: justify; }
 
 /* Soru Gezgini Kutucuğu */
 .nav-box {
