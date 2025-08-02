@@ -1,53 +1,11 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.4)  == */
-/* ================================================================= */
-/* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
-/* konu anlatımı ve yasal metin sayfalarındaki içeriklerin         */
-/* okunabilir ve profesyonel görünmesi için gerekli stilleri içerir. */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.5)  == */
 /* ================================================================= */
 
-/* === İçerik Genişliği: style.css'deki container ile uyumlu === */
 .konu-icerik {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding: 2rem 1.5rem; /* Üst ve alt boşluk eklendi */
-}
-
-/* === Başlık Stilleri === */
-/* Not: HTML'de h1, h2 gibi başlıklar Tailwind sınıfları kullandığı için */
-/* bu CSS kuralları doğrudan uygulanmayabilir. Ancak, gelecekteki      */
-/* tutarlılık için burada bırakılmıştır.                               */
-.konu-icerik h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--text-color);
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 1rem;
-}
-
-.konu-icerik h2 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.konu-icerik h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-}
-
-.konu-icerik h4 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
+    padding: 2rem 1.5rem;
 }
 
 /* === Paragraf ve Liste Stilleri === */
@@ -70,60 +28,49 @@
     margin-bottom: 0.5rem;
 }
 
-.konu-icerik strong {
-    color: var(--text-color);
-}
-
 /* === Alıntı ve Özel Kutular === */
 .konu-icerik blockquote {
     font-style: italic;
-    background-color: #f8fafc; /* slate-50 */
+    background-color: #f8fafc;
     padding: 1rem 1.5rem;
     border-left: 4px solid var(--border-color);
     margin: 1.5rem 0;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
-/* HTML'deki aside ve section'larda kullanılan özel kutu stilleri */
 .ozet-kutusu {
-    background-color: #f0fdfa; /* teal-50 */
+    background-color: #f0fdfa;
     border-left: 4px solid var(--primary-color);
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
 }
 
-.ozet-kutusu p {
-    margin-bottom: 0;
-}
-
 .uyari-kutusu {
-    background-color: #fffbeb; /* amber-50 */
-    border-left: 4px solid #f59e0b; /* amber-500 */
+    background-color: #fffbeb;
+    border-left: 4px solid #f59e0b;
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
 }
 
-/* === DÜZELTME: İkon Boyutları (SVG) === */
-/* İkonların yanlış boyutlanmasını önlemek için daha spesifik seçiciler kullanıldı. */
+/* === İkon Boyutları === */
 aside[aria-label="Test Merkezi"] .flex-shrink-0 svg {
-    height: 3rem; /* 48px */
-    width: 3rem;  /* 48px */
+    height: 3rem;
+    width: 3rem;
 }
 
 .ozet-kutusu[aria-label="Öğrenciye Mesaj"] .flex-shrink-0 svg {
-    height: 2rem; /* 32px */
-    width: 2rem;  /* 32px */
+    height: 2rem;
+    width: 2rem;
 }
 
 [role="region"] h3 svg {
-    height: 1.5rem; /* 24px */
-    width: 1.5rem;  /* 24px */
+    height: 1.5rem;
+    width: 1.5rem;
 }
 
-
-/* === Interaktif Detaylar (<details>) === */
+/* === Details (Açılır Kutular) === */
 details {
     margin: 1rem 0;
     transition: background-color 0.2s;
@@ -134,13 +81,13 @@ details summary {
     font-weight: 600;
     color: var(--text-color);
     padding: 0.5rem;
-    list-style: none; /* Varsayılan üçgeni kaldır */
+    list-style: none;
     display: flex;
     align-items: center;
 }
 
 details summary::-webkit-details-marker {
-    display: none; /* Chrome/Safari için varsayılan üçgeni kaldır */
+    display: none;
 }
 
 details summary:hover,
@@ -150,86 +97,7 @@ details summary:focus {
 }
 
 details[open] {
-    background-color: #f8fafc; /* Açıkken arka plan rengi */
-}
-
-details[open] summary {
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 0.75rem;
-}
-
-/* === DÜZELTME: Hızlı Tekrar Testi ve Diğer Bileşenler === */
-/* HTML'deki sınıf adları (bg-sky-50, border-sky-500 vb.) kullanılarak seçiciler güncellendi. */
-div[class*="bg-sky-50"] {
-    border-top-width: 4px;
-    border-color: #0ea5e9; /* sky-500 */
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    margin: 2rem 0;
-}
-
-div[class*="bg-sky-50"] h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #0c4a6e; /* sky-900 */
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    margin-top: 0; /* Üst boşluğu sıfırla */
-}
-
-div[class*="bg-sky-50"] > div > div { /* Test sorularını içeren div'ler hedeflendi */
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: #f8fafc;
     border: 1px solid var(--border-color);
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.75rem;
-    border-radius: 6px;
-    font-size: 1rem;
-}
-
-div[class*="bg-sky-50"] details summary {
-    font-weight: 600;
-    color: #0369a1; /* sky-700 */
-    cursor: pointer;
-    padding: 0.5rem 0;
-}
-
-div[class*="bg-sky-50"] details[open] summary {
-    border-bottom: none; /* Hızlı test içindeki summary'de çizgi olmasın */
-    margin-bottom: 0.5rem;
-}
-
-div[class*="bg-sky-50"] details > div { /* Cevapları içeren div */
-    background-color: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 1rem;
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-
-/* === DÜZELTME: Bölüm Sonu Özet Kutusu === */
-/* HTML'deki sınıf adları (bg-green-100, border-green-600 vb.) kullanılarak seçiciler güncellendi. */
-div[class*="bg-green-100"] {
-    border-left-width: 4px;
-    border-color: #16a34a; /* green-600 */
     border-radius: var(--border-radius);
-    padding: 1.5rem;
-    margin: 2rem 0;
-}
-
-div[class*="bg-green-100"] strong {
-    color: #15803d; /* green-800 */
-}
-
-div[class*="bg-green-100"] ul {
-    margin-top: 0.5rem;
-    padding-left: 1.5rem;
-}
-
-div[class*="bg-green-100"] li {
-    color: #14532d; /* green-900 */
-    margin-bottom: 0.25rem;
 }
