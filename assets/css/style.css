@@ -1,14 +1,8 @@
 /* ================================================================ */
 /* == Adalet GYS Portalı - Ana Tema Stilleri (v1.5 - GÜNCEL)      == */
 /* ================================================================ */
-/* Açıklama: Sitenin tamamı için geçerli olan genel stilleri içerir. */
-/* Renkler, fontlar, container yapısı, ortak bileşenler.            */
-/* ================================================================ */
-
-/* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Sitenin Ana Değişkenleri */
 :root {
     --primary-color: #0d9488;
     --secondary-color: #475569;
@@ -23,7 +17,6 @@
     --focus-outline-offset: 2px;
 }
 
-/* Genel Sıfırlama ve Body Stili */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -36,8 +29,6 @@ body {
     color: var(--text-color);
     line-height: 1.6;
 }
-
-/* --- ORTAK YAPI ve BİLEŞENLER --- */
 
 .container {
     max-width: var(--container-width);
@@ -55,13 +46,12 @@ body {
     box-shadow: var(--shadow);
 }
 
-/* Erişilebilirlik: Klavye ile gezinme desteği */
 *:focus {
     outline: 2px solid var(--focus-outline-color);
     outline-offset: var(--focus-outline-offset);
 }
 
-/* Navigasyon Menüsü */
+/* Navigasyon */
 .navbar {
     background-color: var(--surface-color);
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -97,7 +87,6 @@ body {
     padding: 0.5rem 0;
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
 }
 
 .nav-link:hover,
@@ -110,7 +99,7 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* Açılır Menü (Dropdown) Stilleri */
+/* Dropdown */
 .nav-item.dropdown {
     position: relative;
 }
@@ -139,7 +128,6 @@ body {
     padding: 0.75rem 1.5rem;
     color: var(--secondary-color);
     text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
 }
 
 .dropdown-menu a:hover,
@@ -155,12 +143,9 @@ body {
     text-decoration: none;
     border-radius: var(--border-radius);
     font-weight: 600;
-    text-align: center;
-    transition: all 0.2s;
-    background-color: var(--primary-color);
     color: white;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+    background-color: var(--primary-color);
+    transition: all 0.2s;
 }
 
 .btn:hover,
@@ -171,14 +156,14 @@ body {
 
 .btn-secondary {
     background-color: var(--secondary-color);
-    color: white;
 }
+
 .btn-secondary:hover,
 .btn-secondary:focus {
     background-color: #334155;
 }
 
-/* --- FOOTER BÖLÜMÜ --- */
+/* Footer */
 .footer {
     text-align: center;
     padding: 2rem 0;
@@ -187,13 +172,13 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
-/* Sosyal Medya İkonları */
 .social-links {
     display: flex;
     justify-content: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
+
 .social-link {
     display: flex;
     justify-content: center;
@@ -204,44 +189,51 @@ body {
     border-radius: 50%;
     transition: background-color 0.2s;
 }
+
 .social-link svg {
     color: var(--secondary-color);
-    transition: color 0.2s;
     width: 20px;
     height: 20px;
 }
+
 .social-link:hover {
     background-color: var(--primary-color);
 }
+
 .social-link:hover svg {
     color: white;
 }
 
-/* Yasal Bilgi Linkleri */
 .legal-links {
     margin-top: 1rem;
     font-size: 0.9rem;
 }
+
 .legal-links a {
     color: var(--secondary-color);
     margin: 0 0.5rem;
     text-decoration: none;
 }
+
 .legal-links a:hover,
 .legal-links a:focus {
     text-decoration: underline;
     color: var(--primary-color);
 }
-.legal-links span {
-    color: var(--border-color);
+
+/* Kategori Kartları */
+.category-card {
+    position: relative; /* .new-badge için eklendi */
 }
 
-/* --- ANA SAYFAYA ÖZEL STİLLER --- */
-.hero { text-align: center; padding: 3rem 1.5rem; border-radius: var(--border-radius); margin-bottom: 2.5rem; }
-.hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-.subtitle { font-size: 1.2rem; color: var(--secondary-color); max-width: 650px; margin: 0 auto; }
-.category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-.category-card { background-color: var(--surface-color); border-radius: var(--border-radius); padding: 2rem; box-shadow: var(--shadow); display: flex; flex-direction: column; }
-.category-card h2 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 0.75rem; }
-.category-card p { flex-grow: 1; margin-bottom: 1.5rem; }
-.new-badge { position: absolute; top: 1rem; right: 1rem; background-color: #dc2626; color: white; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; border-radius: 9999px; }
+.new-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: #dc2626;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px;
+}
