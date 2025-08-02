@@ -1,78 +1,95 @@
 /* ================================================================= */
 /* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.5)  == */
 /* ================================================================= */
+/* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
+/* konu anlatımı ve yasal metin sayfalarındaki içeriklerin         */
+/* okunabilirliğini, görsel hiyerarşisini ve kullanıcı deneyimini  */
+/* artırmak için tasarlanmıştır.                                   */
+/* ================================================================= */
 
+/* === İçerik Genişliği: style.css'deki container ile uyumlu === */
 .konu-icerik {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 2rem 1.5rem; /* Üst ve alt boşluk eklendi */
 }
 
 /* === Paragraf ve Liste Stilleri === */
 .konu-icerik p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    line-height: 1.9;
+    margin-bottom: 1.3rem;
     text-align: justify;
+    color: #1e293b;
 }
 
 .konu-icerik ul,
 .konu-icerik ol {
     padding-left: 1.5rem;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+    margin-bottom: 1.3rem;
+    font-size: 1.125rem;
     text-align: justify;
 }
 
 .konu-icerik li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.konu-icerik strong {
+    color: #1e293b;
 }
 
 /* === Alıntı ve Özel Kutular === */
 .konu-icerik blockquote {
     font-style: italic;
-    background-color: #f8fafc;
-    padding: 1rem 1.5rem;
+    background-color: #f8fafc; /* slate-50 */
+    padding: 1.25rem 1.75rem;
     border-left: 4px solid var(--border-color);
-    margin: 1.5rem 0;
+    margin: 1.75rem 0;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
+/* === Özet, Uyarı ve Bilgi Kutuları === */
 .ozet-kutusu {
-    background-color: #f0fdfa;
+    background-color: #f0fdfa; /* teal-50 */
     border-left: 4px solid var(--primary-color);
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
 }
 
+.ozet-kutusu p {
+    margin-bottom: 0;
+}
+
 .uyari-kutusu {
-    background-color: #fffbeb;
-    border-left: 4px solid #f59e0b;
+    background-color: #fffbeb; /* amber-50 */
+    border-left: 4px solid #f59e0b; /* amber-500 */
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
 }
 
-/* === İkon Boyutları === */
+/* === DÜZELTME: İkon Boyutları (SVG) === */
+/* İkonların yanlış boyutlanmasını önlemek için daha spesifik seçiciler kullanıldı. */
 aside[aria-label="Test Merkezi"] .flex-shrink-0 svg {
-    height: 3rem;
-    width: 3rem;
+    height: 3rem; /* 48px */
+    width: 3rem; /* 48px */
 }
 
 .ozet-kutusu[aria-label="Öğrenciye Mesaj"] .flex-shrink-0 svg {
-    height: 2rem;
-    width: 2rem;
+    height: 2rem; /* 32px */
+    width: 2rem; /* 32px */
 }
 
 [role="region"] h3 svg {
-    height: 1.5rem;
-    width: 1.5rem;
+    height: 1.5rem; /* 24px */
+    width: 1.5rem; /* 24px */
 }
 
-/* === Details (Açılır Kutular) === */
+/* === Interaktif Detaylar (<details>) === */
 details {
-    margin: 1rem 0;
+    margin: 1.2rem 0;
     transition: background-color 0.2s;
 }
 
@@ -80,10 +97,11 @@ details summary {
     cursor: pointer;
     font-weight: 600;
     color: var(--text-color);
-    padding: 0.5rem;
+    padding: 0.6rem 0.5rem;
     list-style: none;
     display: flex;
     align-items: center;
+    transition: all 0.3s ease;
 }
 
 details summary::-webkit-details-marker {
@@ -92,29 +110,96 @@ details summary::-webkit-details-marker {
 
 details summary:hover,
 details summary:focus {
-    color: var(--primary-color);
     background-color: #f8fafc;
+    transform: translateX(4px);
+    border-radius: 6px;
 }
 
-details[open] {
-    background-color: #f8fafc;
-    border: 1px solid var(--border-color);
+/* === Tekrar Testi Bölümü (Bölüm Sonu) === */
+div[class*="bg-sky-50"] {
+    border-top: 4px solid #0ea5e9; /* sky-500 */
     border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
 }
+
+div[class*="bg-sky-50"] > h4 {
+    font-weight: 700;
+    color: #0c4a6e; /* sky-900 */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+div[class*="bg-sky-50"] .test-soru .text-slate-600 {
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+div[class*="bg-sky-50"] .test-soru .text-sm {
+    font-size: 1rem;
+}
+
+div[class*="bg-sky-50"] > div > div {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+div[class*="bg-sky-50"] details summary {
+    font-weight: 600;
+    color: #0369a1; /* sky-700 */
+    cursor: pointer;
+    padding: 0.5rem 0;
+}
+
+div[class*="bg-sky-50"] details[open] summary {
+    border-bottom: none;
+    margin-bottom: 0.5rem;
+}
+
+div[class*="bg-sky-50"] details > div {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* === Bölüm Sonu Özet Kutusu === */
+div[class*="bg-green-100"] {
+    border-left-width: 4px;
+    border-color: #16a34a; /* green-600 */
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+div[class*="bg-green-100"] strong {
+    color: #15803d; /* green-800 */
+}
+
+div[class*="bg-green-100"] ul {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+div[class*="bg-green-100"] li {
+    color: #14532d; /* green-900 */
+    margin-bottom: 0.25rem;
+}
+
 /* ================================================================= */
 /* == GELİŞMİŞ GÖRSEL STİLLER: Modern, Okunabilir, Sınav Odaklı   == */
 /* ================================================================= */
 
-/* Genişletilmiş paragraf okunabilirliği */
-.konu-icerik p {
-    line-height: 1.9;
-    font-size: 1.1rem;
-    margin-bottom: 1.2rem;
-    text-align: justify;
-    color: #1e293b;
-}
-
-/* Vurgu Kutuları */
+/* Vurgu Kutuları (Gradient) */
 .highlight-box {
     background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
     border-left: 6px solid #0d9488;
@@ -139,29 +224,14 @@ details[open] {
     margin: 1.5rem 0;
 }
 
-/* Açılır Kutular (details) Hover Efekti */
-details summary {
-    transition: all 0.3s ease;
-}
-
-details summary:hover {
-    background: #f8fafc;
-    transform: translateX(4px);
-}
-
-/* Büyük İkonlar */
-.icon-lg {
-    font-size: 2rem;
-}
-
 /* Başlık Renk Efektleri */
 .section-title {
     background: linear-gradient(90deg, #0d9488, #14b8a6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-size: 2.5rem;
     font-weight: 800;
+    font-size: 2.5rem;
 }
 
 .subsection-title {
