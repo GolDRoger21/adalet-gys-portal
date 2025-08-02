@@ -101,3 +101,90 @@ details[open] {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
 }
+/* ================================================================= */
+/* == GELİŞMİŞ GÖRSEL STİLLER: Modern, Okunabilir, Sınav Odaklı   == */
+/* ================================================================= */
+
+/* Genişletilmiş paragraf okunabilirliği */
+.konu-icerik p {
+    line-height: 1.9;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+    text-align: justify;
+    color: #1e293b;
+}
+
+/* Vurgu Kutuları */
+.highlight-box {
+    background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
+    border-left: 6px solid #0d9488;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.strategy-box {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border-left: 6px solid #d97706;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.warning-box {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    border-left: 6px solid #dc2626;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+/* Açılır Kutular (details) Hover Efekti */
+details summary {
+    transition: all 0.3s ease;
+}
+
+details summary:hover {
+    background: #f8fafc;
+    transform: translateX(4px);
+}
+
+/* Büyük İkonlar */
+.icon-lg {
+    font-size: 2rem;
+}
+
+/* Başlık Renk Efektleri */
+.section-title {
+    background: linear-gradient(90deg, #0d9488, #14b8a6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.subsection-title {
+    color: #0891b2;
+    border-bottom: 3px solid #a5f3fc;
+    padding-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+/* Test Butonu (Modern Gradient) */
+.test-btn {
+    background: linear-gradient(to right, #0d9488, #0f766e);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.test-btn:hover {
+    background: linear-gradient(to right, #0f766e, #115e59);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
