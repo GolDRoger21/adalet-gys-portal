@@ -223,7 +223,7 @@ body {
 
 /* Kategori Kartları */
 .category-card {
-    position: relative; /* .new-badge için eklendi */
+    position: relative;
 }
 
 .new-badge {
