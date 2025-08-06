@@ -1,10 +1,10 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v2.4)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v3.0)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, tüm konu anlatım sayfaları için ortak,       */
 /* modern ve yüksek okunabilirlikli stilleri merkezileştirir.      */
-/* v2.4: Anayasa sayfasındaki <details> başlıklarının ortalanma     */
-/*       sorunu KESİN OLARAK giderildi.                            */
+/* v3.0: Ana bölüm başlıkları, SVG ikon boyutları ve genel         */
+/*       hizalama sorunları KESİN OLARAK giderildi.                */
 /* ================================================================= */
 
 /* === İçerik Alanı === */
@@ -17,7 +17,7 @@
 .konu-icerik p,
 .konu-icerik ul,
 .konu-icerik ol {
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.125rem;
     line-height: 1.9;
     margin-bottom: 1.3rem;
     text-align: justify;
@@ -34,19 +34,36 @@
 }
 
 .konu-icerik strong {
-    color: #111827; /* gray-900 */
+    color: #111827;
 }
 
-/* Liste içi SVG ikonları için KESİN boyut ve hizalama kuralı */
+/* DÜZELTME: Liste içi SVG ikonları için KESİN boyut ve hizalama kuralı */
 .konu-icerik ul li svg {
     width: 1.5rem;  /* 24px */
     height: 1.5rem; /* 24px */
-    flex-shrink: 0; /* Küçülmesini engeller */
-    margin-right: 0.75rem; /* Sağ boşluk */
-    margin-top: 0.3rem; /* Metinle dikey hizalama */
+    flex-shrink: 0;
+    margin-right: 0.75rem;
+    margin-top: 0.3rem;
 }
 
-/* === Başlık Stilleri (HİZALAMA GARANTİSİ) === */
+/* === Başlık Stilleri (Hiyerarşi ve Okunurluk İçin Yeniden Düzenlendi) === */
+/* YENİ EKLENDİ: "BİRİNCİ KISIM" gibi ana bölüm başlıkları için */
+.ana-bolum-basligi {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    background-color: #f8fafc; /* gray-50 */
+    text-align: left !important;
+}
+
 .section-title {
     background: linear-gradient(90deg, #0d9488, #14b8a6);
     -webkit-background-clip: text;
@@ -57,16 +74,16 @@
 }
 
 .subsection-title {
-    color: #0891b2; /* cyan-600 */
-    border-bottom: 3px solid #a5f3fc; /* cyan-200 */
+    color: #0891b2;
+    border-bottom: 3px solid #a5f3fc;
     padding-bottom: 0.5rem;
     font-weight: 700;
     text-align: left !important;
-    margin-top: 4rem;
+    margin-top: 3rem;
     margin-bottom: 1.5rem;
 }
 
-/* === Vurgu, Bilgi ve Hafıza Kutuları === */
+/* === Bilgi Kutuları === */
 .bilgi-kutusu, .ozet-kutusu, .uyari-kutusu, .hafiza-kutusu, .strateji-kutusu, .vurgu-kutusu {
     padding: 1.5rem;
     margin: 2rem 0;
@@ -74,52 +91,23 @@
     border-left-width: 4px;
     text-align: left;
 }
+.bilgi-kutusu { background-color: #f0fdfa; border-color: var(--primary-color); }
+.uyari-kutusu { background-color: #fffbeb; border-color: #f59e0b; }
+.hafiza-kutusu { background-color: #f0f5ff; border-color: #6366f1; text-align: center; }
+.strateji-kutusu { background-color: #fff1f2; border-color: #f43f5e; }
+.vurgu-kutusu { background-color: #f0f9ff; border-color: #38bdf8; }
 
-.bilgi-kutusu {
-    background-color: #f0fdfa; /* teal-50 */
-    border-color: var(--primary-color);
-}
-
-.uyari-kutusu {
-    background-color: #fffbeb; /* amber-50 */
-    border-color: #f59e0b; /* amber-500 */
-}
-
-.hafiza-kutusu {
-    background-color: #f0f5ff; /* indigo-50 */
-    border-color: #6366f1; /* indigo-500 */
-    text-align: center;
-}
-
-.strateji-kutusu {
-     background-color: #fff1f2; /* rose-50 */
-    border-color: #f43f5e; /* rose-500 */
-}
-
-.vurgu-kutusu {
-    background-color: #f0f9ff; /* sky-50 */
-    border-color: #38bdf8; /* sky-400 */
-}
-
-/* === İnteraktif Soru-Cevap / Madde Gösterici (<details>) === */
+/* === İnteraktif Madde Kutuları (<details>) === */
 details {
     margin: 1rem 0;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     transition: all 0.2s ease;
     background-color: var(--surface-color);
-    text-align: left; /* Kapsayıcının sola yaslı olmasını sağlar */
+    text-align: left;
 }
-
-details:hover {
-    border-color: #a5b4fc; /* indigo-300 */
-}
-
-details[open] {
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 10px rgba(13, 148, 136, 0.1);
-}
-
+details:hover { border-color: #a5b4fc; }
+details[open] { border-color: var(--primary-color); box-shadow: 0 4px 10px rgba(13, 148, 136, 0.1); }
 details summary {
     cursor: pointer;
     font-weight: 600;
@@ -130,50 +118,18 @@ details summary {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.2s;
-    /* DÜZELTME: Madde başlıklarının (summary) sola hizalı olması GARANTİ ALTINA ALINDI */
     text-align: left !important;
 }
-
-details[open] summary {
-    background-color: #f8fafc; /* gray-50 */
-}
-
-details summary::-webkit-details-marker {
-    display: none;
-}
-
-/* Anayasa sayfasındaki açma/kapama okunu, sağda ▼ olacak şekilde standart hale getiriyoruz */
+details[open] summary { background-color: #f8fafc; }
+details summary::-webkit-details-marker { display: none; }
 details summary:after {
-    content: '▼';
-    font-size: 0.8em;
-    color: #9ca3af; /* gray-400 */
-    transition: transform 0.3s ease;
-    margin-left: auto; /* İkonu en sağa yaslar */
-    padding-left: 1rem;
+    content: '▼'; font-size: 0.8em; color: #9ca3af;
+    transition: transform 0.3s ease; margin-left: auto; padding-left: 1rem;
 }
+details[open] summary:after { transform: rotate(-180deg); }
+details .cevap { padding: 0 1.5rem 1.5rem 1.5rem; background-color: #f8fafc; border-top: 1px solid var(--border-color); }
+details .cevap p { margin-bottom: 0; font-size: 1rem; }
 
-details[open] summary:after {
-    transform: rotate(-180deg);
-}
-
-
-details .cevap {
-    padding: 0 1.5rem 1.5rem 1.5rem;
-    background-color: #f8fafc; /* gray-50 */
-    border-top: 1px solid var(--border-color);
-}
-
-details .cevap p {
-    margin-bottom: 0;
-    font-size: 1rem;
-}
-
-/* === Test Merkezi Kutusu (Üst Kısım) === */
-.test-merkezi-karti {
-    transition: all 0.3s ease;
-}
-
-.test-merkezi-karti:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
-}
+/* === Test Merkezi Kartı === */
+.test-merkezi-karti { transition: all 0.3s ease; }
+.test-merkezi-karti:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
