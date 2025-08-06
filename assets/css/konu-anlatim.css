@@ -1,12 +1,12 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v2.0)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v2.1)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, tüm konu anlatım sayfaları için ortak,       */
 /* modern ve yüksek okunabilirlikli stilleri merkezileştirir.      */
+/* v2.1: Başlık hizalama sorunu giderildi.                         */
 /* ================================================================= */
 
 /* === İçerik Alanı === */
-/* Bu sınıf, içeriği ana container genişliğine sabitler. */
 .konu-icerik {
     max-width: var(--container-width);
     margin: 0 auto;
@@ -38,11 +38,13 @@
 
 /* === Başlık Stilleri (Tüm dersler için ortak) === */
 .section-title {
-    background: linear-gradient(90deg, #0d9488, #14b8a6); /* teal-600 to teal-500 */
+    background: linear-gradient(90deg, #0d9488, #14b8a6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-weight: 800;
+    /* DÜZELTME: Hizalama sorunu için eklendi */
+    text-align: left; 
 }
 
 .subsection-title {
@@ -50,6 +52,8 @@
     border-bottom: 3px solid #a5f3fc; /* cyan-200 */
     padding-bottom: 0.5rem;
     font-weight: 700;
+    /* DÜZELTME: Hizalama sorunu için eklendi */
+    text-align: left;
 }
 
 /* === Vurgu, Bilgi ve Hafıza Kutuları (Tüm dersler için ortak) === */
@@ -58,6 +62,7 @@
     margin: 2rem 0;
     border-radius: var(--border-radius);
     border-left-width: 4px;
+    text-align: left; /* Kutuların içindeki metinlerin de sola hizalı olmasını garanti eder */
 }
 
 .bilgi-kutusu { /* Genel bilgi, önemli notlar */
@@ -73,11 +78,11 @@
 .hafiza-kutusu { /* Hafıza teknikleri, kodlamalar */
     background-color: #f0f5ff; /* indigo-50 */
     border-color: #6366f1; /* indigo-500 */
-    text-align: center;
+    text-align: center; /* Hafıza kutuları istisnai olarak ortalı kalabilir */
 }
 
 .strateji-kutusu { /* Sınav stratejileri, tuzaklar */
-    background-color: #fff1f2; /* rose-50 */
+     background-color: #fff1f2; /* rose-50 */
     border-color: #f43f5e; /* rose-500 */
 }
 
@@ -93,6 +98,7 @@ details {
     border-radius: var(--border-radius);
     transition: all 0.2s ease;
     background-color: var(--surface-color);
+    text-align: left; /* Hizalama garantisi */
 }
 
 details:hover {
