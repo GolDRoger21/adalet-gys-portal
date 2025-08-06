@@ -1,10 +1,11 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v3.0)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v4.0)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, tüm konu anlatım sayfaları için ortak,       */
 /* modern ve yüksek okunabilirlikli stilleri merkezileştirir.      */
-/* v3.0: Ana bölüm başlıkları, SVG ikon boyutları ve genel         */
-/*       hizalama sorunları KESİN OLARAK giderildi.                */
+/* v4.0: Ana bölüm başlıkları büyütüldü. SVG ikon boyutu sorunu     */
+/*       !important ile kesin olarak çözüldü. Genel hizalama ve    */
+/*       hiyerarşi sorunları giderildi.                            */
 /* ================================================================= */
 
 /* === İçerik Alanı === */
@@ -17,7 +18,7 @@
 .konu-icerik p,
 .konu-icerik ul,
 .konu-icerik ol {
-    font-size: 1.125rem;
+    font-size: 1.125rem; /* 18px */
     line-height: 1.9;
     margin-bottom: 1.3rem;
     text-align: justify;
@@ -34,36 +35,35 @@
 }
 
 .konu-icerik strong {
-    color: #111827;
+    color: #111827; /* gray-900 */
 }
 
-/* DÜZELTME: Liste içi SVG ikonları için KESİN boyut ve hizalama kuralı */
+/* DÜZELTME: Liste içi SVG ikonları için !important ile ezilemez kural */
+/* Bu kural, İnkılap Tarihi sayfasındaki dev ikon sorununu KESİN olarak çözer. */
 .konu-icerik ul li svg {
-    width: 1.5rem;  /* 24px */
-    height: 1.5rem; /* 24px */
-    flex-shrink: 0;
-    margin-right: 0.75rem;
-    margin-top: 0.3rem;
+    width: 1.5rem !important;  /* 24px */
+    height: 1.5rem !important; /* 24px */
+    flex-shrink: 0 !important;
+    margin-right: 0.75rem !important;
+    margin-top: 0.3rem !important;
 }
 
 /* === Başlık Stilleri (Hiyerarşi ve Okunurluk İçin Yeniden Düzenlendi) === */
+
 /* YENİ EKLENDİ: "BİRİNCİ KISIM" gibi ana bölüm başlıkları için */
+/* Bu kural, Anayasa sayfasındaki küçük ve sönük başlık sorununu çözer. */
 .ana-bolum-basligi {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding-top: 1rem;
+    font-size: 1.75rem; /* Büyütüldü */
+    font-weight: 800; /* Kalınlaştırıldı */
+    color: var(--secondary-color); /* Rengi değiştirildi */
     padding-bottom: 1rem;
     margin-top: 4rem;
     margin-bottom: 2rem;
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    background-color: #f8fafc; /* gray-50 */
-    text-align: left !important;
+    border-bottom: 2px solid var(--border-color);
+    text-align: left !important; /* Ortalanmasını engeller */
 }
 
+/* Sitenin genelindeki sayfa başlığı (örn: T.C. İnkılap Tarihi Ders Notları) */
 .section-title {
     background: linear-gradient(90deg, #0d9488, #14b8a6);
     -webkit-background-clip: text;
@@ -73,9 +73,10 @@
     text-align: left !important;
 }
 
+/* Konu içindeki alt başlıklar (örn: Trablusgarp Savaşı) */
 .subsection-title {
-    color: #0891b2;
-    border-bottom: 3px solid #a5f3fc;
+    color: #0891b2; /* cyan-600 */
+    border-bottom: 3px solid #a5f3fc; /* cyan-200 */
     padding-bottom: 0.5rem;
     font-weight: 700;
     text-align: left !important;
@@ -91,6 +92,7 @@
     border-left-width: 4px;
     text-align: left;
 }
+
 .bilgi-kutusu { background-color: #f0fdfa; border-color: var(--primary-color); }
 .uyari-kutusu { background-color: #fffbeb; border-color: #f59e0b; }
 .hafiza-kutusu { background-color: #f0f5ff; border-color: #6366f1; text-align: center; }
@@ -108,6 +110,8 @@ details {
 }
 details:hover { border-color: #a5b4fc; }
 details[open] { border-color: var(--primary-color); box-shadow: 0 4px 10px rgba(13, 148, 136, 0.1); }
+
+/* DÜZELTME: Madde başlıklarının (summary) sola hizalı olması GARANTİ ALTINA ALINDI */
 details summary {
     cursor: pointer;
     font-weight: 600;
@@ -118,18 +122,28 @@ details summary {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.2s;
-    text-align: left !important;
+    text-align: left !important; /* !important ile ezilemez hale getirildi */
 }
+
 details[open] summary { background-color: #f8fafc; }
 details summary::-webkit-details-marker { display: none; }
 details summary:after {
-    content: '▼'; font-size: 0.8em; color: #9ca3af;
-    transition: transform 0.3s ease; margin-left: auto; padding-left: 1rem;
+    content: '▼';
+    font-size: 0.8em;
+    color: #9ca3af;
+    transition: transform 0.3s ease;
+    margin-left: auto;
+    padding-left: 1rem;
 }
 details[open] summary:after { transform: rotate(-180deg); }
 details .cevap { padding: 0 1.5rem 1.5rem 1.5rem; background-color: #f8fafc; border-top: 1px solid var(--border-color); }
 details .cevap p { margin-bottom: 0; font-size: 1rem; }
 
 /* === Test Merkezi Kartı === */
-.test-merkezi-karti { transition: all 0.3s ease; }
-.test-merkezi-karti:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.test-merkezi-karti {
+    transition: all 0.3s ease;
+}
+.test-merkezi-karti:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
