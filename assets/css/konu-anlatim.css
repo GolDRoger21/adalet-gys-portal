@@ -1,10 +1,10 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v2.2)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v2.4)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, tüm konu anlatım sayfaları için ortak,       */
 /* modern ve yüksek okunabilirlikli stilleri merkezileştirir.      */
-/* v2.2: Liste içi SVG ikon boyutu sorunu ve başlık hizalama       */
-/*       sorunları kalıcı olarak giderildi.                        */
+/* v2.4: Anayasa sayfasındaki <details> başlıklarının ortalanma     */
+/*       sorunu KESİN OLARAK giderildi.                            */
 /* ================================================================= */
 
 /* === İçerik Alanı === */
@@ -37,8 +37,8 @@
     color: #111827; /* gray-900 */
 }
 
-/* DÜZELTME: Liste içi SVG ikonları için boyut ve hizalama kuralı */
-.konu-icerik ul li svg.flex-shrink-0 {
+/* Liste içi SVG ikonları için KESİN boyut ve hizalama kuralı */
+.konu-icerik ul li svg {
     width: 1.5rem;  /* 24px */
     height: 1.5rem; /* 24px */
     flex-shrink: 0; /* Küçülmesini engeller */
@@ -46,15 +46,14 @@
     margin-top: 0.3rem; /* Metinle dikey hizalama */
 }
 
-/* === Başlık Stilleri (Okunurluk için boşluklar ayarlandı) === */
+/* === Başlık Stilleri (HİZALAMA GARANTİSİ) === */
 .section-title {
     background: linear-gradient(90deg, #0d9488, #14b8a6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-weight: 800;
-    /* DÜZELTME: Hizalama sorunu için eklendi */
-    text-align: left; 
+    text-align: left !important;
 }
 
 .subsection-title {
@@ -62,10 +61,9 @@
     border-bottom: 3px solid #a5f3fc; /* cyan-200 */
     padding-bottom: 0.5rem;
     font-weight: 700;
-    /* DÜZELTME: Hizalama sorunu için eklendi */
-    text-align: left;
-    margin-top: 4rem; /* Ana bölümler arasına boşluk ekler */
-    margin-bottom: 1.5rem; /* Alt başlık ve metin arasına boşluk ekler */
+    text-align: left !important;
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
 }
 
 /* === Vurgu, Bilgi ve Hafıza Kutuları === */
@@ -74,43 +72,43 @@
     margin: 2rem 0;
     border-radius: var(--border-radius);
     border-left-width: 4px;
-    text-align: left; /* Kutuların içindeki metinlerin de sola hizalı olmasını garanti eder */
+    text-align: left;
 }
 
-.bilgi-kutusu { /* Genel bilgi, önemli notlar */
+.bilgi-kutusu {
     background-color: #f0fdfa; /* teal-50 */
     border-color: var(--primary-color);
 }
 
-.uyari-kutusu { /* Dikkat edilmesi gerekenler, istisnalar */
+.uyari-kutusu {
     background-color: #fffbeb; /* amber-50 */
     border-color: #f59e0b; /* amber-500 */
 }
 
-.hafiza-kutusu { /* Hafıza teknikleri, kodlamalar */
+.hafiza-kutusu {
     background-color: #f0f5ff; /* indigo-50 */
     border-color: #6366f1; /* indigo-500 */
-    text-align: center; /* Hafıza kutuları istisnai olarak ortalı kalabilir */
+    text-align: center;
 }
 
-.strateji-kutusu { /* Sınav stratejileri, tuzaklar */
+.strateji-kutusu {
      background-color: #fff1f2; /* rose-50 */
     border-color: #f43f5e; /* rose-500 */
 }
 
-.vurgu-kutusu { /* Özel analizler, hoca yorumları */
+.vurgu-kutusu {
     background-color: #f0f9ff; /* sky-50 */
     border-color: #38bdf8; /* sky-400 */
 }
 
-/* === İnteraktif Soru-Cevap (<details>) === */
+/* === İnteraktif Soru-Cevap / Madde Gösterici (<details>) === */
 details {
     margin: 1rem 0;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     transition: all 0.2s ease;
     background-color: var(--surface-color);
-    text-align: left;
+    text-align: left; /* Kapsayıcının sola yaslı olmasını sağlar */
 }
 
 details:hover {
@@ -132,6 +130,8 @@ details summary {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.2s;
+    /* DÜZELTME: Madde başlıklarının (summary) sola hizalı olması GARANTİ ALTINA ALINDI */
+    text-align: left !important;
 }
 
 details[open] summary {
@@ -142,16 +142,20 @@ details summary::-webkit-details-marker {
     display: none;
 }
 
+/* Anayasa sayfasındaki açma/kapama okunu, sağda ▼ olacak şekilde standart hale getiriyoruz */
 details summary:after {
     content: '▼';
     font-size: 0.8em;
     color: #9ca3af; /* gray-400 */
     transition: transform 0.3s ease;
+    margin-left: auto; /* İkonu en sağa yaslar */
+    padding-left: 1rem;
 }
 
 details[open] summary:after {
     transform: rotate(-180deg);
 }
+
 
 details .cevap {
     padding: 0 1.5rem 1.5rem 1.5rem;
