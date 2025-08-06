@@ -1,157 +1,174 @@
-/* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v2.0)  == */
-/* ================================================================= */
-/* Açıklama: Bu dosya, tüm konu anlatım sayfaları için ortak,       */
-/* modern ve yüksek okunabilirlikli stilleri merkezileştirir.      */
-/* ================================================================= */
+/* ================================================================ */
+/* == Adalet GYS Portalı - Sınav Arayüzü Stilleri (v2.2)         == */
+/* ================================================================ */
+/* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
+/* sınav arayüzünde kullanılan özel stilleri içerir.              */
+/* ================================================================ */
 
-/* === İçerik Alanı === */
-/* Bu sınıf, içeriği ana container genişliğine sabitler. */
-.konu-icerik {
-    max-width: var(--container-width);
-    margin: 0 auto;
+/* Sınava özel renk değişkenleri */
+:root {
+    --accent-color: #f59e0b; /* Bayrak rengi */
+    --danger-color: #dc2626;
 }
 
-/* === Genel Tipografi === */
-.konu-icerik p,
-.konu-icerik ul,
-.konu-icerik ol {
-    font-size: 1.125rem; /* 18px */
-    line-height: 1.9;
-    margin-bottom: 1.3rem;
+/* --- İLERLEME ÇUBUĞU (PROGRESS BAR) STİLLERİ --- */
+.progress-bar-container {
+    background-color: var(--border-color);
+    border-radius: 9999px;
+    overflow: hidden;
+    padding: 4px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.progress-bar {
+    height: 10px;
+    background-color: var(--primary-color);
+    width: 0%; /* JavaScript ile güncellenecek */
+    border-radius: 9999px;
+    transition: width 0.3s ease-in-out;
+}
+
+/* Soru metni alanı (pre etiketi) */
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
     text-align: justify;
-    color: var(--text-color);
+    user-select: none;
 }
 
-.konu-icerik ul,
-.konu-icerik ol {
-    padding-left: 1.5rem;
-}
-
-.konu-icerik li {
-    margin-bottom: 0.8rem;
-}
-
-.konu-icerik strong {
-    color: #111827; /* gray-900 */
-}
-
-/* === Başlık Stilleri (Tüm dersler için ortak) === */
-.section-title {
-    background: linear-gradient(90deg, #0d9488, #14b8a6); /* teal-600 to teal-500 */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 800;
-}
-
-.subsection-title {
-    color: #0891b2; /* cyan-600 */
-    border-bottom: 3px solid #a5f3fc; /* cyan-200 */
-    padding-bottom: 0.5rem;
-    font-weight: 700;
-}
-
-/* === Vurgu, Bilgi ve Hafıza Kutuları (Tüm dersler için ortak) === */
-.bilgi-kutusu, .ozet-kutusu, .uyari-kutusu, .hafiza-kutusu, .strateji-kutusu, .vurgu-kutusu {
-    padding: 1.5rem;
-    margin: 2rem 0;
-    border-radius: var(--border-radius);
-    border-left-width: 4px;
-}
-
-.bilgi-kutusu { /* Genel bilgi, önemli notlar */
-    background-color: #f0fdfa; /* teal-50 */
-    border-color: var(--primary-color);
-}
-
-.uyari-kutusu { /* Dikkat edilmesi gerekenler, istisnalar */
-    background-color: #fffbeb; /* amber-50 */
-    border-color: #f59e0b; /* amber-500 */
-}
-
-.hafiza-kutusu { /* Hafıza teknikleri, kodlamalar */
-    background-color: #f0f5ff; /* indigo-50 */
-    border-color: #6366f1; /* indigo-500 */
-    text-align: center;
-}
-
-.strateji-kutusu { /* Sınav stratejileri, tuzaklar */
-    background-color: #fff1f2; /* rose-50 */
-    border-color: #f43f5e; /* rose-500 */
-}
-
-.vurgu-kutusu { /* Özel analizler, hoca yorumları */
-    background-color: #f0f9ff; /* sky-50 */
-    border-color: #38bdf8; /* sky-400 */
-}
-
-/* === İnteraktif Soru-Cevap (<details>) === */
-details {
-    margin: 1rem 0;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    transition: all 0.2s ease;
-    background-color: var(--surface-color);
-}
-
-details:hover {
-    border-color: #a5b4fc; /* indigo-300 */
-}
-
-details[open] {
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 10px rgba(13, 148, 136, 0.1);
-}
-
-details summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--text-color);
-    padding: 1rem 1.5rem;
-    list-style: none; /* Chrome'daki ok işaretini kaldırır */
-    display: flex;
-    justify-content: space-between;
+/* Sınavı Başlat Butonu */
+.start-btn {
+    display: inline-flex;
     align-items: center;
-    transition: background-color 0.2s;
+    justify-content: center;
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+    background-image: linear-gradient(to right, var(--primary-color), #087f5b);
 }
 
-details[open] summary {
-    background-color: #f8fafc; /* gray-50 */
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    background-image: linear-gradient(to right, #087f5b, #065f46);
 }
 
-details summary::-webkit-details-marker {
-    display: none; /* Safari'deki ok işaretini kaldırır */
+/* Soru üzerindeki bayrak ikonu */
+.flag-icon {
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
-details summary:after {
-    content: '▼';
-    font-size: 0.8em;
-    color: #9ca3af; /* gray-400 */
-    transition: transform 0.3s ease;
+.flag-icon:hover {
+    color: var(--accent-color) !important;
 }
 
-details[open] summary:after {
-    transform: rotate(-180deg);
+#mark-review-btn.marked #flag-solid-icon,
+#mark-review-btn.marked #flag-outline-icon {
+    color: var(--accent-color);
 }
 
-details .cevap {
-    padding: 0 1.5rem 1.5rem 1.5rem;
-    background-color: #f8fafc; /* gray-50 */
-    border-top: 1px solid var(--border-color);
+/* Modern soru metni çerçevesi */
+#question-text-container {
+    background-color: #f0fdfa;
+    padding: 1.5rem 2rem;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0.5rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
 }
 
-details .cevap p {
-    margin-bottom: 0;
-    font-size: 1rem;
+/* Seçenek butonu */
+.option-btn {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    width: 100%;
+    text-align: left;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
-/* === Test Merkezi Kutusu (Üst Kısım) === */
-.test-merkezi-karti {
-    transition: all 0.3s ease;
+.option-btn:hover {
+    border-color: #38bdf8;
+    background-color: rgba(56, 189, 248, 0.1);
 }
 
-.test-merkezi-karti:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
+.option-selected {
+    border-color: var(--primary-color);
+    background-color: rgba(13, 148, 136, 0.1);
+    color: var(--primary-color);
+    font-weight: 600;
 }
+
+.option-key {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 9999px;
+    border: 1px solid var(--border-color);
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.option-selected .option-key {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Zamanlayıcı uyarı efekti */
+.timer-warning {
+    color: var(--danger-color) !important;
+    animation: pulse 1.2s infinite;
+    font-weight: 700 !important;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Soru açıklamaları kutusu */
+.explanation-box {
+    background-color: #f0f9ff;
+    border-left: 4px solid #38bdf8;
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    border-radius: 0.5rem;
+}
+
+.explanation-section { margin-top: 1rem; }
+.explanation-section h5 { font-weight: 600; color: #0c4a6e; display: flex; align-items: center; }
+.explanation-section p { font-size: 0.95rem; line-height: 1.7; color: #0c4a6e; text-align: justify; }
+
+.nav-box { transition: all 0.2s ease-in-out; cursor: pointer; }
+
+/* Sonuç Ekranı Sekme Butonları */
+.tab-btn {
+    transition: all 0.2s ease-in-out;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    background-color: #e2e8f0;
+    color: #475569;
+    border: 2px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tab-btn:hover { background-color: #cbd5e1; transform: translateY(-1px); }
+.tab-active { background-color: #f0fdfa; color: var(--primary-color) !important; border-color: var(--primary-color); }
+
+#timer-announcer { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
