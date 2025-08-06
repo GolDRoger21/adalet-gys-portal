@@ -3,8 +3,8 @@
 /* ================================================================= */
 /* Açıklama: Bu dosya, tüm konu anlatım sayfaları için ortak,       */
 /* modern ve yüksek okunabilirlikli stilleri merkezileştirir.      */
-/* v2.2: Liste içi SVG ikon boyutu sorunu giderildi ve okunurluk   */
-/*       için başlık boşlukları ayarlandı.                         */
+/* v2.2: Liste içi SVG ikon boyutu sorunu ve başlık hizalama       */
+/*       sorunları kalıcı olarak giderildi.                        */
 /* ================================================================= */
 
 /* === İçerik Alanı === */
@@ -30,8 +30,7 @@
 }
 
 .konu-icerik li {
-    margin-bottom: 0.8rem;
-    padding-left: 0.5rem; /* İkon ile hizalama için eklendi */
+    margin-bottom: 1rem;
 }
 
 .konu-icerik strong {
@@ -39,7 +38,7 @@
 }
 
 /* DÜZELTME: Liste içi SVG ikonları için boyut ve hizalama kuralı */
-.konu-icerik ul li .flex-shrink-0 {
+.konu-icerik ul li svg.flex-shrink-0 {
     width: 1.5rem;  /* 24px */
     height: 1.5rem; /* 24px */
     flex-shrink: 0; /* Küçülmesini engeller */
@@ -54,7 +53,8 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-weight: 800;
-    text-align: left;
+    /* DÜZELTME: Hizalama sorunu için eklendi */
+    text-align: left; 
 }
 
 .subsection-title {
@@ -62,6 +62,7 @@
     border-bottom: 3px solid #a5f3fc; /* cyan-200 */
     padding-bottom: 0.5rem;
     font-weight: 700;
+    /* DÜZELTME: Hizalama sorunu için eklendi */
     text-align: left;
     margin-top: 4rem; /* Ana bölümler arasına boşluk ekler */
     margin-bottom: 1.5rem; /* Alt başlık ve metin arasına boşluk ekler */
@@ -73,31 +74,31 @@
     margin: 2rem 0;
     border-radius: var(--border-radius);
     border-left-width: 4px;
-    text-align: left;
+    text-align: left; /* Kutuların içindeki metinlerin de sola hizalı olmasını garanti eder */
 }
 
-.bilgi-kutusu {
+.bilgi-kutusu { /* Genel bilgi, önemli notlar */
     background-color: #f0fdfa; /* teal-50 */
     border-color: var(--primary-color);
 }
 
-.uyari-kutusu {
+.uyari-kutusu { /* Dikkat edilmesi gerekenler, istisnalar */
     background-color: #fffbeb; /* amber-50 */
     border-color: #f59e0b; /* amber-500 */
 }
 
-.hafiza-kutusu {
+.hafiza-kutusu { /* Hafıza teknikleri, kodlamalar */
     background-color: #f0f5ff; /* indigo-50 */
     border-color: #6366f1; /* indigo-500 */
-    text-align: center;
+    text-align: center; /* Hafıza kutuları istisnai olarak ortalı kalabilir */
 }
 
-.strateji-kutusu {
+.strateji-kutusu { /* Sınav stratejileri, tuzaklar */
      background-color: #fff1f2; /* rose-50 */
     border-color: #f43f5e; /* rose-500 */
 }
 
-.vurgu-kutusu {
+.vurgu-kutusu { /* Özel analizler, hoca yorumları */
     background-color: #f0f9ff; /* sky-50 */
     border-color: #38bdf8; /* sky-400 */
 }
