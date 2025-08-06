@@ -1,15 +1,15 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.5 - GÜNCEL)      == */
+/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.6 - Bütünleşik)  == */
 /* ================================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-    --primary-color: #0d9488;
-    --secondary-color: #475569;
-    --background-color: #f1f5f9;
+    --primary-color: #0d9488; /* teal-600 */
+    --secondary-color: #475569; /* slate-600 */
+    --background-color: #f1f5f9; /* slate-100 */
     --surface-color: #ffffff;
-    --text-color: #1e293b;
-    --border-color: #e2e8f0;
+    --text-color: #1e293b; /* slate-800 */
+    --border-color: #e2e8f0; /* slate-200 */
     --container-width: 1200px;
     --border-radius: 8px;
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -27,7 +27,7 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 .container {
@@ -44,14 +44,15 @@ body {
     background-color: var(--surface-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
 }
 
-*:focus {
+*:focus-visible {
     outline: 2px solid var(--focus-outline-color);
     outline-offset: var(--focus-outline-offset);
 }
 
-/* Navigasyon */
+/* === Navigasyon === */
 .navbar {
     background-color: var(--surface-color);
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -99,7 +100,7 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* Dropdown */
+/* === Dropdown Menü === */
 .nav-item.dropdown {
     position: relative;
 }
@@ -128,6 +129,7 @@ body {
     padding: 0.75rem 1.5rem;
     color: var(--secondary-color);
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .dropdown-menu a:hover,
@@ -136,7 +138,7 @@ body {
     color: var(--primary-color);
 }
 
-/* Butonlar */
+/* === Butonlar === */
 .btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
@@ -146,12 +148,14 @@ body {
     color: white;
     background-color: var(--primary-color);
     transition: all 0.2s;
+    border: 1px solid transparent;
 }
 
 .btn:hover,
 .btn:focus {
-    background-color: #0f766e;
+    background-color: #0f766e; /* teal-700 */
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .btn-secondary {
@@ -160,15 +164,16 @@ body {
 
 .btn-secondary:hover,
 .btn-secondary:focus {
-    background-color: #334155;
+    background-color: #334155; /* slate-700 */
 }
 
-/* Footer */
+/* === Footer === */
 .footer {
     text-align: center;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     margin-top: 2rem;
     color: var(--secondary-color);
+    background-color: var(--surface-color);
     border-top: 1px solid var(--border-color);
 }
 
@@ -187,20 +192,17 @@ body {
     height: 40px;
     background-color: var(--border-color);
     border-radius: 50%;
-    transition: background-color 0.2s;
+    color: var(--secondary-color);
+    transition: all 0.2s;
 }
 
 .social-link svg {
-    color: var(--secondary-color);
     width: 20px;
     height: 20px;
 }
 
 .social-link:hover {
     background-color: var(--primary-color);
-}
-
-.social-link:hover svg {
     color: white;
 }
 
@@ -221,19 +223,6 @@ body {
     color: var(--primary-color);
 }
 
-/* Kategori Kartları */
-.category-card {
-    position: relative;
-}
-
-.new-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background-color: #dc2626;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 9999px;
+.legal-links span {
+    color: var(--border-color);
 }
