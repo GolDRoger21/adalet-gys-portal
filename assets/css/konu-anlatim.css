@@ -1,9 +1,10 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v2.1)  == */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v2.2)  == */
 /* ================================================================= */
 /* Açıklama: Bu dosya, tüm konu anlatım sayfaları için ortak,       */
 /* modern ve yüksek okunabilirlikli stilleri merkezileştirir.      */
-/* v2.1: Başlık hizalama sorunu giderildi.                         */
+/* v2.2: Liste içi SVG ikon boyutu sorunu giderildi ve okunurluk   */
+/*       için başlık boşlukları ayarlandı.                         */
 /* ================================================================= */
 
 /* === İçerik Alanı === */
@@ -30,21 +31,30 @@
 
 .konu-icerik li {
     margin-bottom: 0.8rem;
+    padding-left: 0.5rem; /* İkon ile hizalama için eklendi */
 }
 
 .konu-icerik strong {
     color: #111827; /* gray-900 */
 }
 
-/* === Başlık Stilleri (Tüm dersler için ortak) === */
+/* DÜZELTME: Liste içi SVG ikonları için boyut ve hizalama kuralı */
+.konu-icerik ul li .flex-shrink-0 {
+    width: 1.5rem;  /* 24px */
+    height: 1.5rem; /* 24px */
+    flex-shrink: 0; /* Küçülmesini engeller */
+    margin-right: 0.75rem; /* Sağ boşluk */
+    margin-top: 0.3rem; /* Metinle dikey hizalama */
+}
+
+/* === Başlık Stilleri (Okunurluk için boşluklar ayarlandı) === */
 .section-title {
     background: linear-gradient(90deg, #0d9488, #14b8a6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-weight: 800;
-    /* DÜZELTME: Hizalama sorunu için eklendi */
-    text-align: left; 
+    text-align: left;
 }
 
 .subsection-title {
@@ -52,41 +62,42 @@
     border-bottom: 3px solid #a5f3fc; /* cyan-200 */
     padding-bottom: 0.5rem;
     font-weight: 700;
-    /* DÜZELTME: Hizalama sorunu için eklendi */
     text-align: left;
+    margin-top: 4rem; /* Ana bölümler arasına boşluk ekler */
+    margin-bottom: 1.5rem; /* Alt başlık ve metin arasına boşluk ekler */
 }
 
-/* === Vurgu, Bilgi ve Hafıza Kutuları (Tüm dersler için ortak) === */
+/* === Vurgu, Bilgi ve Hafıza Kutuları === */
 .bilgi-kutusu, .ozet-kutusu, .uyari-kutusu, .hafiza-kutusu, .strateji-kutusu, .vurgu-kutusu {
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
     border-left-width: 4px;
-    text-align: left; /* Kutuların içindeki metinlerin de sola hizalı olmasını garanti eder */
+    text-align: left;
 }
 
-.bilgi-kutusu { /* Genel bilgi, önemli notlar */
+.bilgi-kutusu {
     background-color: #f0fdfa; /* teal-50 */
     border-color: var(--primary-color);
 }
 
-.uyari-kutusu { /* Dikkat edilmesi gerekenler, istisnalar */
+.uyari-kutusu {
     background-color: #fffbeb; /* amber-50 */
     border-color: #f59e0b; /* amber-500 */
 }
 
-.hafiza-kutusu { /* Hafıza teknikleri, kodlamalar */
+.hafiza-kutusu {
     background-color: #f0f5ff; /* indigo-50 */
     border-color: #6366f1; /* indigo-500 */
-    text-align: center; /* Hafıza kutuları istisnai olarak ortalı kalabilir */
+    text-align: center;
 }
 
-.strateji-kutusu { /* Sınav stratejileri, tuzaklar */
+.strateji-kutusu {
      background-color: #fff1f2; /* rose-50 */
     border-color: #f43f5e; /* rose-500 */
 }
 
-.vurgu-kutusu { /* Özel analizler, hoca yorumları */
+.vurgu-kutusu {
     background-color: #f0f9ff; /* sky-50 */
     border-color: #38bdf8; /* sky-400 */
 }
@@ -98,7 +109,7 @@ details {
     border-radius: var(--border-radius);
     transition: all 0.2s ease;
     background-color: var(--surface-color);
-    text-align: left; /* Hizalama garantisi */
+    text-align: left;
 }
 
 details:hover {
@@ -115,7 +126,7 @@ details summary {
     font-weight: 600;
     color: var(--text-color);
     padding: 1rem 1.5rem;
-    list-style: none; /* Chrome'daki ok işaretini kaldırır */
+    list-style: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -127,7 +138,7 @@ details[open] summary {
 }
 
 details summary::-webkit-details-marker {
-    display: none; /* Safari'deki ok işaretini kaldırır */
+    display: none;
 }
 
 details summary:after {
