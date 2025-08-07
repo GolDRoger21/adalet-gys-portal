@@ -232,3 +232,29 @@ div[class*="bg-green-100"] li {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+/* ===================================================================== */
+/* == YENİ EKLENEN GÜVENLİ DÜZELTME KURALLARI (İnkılap Tarihi İçin) == */
+/* ===================================================================== */
+
+/* İnkılap Tarihi sayfasındaki liste ikonlarının boyutunu sabitler */
+/* Sadece .card içindeki listeleri hedeflediği için diğer sayfaları etkilemez */
+.card ul li svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    flex-shrink: 0 !important;
+}
+
+/* İnkılap Tarihi sayfasındaki Soru-Cevap Javascript'inin düzgün çalışmasını sağlar */
+.qa-item .answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+    background-color: #f9fafb;
+}
+.qa-item .question.active + .answer {
+    padding: 1rem;
+}
+.qa-item .question.active svg {
+    transform: rotate(180deg);
+}
