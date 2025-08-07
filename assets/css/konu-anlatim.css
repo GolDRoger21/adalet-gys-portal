@@ -1,88 +1,249 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.0)  == */
-/* ================================================================= */
-/* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
-/* konu anlatımı sayfalarındaki metin içeriklerinin okunabilir     */
-/* ve profesyonel görünmesi için gerekli özel stilleri içerir.     */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v5.1)  == */
 /* ================================================================= */
 
-/* Ana içerik konteynerine uygulanacak genel stiller */
 .konu-icerik {
-    /* Okunabilirlik için metin genişliğini sınırlar */
-    max-width: 800px;
+    max-width: var(--container-width);
     margin: 0 auto;
+    padding: 2rem 1.5rem;
 }
 
-/* Sayfa Ana Başlığı */
-.konu-icerik h1 {
-    font-size: 2.5rem; /* 40px */
-    font-weight: 700;
-    color: var(--text-color);
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 1rem;
+.konu-icerik p,
+.konu-icerik ul,
+.konu-icerik ol {
+    font-size: 1.125rem;
+    line-height: 1.9;
+    margin-bottom: 1.3rem;
+    text-align: justify;
+    color: #1e293b;
 }
 
-/* Alt Başlıklar */
-.konu-icerik h2 {
-    font-size: 1.75rem; /* 28px */
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-/* Daha Alt Başlıklar */
-.konu-icerik h3 {
-    font-size: 1.25rem; /* 20px */
-    font-weight: 600;
-    color: var(--secondary-color);
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-}
-
-/* Paragraflar */
-.konu-icerik p {
-    font-size: 1.1rem; /* 17.6px */
-    line-height: 1.8;
-    margin-bottom: 1rem;
-}
-
-/* Listeler */
 .konu-icerik ul,
 .konu-icerik ol {
     padding-left: 1.5rem;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
 }
 
 .konu-icerik li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
 }
 
-/* Kalın (strong) metinler */
 .konu-icerik strong {
-    color: var(--text-color);
+    color: #1e293b;
 }
 
-/* Önemli Bilgi / Özet Kutusu */
+.konu-icerik ul li svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    flex-shrink: 0 !important;
+    margin-right: 0.75rem !important;
+    margin-top: 0.3rem !important;
+}
+
+.ana-bolum-basligi {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    padding-bottom: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    text-align: left !important;
+}
+
+.section-title {
+    background: linear-gradient(90deg, #0d9488, #14b8a6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    font-size: 2.5rem;
+    text-align: left !important;
+}
+
+.subsection-title {
+    color: #0891b2;
+    border-bottom: 3px solid #a5f3fc;
+    padding-bottom: 0.5rem;
+    font-weight: 700;
+    text-align: left !important;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+}
+
 .ozet-kutusu {
-    background-color: #f0fdfa; /* Açık yeşil */
+    background-color: #f0fdfa;
     border-left: 4px solid var(--primary-color);
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
 }
 
-.ozet-kutusu p {
-    margin-bottom: 0;
-}
-
-/* Uyarı / Dikkat Kutusu */
 .uyari-kutusu {
-    background-color: #fffbeb; /* Açık sarı */
-    border-left: 4px solid #f59e0b; /* Amber */
+    background-color: #fffbeb;
+    border-left: 4px solid #f59e0b;
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
+}
+
+details {
+    margin: 1.2rem 0;
+    transition: background-color 0.2s;
+}
+
+details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-color);
+    padding: 0.6rem 0.5rem;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    text-align: left !important;
+}
+
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+details summary:hover,
+details summary:focus {
+    background-color: #f8fafc;
+    transform: translateX(4px);
+    border-radius: 6px;
+}
+
+div[class*="bg-sky-50"] {
+    border-top: 4px solid #0ea5e9;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+div[class*="bg-sky-50"] > h4 {
+    font-weight: 700;
+    color: #0c4a6e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+div[class*="bg-sky-50"] .test-soru .text-slate-600 {
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+div[class*="bg-sky-50"] .test-soru .text-sm {
+    font-size: 1rem;
+}
+
+div[class*="bg-sky-50"] > div > div {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+div[class*="bg-sky-50"] details summary {
+    font-weight: 600;
+    color: #0369a1;
+    cursor: pointer;
+    padding: 0.5rem 0;
+}
+
+div[class*="bg-sky-50"] details[open] summary {
+    border-bottom: none;
+    margin-bottom: 0.5rem;
+}
+
+div[class*="bg-sky-50"] details > div {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+div[class*="bg-green-100"] {
+    border-left-width: 4px;
+    border-color: #16a34a;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+div[class*="bg-green-100"] strong {
+    color: #15803d;
+}
+
+div[class*="bg-green-100"] ul {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+div[class*="bg-green-100"] li {
+    color: #14532d;
+    margin-bottom: 0.25rem;
+}
+
+.highlight-box {
+    background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
+    border-left: 6px solid #0d9488;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.strategy-box {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border-left: 6px solid #d97706;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.warning-box {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    border-left: 6px solid #dc2626;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.test-btn {
+    background: linear-gradient(to right, #0d9488, #0f766e);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.test-btn:hover {
+    background: linear-gradient(to right, #0f766e, #115e59);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.qa-item .answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+    background-color: #f9fafb;
+}
+
+.qa-item .question.active + .answer {
+    padding: 1rem;
+}
+
+.qa-item .question.active svg {
+    transform: rotate(180deg);
 }

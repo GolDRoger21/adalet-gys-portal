@@ -1,28 +1,22 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.2)              == */
+/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.6 - Bütünleşik)  == */
 /* ================================================================ */
-/* Açıklama: Bu dosya, sitenin tamamı için geçerli olan genel      */
-/* renkleri, fontları, container yapısını ve ortak bileşenleri    */
-/* (navbar, footer, card, btn) tanımlar.                          */
-/* ================================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* Sitenin Ana Değişkenleri */
 :root {
-    --primary-color: #0d9488;
-    --secondary-color: #475569;
-    --background-color: #f1f5f9;
+    --primary-color: #0d9488; /* teal-600 */
+    --secondary-color: #475569; /* slate-600 */
+    --background-color: #f1f5f9; /* slate-100 */
     --surface-color: #ffffff;
-    --text-color: #1e293b;
-    --border-color: #e2e8f0;
+    --text-color: #1e293b; /* slate-800 */
+    --border-color: #e2e8f0; /* slate-200 */
     --container-width: 1200px;
     --border-radius: 8px;
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --focus-outline-color: #0d9488;
+    --focus-outline-offset: 2px;
 }
 
-/* Genel Sıfırlama ve Body Stili */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -33,10 +27,8 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
-    line-height: 1.6;
+    line-height: 1.7;
 }
-
-/* --- ORTAK YAPI ve BİLEŞENLER --- */
 
 .container {
     max-width: var(--container-width);
@@ -52,9 +44,15 @@ body {
     background-color: var(--surface-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
 }
 
-/* Navigasyon Menüsü */
+*:focus-visible {
+    outline: 2px solid var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+}
+
+/* === Navigasyon === */
 .navbar {
     background-color: var(--surface-color);
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -79,7 +77,7 @@ body {
 
 .navbar-nav {
     display: flex;
-    align-items: center; /* === DÜZELTME: Menü elemanlarını dikeyde hizala === */
+    align-items: center;
     gap: 1.5rem;
 }
 
@@ -87,13 +85,13 @@ body {
     text-decoration: none;
     color: var(--secondary-color);
     font-weight: 500;
-    padding: 0.5rem 0; /* Dikey padding eklendi */
+    padding: 0.5rem 0;
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link:focus {
     color: var(--primary-color);
 }
 
@@ -102,13 +100,13 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* === YENİ: AÇILIR MENÜ (DROPDOWN) STİLLERİ === */
+/* === Dropdown Menü === */
 .nav-item.dropdown {
     position: relative;
 }
 
 .dropdown-menu {
-    display: none; /* Normalde gizli */
+    display: none;
     position: absolute;
     top: 100%;
     left: 0;
@@ -116,14 +114,14 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     padding: 0.5rem 0;
-    margin-top: 0.5rem; /* Menü ile arasında küçük bir boşluk */
-    min-width: 220px; /* Açılır menü genişliği */
+    margin-top: 0.5rem;
+    min-width: 220px;
     z-index: 20;
     border: 1px solid var(--border-color);
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
-    display: block; /* Üzerine gelince görünür yap */
+    display: block;
 }
 
 .dropdown-menu a {
@@ -131,97 +129,100 @@ body {
     padding: 0.75rem 1.5rem;
     color: var(--secondary-color);
     text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
+    white-space: nowrap;
 }
 
-.dropdown-menu a:hover {
+.dropdown-menu a:hover,
+.dropdown-menu a:focus {
     background-color: var(--background-color);
     color: var(--primary-color);
 }
-/* === YENİ STİLLERİN SONU === */
 
-/* Butonlar */
+/* === Butonlar === */
 .btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     text-decoration: none;
     border-radius: var(--border-radius);
     font-weight: 600;
-    text-align: center;
-    transition: background-color 0.2s, transform 0.2s;
-    background-color: var(--primary-color);
     color: white;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+    background-color: var(--primary-color);
+    transition: all 0.2s;
+    border: 1px solid transparent;
 }
 
-.btn:hover {
-    background-color: #0f766e;
+.btn:hover,
+.btn:focus {
+    background-color: #0f766e; /* teal-700 */
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .btn-secondary {
     background-color: var(--secondary-color);
-    color: white;
-}
-.btn-secondary:hover {
-    background-color: #334155;
 }
 
-/* Footer */
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background-color: #334155; /* slate-700 */
+}
+
+/* === Footer === */
 .footer {
     text-align: center;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     margin-top: 2rem;
     color: var(--secondary-color);
+    background-color: var(--surface-color);
     border-top: 1px solid var(--border-color);
 }
 
-/* --- ANA SAYFAYA ÖZEL STİLLER --- */
-
-.hero {
-    text-align: center;
-    background-color: var(--surface-color);
-    padding: 3rem 1.5rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 2.5rem;
-    box-shadow: var(--shadow);
-}
-
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.subtitle {
-    font-size: 1.2rem;
-    color: var(--secondary-color);
-    max-width: 650px;
-    margin: 0 auto;
-}
-
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.category-card {
-    background-color: var(--surface-color);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    box-shadow: var(--shadow);
+.social-links {
     display: flex;
-    flex-direction: column;
-}
-
-.category-card h2 {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    margin-bottom: 0.75rem;
-}
-
-.category-card p {
-    flex-grow: 1;
+    justify-content: center;
+    gap: 1rem;
     margin-bottom: 1.5rem;
+}
+
+.social-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--border-color);
+    border-radius: 50%;
+    color: var(--secondary-color);
+    transition: all 0.2s;
+}
+
+.social-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+.social-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.legal-links {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.legal-links a {
+    color: var(--secondary-color);
+    margin: 0 0.5rem;
+    text-decoration: none;
+}
+
+.legal-links a:hover,
+.legal-links a:focus {
+    text-decoration: underline;
+    color: var(--primary-color);
+}
+
+.legal-links span {
+    color: var(--border-color);
 }

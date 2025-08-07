@@ -1,0 +1,21 @@
+{
+  "name": "adalet-gys-portal-main",
+  "version": "1.0.0",
+  "description": "Bu proje, görevde yükselme sınavı için konu anlatımı ve deneme sınavlarını içerir.",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "postcss ./assets/css/input.css -o ./assets/css/tailwind.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.2",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.0",
+    "tailwindcss": "^4.1.11"
+  }
+}
