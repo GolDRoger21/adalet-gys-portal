@@ -1,21 +1,16 @@
 /* ================================================================= */
-/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v1.5)  == */
-/* ================================================================= */
-/* Açıklama: Bu dosya, ana tema (style.css) üzerine ek olarak,     */
-/* konu anlatımı ve yasal metin sayfalarındaki içeriklerin         */
-/* okunabilirliğini, görsel hiyerarşisini ve kullanıcı deneyimini  */
-/* artırmak için tasarlanmıştır.                                   */
+/* == Adalet GYS Portalı - Konu Anlatımı Sayfası Stilleri (v5.1)  == */
 /* ================================================================= */
 
-/* === İçerik Genişliği: style.css'deki container ile uyumlu === */
 .konu-icerik {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding: 2rem 1.5rem; /* Üst ve alt boşluk eklendi */
+    padding: 2rem 1.5rem;
 }
 
-/* === Paragraf ve Liste Stilleri === */
-.konu-icerik p {
+.konu-icerik p,
+.konu-icerik ul,
+.konu-icerik ol {
     font-size: 1.125rem;
     line-height: 1.9;
     margin-bottom: 1.3rem;
@@ -26,9 +21,6 @@
 .konu-icerik ul,
 .konu-icerik ol {
     padding-left: 1.5rem;
-    margin-bottom: 1.3rem;
-    font-size: 1.125rem;
-    text-align: justify;
 }
 
 .konu-icerik li {
@@ -39,55 +31,61 @@
     color: #1e293b;
 }
 
-/* === Alıntı ve Özel Kutular === */
-.konu-icerik blockquote {
-    font-style: italic;
-    background-color: #f8fafc; /* slate-50 */
-    padding: 1.25rem 1.75rem;
-    border-left: 4px solid var(--border-color);
-    margin: 1.75rem 0;
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+.konu-icerik ul li svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    flex-shrink: 0 !important;
+    margin-right: 0.75rem !important;
+    margin-top: 0.3rem !important;
 }
 
-/* === Özet, Uyarı ve Bilgi Kutuları === */
+.ana-bolum-basligi {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    padding-bottom: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    text-align: left !important;
+}
+
+.section-title {
+    background: linear-gradient(90deg, #0d9488, #14b8a6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    font-size: 2.5rem;
+    text-align: left !important;
+}
+
+.subsection-title {
+    color: #0891b2;
+    border-bottom: 3px solid #a5f3fc;
+    padding-bottom: 0.5rem;
+    font-weight: 700;
+    text-align: left !important;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+}
+
 .ozet-kutusu {
-    background-color: #f0fdfa; /* teal-50 */
+    background-color: #f0fdfa;
     border-left: 4px solid var(--primary-color);
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
 }
 
-.ozet-kutusu p {
-    margin-bottom: 0;
-}
-
 .uyari-kutusu {
-    background-color: #fffbeb; /* amber-50 */
-    border-left: 4px solid #f59e0b; /* amber-500 */
+    background-color: #fffbeb;
+    border-left: 4px solid #f59e0b;
     padding: 1.5rem;
     margin: 2rem 0;
     border-radius: var(--border-radius);
 }
 
-/* === DÜZELTME: İkon Boyutları (SVG) === */
-/* İkonların yanlış boyutlanmasını önlemek için daha spesifik seçiciler kullanıldı. */
-aside[aria-label="Test Merkezi"] .flex-shrink-0 svg {
-    height: 3rem; /* 48px */
-    width: 3rem; /* 48px */
-}
-
-.ozet-kutusu[aria-label="Öğrenciye Mesaj"] .flex-shrink-0 svg {
-    height: 2rem; /* 32px */
-    width: 2rem; /* 32px */
-}
-
-[role="region"] h3 svg {
-    height: 1.5rem; /* 24px */
-    width: 1.5rem; /* 24px */
-}
-
-/* === Interaktif Detaylar (<details>) === */
 details {
     margin: 1.2rem 0;
     transition: background-color 0.2s;
@@ -102,6 +100,7 @@ details summary {
     display: flex;
     align-items: center;
     transition: all 0.3s ease;
+    text-align: left !important;
 }
 
 details summary::-webkit-details-marker {
@@ -115,14 +114,8 @@ details summary:focus {
     border-radius: 6px;
 }
 
-/* DÜZELTME: Madde başlıklarının (summary) ortalanmasını engellemek için eklendi */
-.card .konu-icerik details summary {
-    text-align: left;
-}
-
-/* === Tekrar Testi Bölümü (Bölüm Sonu) === */
 div[class*="bg-sky-50"] {
-    border-top: 4px solid #0ea5e9; /* sky-500 */
+    border-top: 4px solid #0ea5e9;
     border-radius: var(--border-radius);
     padding: 1.5rem;
     margin: 2rem 0;
@@ -130,7 +123,7 @@ div[class*="bg-sky-50"] {
 
 div[class*="bg-sky-50"] > h4 {
     font-weight: 700;
-    color: #0c4a6e; /* sky-900 */
+    color: #0c4a6e;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -158,7 +151,7 @@ div[class*="bg-sky-50"] > div > div {
 
 div[class*="bg-sky-50"] details summary {
     font-weight: 600;
-    color: #0369a1; /* sky-700 */
+    color: #0369a1;
     cursor: pointer;
     padding: 0.5rem 0;
 }
@@ -177,17 +170,16 @@ div[class*="bg-sky-50"] details > div {
     line-height: 1.6;
 }
 
-/* === Bölüm Sonu Özet Kutusu === */
 div[class*="bg-green-100"] {
     border-left-width: 4px;
-    border-color: #16a34a; /* green-600 */
+    border-color: #16a34a;
     border-radius: var(--border-radius);
     padding: 1.5rem;
     margin: 2rem 0;
 }
 
 div[class*="bg-green-100"] strong {
-    color: #15803d; /* green-800 */
+    color: #15803d;
 }
 
 div[class*="bg-green-100"] ul {
@@ -196,15 +188,10 @@ div[class*="bg-green-100"] ul {
 }
 
 div[class*="bg-green-100"] li {
-    color: #14532d; /* green-900 */
+    color: #14532d;
     margin-bottom: 0.25rem;
 }
 
-/* ================================================================= */
-/* == GELİŞMİŞ GÖRSEL STİLLER: Modern, Okunabilir, Sınav Odaklı   == */
-/* ================================================================= */
-
-/* Vurgu Kutuları (Gradient) */
 .highlight-box {
     background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
     border-left: 6px solid #0d9488;
@@ -229,24 +216,6 @@ div[class*="bg-green-100"] li {
     margin: 1.5rem 0;
 }
 
-/* Başlık Renk Efektleri */
-.section-title {
-    background: linear-gradient(90deg, #0d9488, #14b8a6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 800;
-    font-size: 2.5rem;
-}
-
-.subsection-title {
-    color: #0891b2;
-    border-bottom: 3px solid #a5f3fc;
-    padding-bottom: 0.5rem;
-    font-weight: 700;
-}
-
-/* Test Butonu (Modern Gradient) */
 .test-btn {
     background: linear-gradient(to right, #0d9488, #0f766e);
     color: white;
