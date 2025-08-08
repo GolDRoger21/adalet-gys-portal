@@ -1,12 +1,15 @@
 /**
- * @file Adalet GYS Portalı için ortak şablon yükleyici.
- * @description Header, footer gibi ortak HTML bileşenlerini ilgili sayfalara dinamik olarak yükler.
- * @version 7.1 (Fixed typo in exam template path)
+ * @file Adalet GYS Portalı - Güncellenmiş Şablon Yükleyici
+ * @description Header, footer ve sınav arayüzü bileşenlerini yükler
+ * @version 7.2 (Stil Entegrasyonu Düzeltildi)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
     if (document.body.dataset.needsTemplate) {
-        loadCommonTemplate();
+        loadCommonTemplate().catch(error => {
+            console.error('Şablon yükleme hatası:', error);
+            showErrorUI(error);
+        });
     }
 });
 
@@ -14,57 +17,102 @@ async function loadCommonTemplate() {
     const templateType = document.body.dataset.needsTemplate;
     let templatePath;
 
+    // Path kontrolü eklendi
     if (templateType === 'exam') {
-        // === DÜZELTME: Dosya adındaki yazım hatası giderildi ===
-        templatePath = '/adalet-gys-portal/_templates/sinav-sablonu.html'; // "sablonu" olarak düzeltildi.
-    } else { // 'page' veya diğer tüm türler için
+        templatePath = '/adalet-gys-portal/_templates/sinav-sablonu.html';
+    } else {
         templatePath = '/adalet-gys-portal/_templates/genel-sablon.html';
     }
 
     try {
         const response = await fetch(templatePath);
-        if (!response.ok) {
-            throw new Error(`Şablon dosyası yüklenemedi: ${templatePath}`);
-        }
+        if (!response.ok) throw new Error(`HTTP hatası! Durum: ${response.status}`);
+        
         const templateText = await response.text();
         const tempContainer = document.createElement('div');
         tempContainer.innerHTML = templateText;
 
-        const header = tempContainer.querySelector('.navbar');
-        const footer = tempContainer.querySelector('.footer');
+        // HEADER YÜKLEME
+        const headerTemplate = tempContainer.querySelector('.navbar');
+        if (headerTemplate) {
+            const existingHeader = document.querySelector('.navbar');
+            if (existingHeader) existingHeader.remove();
+            
+            const newHeader = headerTemplate.cloneNode(true);
+            document.body.insertBefore(newHeader, document.body.firstChild);
+            
+            // Navbar stillerinin hemen uygulanması
+            requestAnimationFrame(() => {
+                newHeader.style.opacity = '1';
+            });
+        }
 
-        if (header) document.body.prepend(header.cloneNode(true));
-        if (footer) document.body.appendChild(footer.cloneNode(true));
+        // FOOTER YÜKLEME
+        const footerTemplate = tempContainer.querySelector('.footer');
+        if (footerTemplate) {
+            const existingFooter = document.querySelector('.footer');
+            if (existingFooter) existingFooter.remove();
+            
+            document.body.appendChild(footerTemplate.cloneNode(true));
+        }
 
-        // SADECE 'exam' türü için özel işlemleri yap
+        // SINAV MODU ÖZEL İŞLEMLER
         if (templateType === 'exam') {
             const alertModal = tempContainer.querySelector('#alert-modal');
-            if (alertModal) document.body.appendChild(alertModal.cloneNode(true));
+            if (alertModal) {
+                document.body.appendChild(alertModal.cloneNode(true));
+            }
 
             const templateAppContainer = tempContainer.querySelector('#app-container');
             const targetAppContainer = document.getElementById('app-container');
             
             if (templateAppContainer && targetAppContainer) {
-                const newAppContainer = document.createElement('main');
-                newAppContainer.id = templateAppContainer.id;
-                newAppContainer.className = templateAppContainer.className;
-
-                for (let attr of targetAppContainer.attributes) {
+                const newAppContainer = templateAppContainer.cloneNode(true);
+                
+                // Data attributeları aktar
+                Array.from(targetAppContainer.attributes).forEach(attr => {
                     if (attr.name.startsWith('data-')) {
                         newAppContainer.setAttribute(attr.name, attr.value);
                     }
-                }
-                newAppContainer.innerHTML = templateAppContainer.innerHTML;
-                targetAppContainer.parentNode.replaceChild(newAppContainer, targetAppContainer);
+                });
+                
+                targetAppContainer.replaceWith(newAppContainer);
             }
         }
-        // 'page' türü için ekstra bir işlem yapmaya gerek yok, çünkü içerik zaten sayfada mevcut.
 
-        document.dispatchEvent(new Event('template-loaded'));
+        // STİL ENTEGRASYONU İÇİN YENİ KOD
+        const styleLinks = tempContainer.querySelectorAll('link[rel="stylesheet"]');
+        styleLinks.forEach(link => {
+            if (!document.head.querySelector(`link[href="${link.href}"]`)) {
+                document.head.appendChild(link.cloneNode());
+            }
+        });
+
+        // EVENT TETİKLEME
+        const event = new CustomEvent('template-loaded', {
+            detail: { templateType }
+        });
+        document.dispatchEvent(event);
 
     } catch (error) {
         console.error('Şablon yükleme hatası:', error);
-        const mainContent = document.querySelector('main') || document.body;
-        mainContent.innerHTML = `<div class="card p-8 text-center"><h1 class="text-xl font-bold text-red-600">Tema yüklenirken bir hata oluştu.</h1><p class="mt-2">${error.message}</p></div>`;
+        showErrorUI(error);
+        throw error;
     }
 }
+
+function showErrorUI(error) {
+    const mainContent = document.querySelector('main') || document.body;
+    mainContent.innerHTML = `
+        <div class="card p-8 text-center">
+            <h1 class="text-xl font-bold text-red-600">Sistem Hatası</h1>
+            <p class="mt-4 text-slate-600">${error.message}</p>
+            <button onclick="window.location.reload()" class="btn mt-6">
+                Tekrar Dene
+            </button>
+        </div>
+    `;
+}
+
+// Hata yönetimi için global fonksiyon
+window.handleTemplateError = showErrorUI;
