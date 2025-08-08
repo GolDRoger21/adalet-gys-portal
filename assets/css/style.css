@@ -1,228 +1,247 @@
-/* ================================================================ */
-/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.6 - Bütünleşik)  == */
-/* ================================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* ================================================================= */
+/* == Adalet GYS Portalı - Genel Stil Dosyası (v3.0)               == */
+/* == Tailwind CSS ile Tam Uyumlu, Çakışmasız ve Temizlenmiş Hali   == */
+/* ================================================================= */
 
+/* Genel Değişkenler */
 :root {
-    --primary-color: #0d9488; /* teal-600 */
-    --secondary-color: #475569; /* slate-600 */
-    --background-color: #f1f5f9; /* slate-100 */
-    --surface-color: #ffffff;
-    --text-color: #1e293b; /* slate-800 */
-    --border-color: #e2e8f0; /* slate-200 */
-    --container-width: 1200px;
-    --border-radius: 8px;
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --focus-outline-color: #0d9488;
-    --focus-outline-offset: 2px;
+  --primary-color: #0d9488;
+  --secondary-color: #0891b2;
+  --accent-color: #d97706;
+  --border-color: #cbd5e1;
+  --container-width: 1280px;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+/* Sayfa Genel Stili */
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.7;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  color: #1e293b;
+  line-height: 1.8;
 }
 
+/* Ana Sayfa İçeriği */
 .container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 1.5rem;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 .page-content {
-    padding: 2rem 0;
+  padding: 2rem 0;
 }
 
+/* Kart Stili */
 .card {
-    background-color: var(--surface-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
 }
 
-*:focus-visible {
-    outline: 2px solid var(--focus-outline-color);
-    outline-offset: var(--focus-outline-offset);
-}
-
-/* === Navigasyon === */
-.navbar {
-    background-color: var(--surface-color);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 1rem 0;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.navbar-brand {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    text-decoration: none;
-}
-
-.navbar-nav {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: var(--secondary-color);
-    font-weight: 500;
-    padding: 0.5rem 0;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-}
-
-.nav-link:hover,
-.nav-link:focus {
-    color: var(--primary-color);
-}
-
-.nav-link.active {
-    color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-}
-
-/* === Dropdown Menü === */
-.nav-item.dropdown {
-    position: relative;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: var(--surface-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    padding: 0.5rem 0;
-    margin-top: 0.5rem;
-    min-width: 220px;
-    z-index: 20;
-    border: 1px solid var(--border-color);
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-}
-
-.dropdown-menu a {
-    display: block;
-    padding: 0.75rem 1.5rem;
-    color: var(--secondary-color);
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.dropdown-menu a:hover,
-.dropdown-menu a:focus {
-    background-color: var(--background-color);
-    color: var(--primary-color);
-}
-
-/* === Butonlar === */
+/* Butonlar */
 .btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-    color: white;
-    background-color: var(--primary-color);
-    transition: all 0.2s;
-    border: 1px solid transparent;
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.btn:hover,
-.btn:focus {
-    background-color: #0f766e; /* teal-700 */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.btn-primary {
+  background: linear-gradient(to right, #0d9488, #0f766e);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to right, #0f766e, #115e59);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .btn-secondary {
-    background-color: var(--secondary-color);
+  background-color: #e2e8f0;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
 }
 
-.btn-secondary:hover,
-.btn-secondary:focus {
-    background-color: #334155; /* slate-700 */
+.btn-secondary:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
 }
 
-/* === Footer === */
+/* Header */
+.header {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+
+.logo img {
+  height: 2.5rem;
+}
+
+/* Navigation */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #475569;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--primary-color);
+}
+
+/* Mobile Menu */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+/* Dropdown (İleride Kullanım İçin) */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  min-width: 160px;
+  z-index: 10;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #475569;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f8fafc;
+  color: var(--primary-color);
+}
+
+/* Footer */
 .footer {
-    text-align: center;
-    padding: 2.5rem 0;
-    margin-top: 2rem;
-    color: var(--secondary-color);
-    background-color: var(--surface-color);
-    border-top: 1px solid var(--border-color);
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 3rem 0;
+  margin-top: 4rem;
 }
 
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+.footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
 }
 
-.social-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    background-color: var(--border-color);
-    border-radius: 50%;
-    color: var(--secondary-color);
-    transition: all 0.2s;
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.social-link svg {
-    width: 20px;
-    height: 20px;
+.footer-links a {
+  color: #e2e8f0;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.social-link:hover {
-    background-color: var(--primary-color);
-    color: white;
+.footer-links a:hover {
+  color: #f1f5f9;
 }
 
-.legal-links {
-    margin-top: 1rem;
-    font-size: 0.9rem;
+.footer-info {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 30rem;
 }
 
-.legal-links a {
-    color: var(--secondary-color);
-    margin: 0 0.5rem;
-    text-decoration: none;
+/* Responsive */
+@media (max-width: 1023px) {
+  .nav-links {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .footer .container {
+    flex-direction: column;
+  }
 }
 
-.legal-links a:hover,
-.legal-links a:focus {
-    text-decoration: underline;
-    color: var(--primary-color);
+/* Tablet ve Mobil */
+@media (min-width: 768px) {
+  .page-content {
+    padding: 3rem 0;
+  }
 }
 
-.legal-links span {
-    color: var(--border-color);
+/* Mobile */
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
 }
