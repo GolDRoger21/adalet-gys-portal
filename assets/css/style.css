@@ -1,5 +1,5 @@
 /* ================================================================ */
-/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.7 - Navbar Düzeltme) == */
+/* == Adalet GYS Portalı - Ana Tema Stilleri (v1.6 - Bütünleşik)  == */
 /* ================================================================ */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -15,8 +15,6 @@
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --focus-outline-color: #0d9488;
     --focus-outline-offset: 2px;
-    --navbar-height: 64px; /* Yeni eklenen sabit */
-    --mobile-breakpoint: 768px; /* Yeni eklenen */
 }
 
 * {
@@ -30,14 +28,12 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.7;
-    padding-top: var(--navbar-height); /* Navbar yüksekliği kadar boşluk */
 }
 
 .container {
     max-width: var(--container-width);
     margin: 0 auto;
     padding: 0 1.5rem;
-    width: 100%; /* Eklendi */
 }
 
 .page-content {
@@ -56,26 +52,20 @@ body {
     outline-offset: var(--focus-outline-offset);
 }
 
-/* === YENİ NAVBAR YAPISI === */
+/* === Navigasyon === */
 .navbar {
     background-color: var(--surface-color);
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    padding: 0.75rem 0;
-    position: fixed;
+    padding: 1rem 0;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    height: var(--navbar-height);
-    display: flex;
-    align-items: center;
+    z-index: 10;
 }
 
 .navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: nowrap;
 }
 
 .navbar-brand {
@@ -83,16 +73,12 @@ body {
     font-weight: 700;
     color: var(--primary-color);
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 .navbar-nav {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    list-style: none;
 }
 
 .nav-link {
@@ -101,8 +87,7 @@ body {
     font-weight: 500;
     padding: 0.5rem 0;
     border-bottom: 2px solid transparent;
-    transition: all 0.2s ease;
-    display: block;
+    transition: color 0.2s, border-color 0.2s;
 }
 
 .nav-link:hover,
@@ -115,50 +100,7 @@ body {
     border-bottom-color: var(--primary-color);
 }
 
-/* === MOBİL MENÜ === */
-.navbar-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    color: var(--primary-color);
-}
-
-.navbar-toggle-icon {
-    display: block;
-    width: 24px;
-    height: 24px;
-    position: relative;
-}
-
-.navbar-toggle-icon span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: currentColor;
-    position: absolute;
-    left: 0;
-    transition: all 0.3s ease;
-}
-
-.navbar-toggle-icon span:nth-child(1) { top: 6px; }
-.navbar-toggle-icon span:nth-child(2) { top: 12px; }
-.navbar-toggle-icon span:nth-child(3) { top: 18px; }
-
-.navbar-toggle--open .navbar-toggle-icon span:nth-child(1) {
-    transform: rotate(45deg);
-    top: 12px;
-}
-.navbar-toggle--open .navbar-toggle-icon span:nth-child(2) {
-    opacity: 0;
-}
-.navbar-toggle--open .navbar-toggle-icon span:nth-child(3) {
-    transform: rotate(-45deg);
-    top: 12px;
-}
-
-/* === DROPDOWN MENÜ === */
+/* === Dropdown Menü === */
 .nav-item.dropdown {
     position: relative;
 }
@@ -174,7 +116,7 @@ body {
     padding: 0.5rem 0;
     margin-top: 0.5rem;
     min-width: 220px;
-    z-index: 1001;
+    z-index: 20;
     border: 1px solid var(--border-color);
 }
 
@@ -196,52 +138,6 @@ body {
     color: var(--primary-color);
 }
 
-/* === RESPONSIVE DÜZEN === */
-@media (max-width: 768px) {
-    .navbar {
-        padding: 0.5rem 0;
-    }
-    
-    .navbar-toggle {
-        display: block;
-    }
-    
-    .navbar-nav {
-        display: none;
-        position: fixed;
-        top: var(--navbar-height);
-        left: 0;
-        right: 0;
-        background-color: var(--surface-color);
-        flex-direction: column;
-        gap: 0;
-        padding: 1rem 0;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    
-    .navbar-nav--open {
-        display: flex;
-    }
-    
-    .nav-link {
-        padding: 0.75rem 1.5rem;
-        border-bottom: none;
-        border-left: 3px solid transparent;
-    }
-    
-    .nav-link.active {
-        border-left-color: var(--primary-color);
-        border-bottom: none;
-    }
-    
-    .dropdown-menu {
-        position: static;
-        box-shadow: none;
-        border: none;
-        margin-top: 0;
-    }
-}
-
 /* === Butonlar === */
 .btn {
     display: inline-block;
@@ -253,8 +149,6 @@ body {
     background-color: var(--primary-color);
     transition: all 0.2s;
     border: 1px solid transparent;
-    cursor: pointer;
-    text-align: center;
 }
 
 .btn:hover,
@@ -331,33 +225,4 @@ body {
 
 .legal-links span {
     color: var(--border-color);
-}
-/* Back to top butonu */
-.back-to-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    display: none;
-    z-index: 999;
-    opacity: 0.8;
-    transition: opacity 0.3s;
-}
-
-.back-to-top:hover {
-    opacity: 1;
-}
-
-/* Mobil menü scroll kontrolü */
-body.menu-open {
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
 }
