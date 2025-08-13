@@ -1,47 +1,79 @@
-<header class="navbar">
-    <div class="container">
-        <a href="/adalet-gys-portal/index.html" class="navbar-brand">Adalet GYS Portalı</a>
-        <nav class="navbar-nav">
-            <a href="/adalet-gys-portal/index.html" class="nav-link">Ana Sayfa</a>
-            <div class="nav-item dropdown">
-                <a href="/adalet-gys-portal/konu-anlatimlari/" class="nav-link">Konu Anlatımları</a>
-                <div class="dropdown-menu">
-                    <a href="/adalet-gys-portal/konu-anlatimlari/ortak-konular/">Ortak Konular</a>
-                    <a href="/adalet-gys-portal/konu-anlatimlari/alan-konulari/">Alan Konuları</a>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adalet GYS Portalı</title>
+    <link href="/assets/css/tailwind.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50">
+    <header class="navbar bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="/adalet-gys-portal/index.html" class="navbar-brand text-2xl font-bold text-primary">Adalet GYS Portalı</a>
+            <nav class="navbar-nav flex items-center space-x-6">
+                <a href="/adalet-gys-portal/index.html" class="nav-link text-slate-700 hover:text-primary transition-colors">Ana Sayfa</a>
+                <div class="nav-item dropdown relative">
+                    <a href="/adalet-gys-portal/konu-anlatimlari/" class="nav-link flex items-center text-slate-700 hover:text-primary transition-colors">
+                        Konu Anlatımları
+                        <svg class="w-4 h-4 ml-1 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </a>
+                    <div class="dropdown-menu absolute hidden bg-white shadow-md rounded-md mt-2 w-48">
+                        <a href="/adalet-gys-portal/konu-anlatimlari/ortak-konular/" class="block px-4 py-2 text-slate-700 hover:bg-slate-100">Ortak Konular</a>
+                        <a href="/adalet-gys-portal/konu-anlatimlari/alan-konulari/" class="block px-4 py-2 text-slate-700 hover:bg-slate-100">Alan Konuları</a>
+                    </div>
                 </div>
-            </div>
-            <div class="nav-item dropdown">
-                <a href="/adalet-gys-portal/deneme-sinavlari/" class="nav-link">Deneme Sınavları</a>
-                <div class="dropdown-menu">
-                    <a href="/adalet-gys-portal/deneme-sinavlari/genel-denemeler/">Genel Denemeler</a>
-                    <a href="/adalet-gys-portal/deneme-sinavlari/alan-denemeleri/">Alan Denemeleri</a>
-                    <a href="/adalet-gys-portal/deneme-sinavlari/ortak-konular-denemeleri/">Ortak Konular Denemeleri</a>
+                <div class="nav-item dropdown relative">
+                    <a href="/adalet-gys-portal/deneme-sinavlari/" class="nav-link flex items-center text-slate-700 hover:text-primary transition-colors">
+                        Deneme Sınavları
+                        <svg class="w-4 h-4 ml-1 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </a>
+                    <div class="dropdown-menu absolute hidden bg-white shadow-md rounded-md mt-2 w-48">
+                        <a href="/adalet-gys-portal/deneme-sinavlari/genel-denemeler/" class="block px-4 py-2 text-slate-700 hover:bg-slate-100">Genel Denemeler</a>
+                        <a href="/adalet-gys-portal/deneme-sinavlari/alan-denemeleri/" class="block px-4 py-2 text-slate-700 hover:bg-slate-100">Alan Denemeleri</a>
+                        <a href="/adalet-gys-portal/deneme-sinavlari/ortak-konular-denemeleri/" class="block px-4 py-2 text-slate-700 hover:bg-slate-100">Ortak Konular Denemeleri</a>
+                    </div>
                 </div>
+                <a href="/adalet-gys-portal/hakkinda.html" class="nav-link text-slate-700 hover:text-primary transition-colors">Hakkında</a>
+                <a href="/adalet-gys-portal/iletisim.html" class="nav-link text-slate-700 hover:text-primary transition-colors">İletişim</a>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto px-4 py-8 page-content">
+        <!-- Sayfaya özel içerik buraya eklenecek -->
+    </main>
+    <footer class="footer bg-slate-800 text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="social-links flex space-x-4 justify-center mb-4">
+                <a href="#" class="social-link hover:text-primary transition-colors" title="Facebook" target="_blank" rel="noopener noreferrer">
+                    <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M9.19795 21.5H13.198V13.4901H16.1618L16.6748 9.49012H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H16.5V2.5H13.198C11.0768 2.5 9.19795 4.37888 9.19795 6.5V9.49012H7.19795L6.68495 13.4901H9.19795V21.5Z"></path>
+                    </svg>
+                </a>
+                <a href="#" class="social-link hover:text-primary transition-colors" title="X (Twitter)" target="_blank" rel="noopener noreferrer">
+                    <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                    </svg>
+                </a>
+                <a href="#" class="social-link hover:text-primary transition-colors" title="Instagram" target="_blank" rel="noopener noreferrer">
+                    <svg class="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 16.1748C14.3013 16.1748 16.1748 14.3013 16.1748 12C16.1748 9.69873 14.3013 7.8252 12 7.8252C9.69873 7.8252 7.8252 9.69873 7.8252 12C7.8252 14.3013 9.69873 16.1748 12 16.1748Z"></path>
+                        <path d="M16.7913 2.08691H7.20874C4.36449 2.08691 2.08691 4.36449 2.08691 7.20874V16.7913C2.08691 19.6355 4.36449 21.9131 7.20874 21.9131H16.7913C19.6355 21.9131 21.9131 19.6355 21.9131 16.7913V7.20874C21.9131 4.36449 19.6355 2.08691 16.7913 2.08691ZM18.5087 16.7913C18.5087 17.7346 17.7346 18.5087 16.7913 18.5087H7.20874C6.26549 18.5087 5.49133 17.7346 5.49133 16.7913V7.20874C5.49133 6.26549 6.26549 5.49133 7.20874 5.49133H16.7913C17.7346 5.49133 18.5087 6.26549 18.5087 7.20874V16.7913Z"></path>
+                        <path d="M16.9201 7.74953C16.5332 7.74953 16.2197 7.43603 16.2197 7.04914C16.2197 6.66224 16.5332 6.34875 16.9201 6.34875C17.307 6.34875 17.6205 6.66224 17.6205 7.04914C17.6205 7.43603 17.307 7.74953 16.9201 7.74953Z"></path>
+                    </svg>
+                </a>
             </div>
-            <a href="/adalet-gys-portal/hakkinda.html" class="nav-link">Hakkında</a>
-            <a href="/adalet-gys-portal/iletisim.html" class="nav-link">İletişim</a>
-        </nav>
-    </div>
-</header>
-
-<footer class="footer">
-    <div class="container">
-        <div class="social-links">
-            <a href="#" class="social-link" title="Facebook" target="_blank" rel="noopener noreferrer">
-                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9.19795 21.5H13.198V13.4901H16.1618L16.6748 9.49012H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H16.5V2.5H13.198C11.0768 2.5 9.19795 4.37888 9.19795 6.5V9.49012H7.19795L6.68495 13.4901H9.19795V21.5Z"></path></svg>
-            </a>
-            <a href="#" class="social-link" title="X (Twitter)" target="_blank" rel="noopener noreferrer">
-                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-            </a>
-            <a href="#" class="social-link" title="Instagram" target="_blank" rel="noopener noreferrer">
-                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 16.1748C14.3013 16.1748 16.1748 14.3013 16.1748 12C16.1748 9.69873 14.3013 7.8252 12 7.8252C9.69873 7.8252 7.8252 9.69873 7.8252 12C7.8252 14.3013 9.69873 16.1748 12 16.1748Z"></path><path d="M16.7913 2.08691H7.20874C4.36449 2.08691 2.08691 4.36449 2.08691 7.20874V16.7913C2.08691 19.6355 4.36449 21.9131 7.20874 21.9131H16.7913C19.6355 21.9131 21.9131 19.6355 21.9131 16.7913V7.20874C21.9131 4.36449 19.6355 2.08691 16.7913 2.08691ZM18.5087 16.7913C18.5087 17.7346 17.7346 18.5087 16.7913 18.5087H7.20874C6.26549 18.5087 5.49133 17.7346 5.49133 16.7913V7.20874C5.49133 6.26549 6.26549 5.49133 7.20874 5.49133H16.7913C17.7346 5.49133 18.5087 6.26549 18.5087 7.20874V16.7913Z"></path><path d="M16.9201 7.74953C16.5332 7.74953 16.2197 7.43603 16.2197 7.04914C16.2197 6.66224 16.5332 6.34875 16.9201 6.34875C17.307 6.34875 17.6205 6.66224 17.6205 7.04914C17.6205 7.43603 17.307 7.74953 16.9201 7.74953Z"></path></svg>
-            </a>
+            <p class="text-center text-sm">&copy; 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
+            <div class="legal-links flex justify-center space-x-4 mt-2 text-sm">
+                <a href="/adalet-gys-portal/gizlilik-politikasi.html" class="hover:text-primary transition-colors">Gizlilik Politikası</a>
+                <span>|</span>
+                <a href="/adalet-gys-portal/kullanim-kosullari.html" class="hover:text-primary transition-colors">Kullanım Koşulları</a>
+            </div>
         </div>
-        <p>&copy; 2025 Adalet GYS Portalı. Tüm hakları saklıdır.</p>
-        <div class="legal-links">
-            <a href="/adalet-gys-portal/gizlilik-politikasi.html">Gizlilik Politikası</a>
-            <span>|</span>
-            <a href="/adalet-gys-portal/kullanim-kosullari.html">Kullanım Koşulları</a>
-        </div>
-    </div>
-</footer>
+    </footer>
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>
