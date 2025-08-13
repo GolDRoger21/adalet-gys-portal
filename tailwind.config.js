@@ -13,8 +13,18 @@ module.exports = {
         text: '#1e293b', // --text-color
         border: '#e2e8f0' // --border-color
       },
-      svg: {
-        fill: 'currentColor' // SVG'ler için varsayılan fill
+      fill: {
+        primary: '#0d9488',
+        secondary: '#475569',
+        accent: '#f59e0b',
+        danger: '#dc2626',
+        none: 'none'
+      },
+      stroke: {
+        primary: '#0d9488',
+        secondary: '#475569',
+        accent: '#f59e0b',
+        danger: '#dc2626'
       }
     }
   },
