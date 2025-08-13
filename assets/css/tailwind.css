@@ -224,6 +224,14 @@
     opacity: 50%;
   }
 }
+@layer utilities {
+  .fill-primary {
+    fill: #0d9488;
+  }
+  .stroke-primary {
+    stroke: #0d9488;
+  }
+}
 @property --tw-rotate-x {
   syntax: "*";
   inherits: false;
