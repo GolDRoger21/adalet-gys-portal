@@ -10,7 +10,12 @@
     <header class="navbar bg-white shadow-md">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <a href="/adalet-gys-portal/index.html" class="navbar-brand text-2xl font-bold text-primary">Adalet GYS Portalı</a>
-            <nav class="navbar-nav flex items-center space-x-6">
+            <button class="navbar-toggle md:hidden" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <svg class="w-6 h-6 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+            <nav class="navbar-nav hidden md:flex items-center space-x-6">
                 <a href="/adalet-gys-portal/index.html" class="nav-link text-slate-700 hover:text-primary transition-colors">Ana Sayfa</a>
                 <div class="nav-item dropdown relative">
                     <a href="/adalet-gys-portal/konu-anlatimlari/" class="nav-link flex items-center text-slate-700 hover:text-primary transition-colors">
@@ -72,8 +77,6 @@
                 <span>|</span>
                 <a href="/adalet-gys-portal/kullanim-kosullari.html" class="hover:text-primary transition-colors">Kullanım Koşulları</a>
             </div>
-        </div>
-    </footer>
-    <script src="/adalet-gys-portal/assets/js/main.js"></script>
-</body>
+        </footer>
+    </body>
 </html>
