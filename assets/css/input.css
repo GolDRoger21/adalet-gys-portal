@@ -1,11 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer utilities {
   .fill-primary {
     fill: #0d9488;
   }
   .stroke-primary {
     stroke: #0d9488;
+  }
+  .navbar-nav--open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+  }
+  .navbar-toggle--open svg {
+    transform: rotate(90deg);
   }
 }
